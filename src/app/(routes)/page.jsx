@@ -1,15 +1,18 @@
+"use client";
 import { Card, useSelect } from "@nextui-org/react";
 import Image from "next/image";
 
 import ItemCard from "../components/ItemCard";
 
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.counter);
+  const cart = useSelector((state) => state.cart);
 
   return (
-    <div className="font-poppins">
+    <div className=" font-poppins">
       <nav className=" sticky w-full bg-stone-100 flex justify-center">
         <div className="max-w-5xl w-full p-4">
           <div className="text-3xl font-semibold">
