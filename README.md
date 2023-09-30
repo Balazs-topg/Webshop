@@ -13,7 +13,7 @@ Planen med denna repo:n är att bygg en webshop. Detta är även en del mitt GA.
 ## Todo
 
 - [x] Setup stack
-- [x] Setup DB
+- [ ] Setup DB
 - [ ] Setup env
-- [ ] Skapa cards
+- [x] Skapa cards
 - [ ] Skapa admin dashboard
