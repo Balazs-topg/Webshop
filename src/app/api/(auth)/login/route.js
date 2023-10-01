@@ -18,7 +18,11 @@ export async function POST(request, response) {
     : false;
 
   return NextResponse.json(
-    { loginIsSuccessful: passwordIsCorrect, userFound: Boolean(user) },
+    {
+      loginIsSuccessful: passwordIsCorrect,
+      userFound: Boolean(user),
+      jwt: jwt,
+    },
     { status: !Boolean(user) || !passwordIsCorrect ? 400 : 200 }
   );
 }
