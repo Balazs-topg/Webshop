@@ -13,7 +13,6 @@ async function isEmailTaken(model, email) {
 function isPasswordWeak(password) {
   return password.length < 5;
 }
-
 async function pushToDb(body) {
   const newAccount = new accountModel({
     username: body.username,
@@ -34,9 +33,9 @@ export async function POST(request, response) {
   if (!usernameTaken && !emailTaken && !passwordIsWeak)
     await pushToDb(reqBody).then(() => (signupSuccessful = true));
 
-  const jwt = createJwt(
-    accountModel.findOne({ username: reqBody.username }._id)
-  );
+  let jwt;
+  if (signupSuccessful)
+    jwt = createJwt(accountModel.findOne({ username: reqBody.username }._id));
 
   return NextResponse.json(
     {
