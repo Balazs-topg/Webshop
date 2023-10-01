@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import counterReducer from "./counterSlice";
-import cartReducer from "./cartSlice";
+import cartReducer from "./userInfo";
 
 const preloadedState = {
   counter: 5,

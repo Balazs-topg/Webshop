@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Input } from "@nextui-org/react";
@@ -7,6 +7,13 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 
 function Page() {
   const router = useRouter();
+  useEffect(() => {
+    try {
+      if (JSON.parse(localStorage.getItem("userInfo")).username) {
+        router.push("./view-account");
+      }
+    } catch {}
+  }, []);
 
   const usernameRef = useRef();
   const emailRef = useRef();
@@ -80,6 +87,7 @@ function Page() {
       >
         <h1 className="text-3xl font-semibold text-sky-800">Registrera</h1>
         <Input
+          isDisabled={isLoading}
           errorMessage={usernameIsTaken && "Användarnamnet är upptaget"}
           color={usernameIsTaken && "danger"}
           className="overflow-hidden rounded-xl"
@@ -90,6 +98,7 @@ function Page() {
           label="Användarnamn"
         ></Input>
         <Input
+          isDisabled={isLoading}
           errorMessage={usernameIsTaken && "Emailet är redan registrerat"}
           color={usernameIsTaken && "danger"}
           className="overflow-hidden rounded-xl"
@@ -100,6 +109,7 @@ function Page() {
           label="Email"
         ></Input>
         <Input
+          isDisabled={isLoading}
           errorMessage={passwordIsWeak && "Lösenordet är för kort"}
           color={passwordIsWeak && "danger"}
           className="overflow-hidden rounded-xl"
@@ -110,6 +120,7 @@ function Page() {
           label="Lösenord"
         ></Input>
         <Input
+          isDisabled={isLoading}
           errorMessage={repeatPassIsIncorrect && "Lösenorden är olika"}
           color={repeatPassIsIncorrect && "danger"}
           ref={repeatPasswordRef}
@@ -123,6 +134,7 @@ function Page() {
           Jag godkänner GDPR
         </Checkbox>
         <Button
+          isDisabled={isLoading}
           isLoading={isLoading}
           spinner={<Spinner color="white" size="sm"></Spinner>}
           type="submit"
