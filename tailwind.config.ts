@@ -11,10 +11,24 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["Poppins", ],
+        poppins: ["Poppins"],
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#075985",
+              foreground: "#ffffff",
+            },
+            focus: "#075985",
+          },
+        },
+      },
+    }),
+  ],
 };
 export default config;

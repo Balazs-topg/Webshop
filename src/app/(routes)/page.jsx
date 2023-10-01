@@ -5,6 +5,7 @@ import Image from "next/image";
 import ItemCard from "../components/ItemCard";
 
 import { useDispatch, useSelector } from "react-redux";
+import WebsiteHeader from "../components/WebsiteHeader";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -13,13 +14,7 @@ export default function Home() {
 
   return (
     <div className=" font-poppins">
-      <nav className=" sticky w-full bg-stone-100 flex justify-center">
-        <div className="max-w-5xl w-full p-4">
-          <div className="text-3xl font-semibold">
-            web <span className="text-sky-600">shop</span>
-          </div>
-        </div>
-      </nav>
+      <WebsiteHeader />
       <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
         <ItemCard
           brandName="Alvedon"
