@@ -13,6 +13,7 @@ function WebsiteHeader() {
           </Link>
           <Input
             placeholder="Sök bland 0 produkter"
+            className="overflow-hidden rounded-full"
             startContent={
               <svg
                 xmlns="http://www.w3.org/2000/svg"

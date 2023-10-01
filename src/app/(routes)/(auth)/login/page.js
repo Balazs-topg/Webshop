@@ -11,8 +11,16 @@ function Page() {
       <WebsiteHeader />
       <div className=" max-w-lg mx-auto p-6 space-y-4">
         <h1 className="text-3xl font-semibold text-sky-800">Logga in</h1>
-        <Input variant="bordered" label="Email"></Input>
-        <Input variant="bordered" label="Lösenord"></Input>
+        <Input
+          className="overflow-hidden rounded-xl"
+          variant="bordered"
+          label="Email"
+        ></Input>
+        <Input
+          className="overflow-hidden rounded-xl"
+          variant="bordered"
+          label="Lösenord"
+        ></Input>
         <Button size="lg" color="primary" fullWidth>
           Logga in
         </Button>

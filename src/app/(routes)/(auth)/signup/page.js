@@ -43,6 +43,7 @@ function Page() {
       >
         <h1 className="text-3xl font-semibold text-sky-800">Registrera</h1>
         <Input
+          className="overflow-hidden rounded-xl"
           isRequired
           ref={usernameRef}
           variant="bordered"
@@ -50,6 +51,7 @@ function Page() {
           label="Användarnamn"
         ></Input>
         <Input
+          className="overflow-hidden rounded-xl"
           isRequired
           ref={emailRef}
           variant="bordered"
@@ -57,6 +59,7 @@ function Page() {
           label="Email"
         ></Input>
         <Input
+          className="overflow-hidden rounded-xl"
           isRequired
           ref={passwordRef}
           variant="bordered"
@@ -64,6 +67,7 @@ function Page() {
           label="Lösenord"
         ></Input>
         <Input
+          className="overflow-hidden rounded-xl"
           isRequired
           variant="bordered"
           type="password"
