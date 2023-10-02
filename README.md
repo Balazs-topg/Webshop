@@ -16,7 +16,6 @@ Spara jwt i cookies istället för localstorage. coockies sparas på clienten s�
 
 fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin dashboarden med en server-component.
 
-
 - [x] Setup stack
 - [ ] Setup DB
 - [ ] Setup env

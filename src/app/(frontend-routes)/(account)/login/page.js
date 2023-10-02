@@ -4,6 +4,7 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Button, Spinner, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { setCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();
@@ -40,8 +41,9 @@ function Page() {
     const data = await response.json();
     console.log(data);
 
-    !data.userFound && setUserFound(false);
+    data.userFound ? setUserFound(true) : setUserFound(false);
     !data.loginIsSuccessful && setPasswordIsWrong(true);
+    data.jwt && setCookie("jwt", data.jwt);
     data.jwt && localStorage.setItem("jwt", data.jwt);
     data.loginIsSuccessful &&
       localStorage.setItem(

@@ -17,7 +17,7 @@ function WebsiteHeader() {
     <nav className=" sticky z-10 w-full bg-stone-100 flex justify-center font-poppins">
       <div className="max-w-5xl w-full p-4">
         <div className="text-3xl font-semibold flex gap-2">
-          <Link href="./" className="whitespace-nowrap mr-2">
+          <Link href="/" className="whitespace-nowrap mr-2">
             web <span className="text-sky-800">shop</span>
           </Link>
           <Input
@@ -45,7 +45,7 @@ function WebsiteHeader() {
           {!username ? (
             <Button
               onClick={() => {
-                router.push("./login");
+                router.push("/login");
               }}
               isIconOnly
               className=" bg-sky-800 w-10 h-10 flex justify-center items-center rounded-full"
@@ -66,7 +66,7 @@ function WebsiteHeader() {
           ) : (
             <Button
               onClick={() => {
-                router.push("./view-account");
+                router.push("/view-account");
               }}
               isIconOnly
               className=" bg-sky-800 w-10 h-10 flex justify-center items-center rounded-full"

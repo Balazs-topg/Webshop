@@ -58,13 +58,10 @@ function Page() {
     const data = await response.json();
     console.log(data);
 
-    data.usernameIsTaken == true
-      ? setUsernameIsTaken(true)
-      : setUsernameIsTaken(false);
-    data.emailIsTaken == true ? setEmailIsTaken(true) : setEmailIsTaken(false);
-    data.passwordIsWeak == true
-      ? setPasswordIsWeak(true)
-      : setPasswordIsWeak(false);
+    data.usernameIsTaken ? setUsernameIsTaken(true) : setUsernameIsTaken(false);
+    data.emailIsTaken ? setEmailIsTaken(true) : setEmailIsTaken(false);
+    data.passwordIsWeak ? setPasswordIsWeak(true) : setPasswordIsWeak(false);
+    data.jwt && setCookie("jwt", data.jwt);
     data.jwt && localStorage.setItem("jwt", data.jwt);
     data.signupIsSuccessful &&
       localStorage.setItem(

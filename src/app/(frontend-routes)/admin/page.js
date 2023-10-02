@@ -1,18 +1,23 @@
-"use client";
-import WebsiteHeader from "../../components/WebsiteHeader";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import accountModel from "@/app/api/models/accountModel";
+import { redirect } from "next/navigation";
+import "../../api/utils/connectToDB";
 
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Home() {
+  const cookiesAll = cookies().getAll();
+  let requestJwt, decodedJwt, userId, user, isAdmin;
+  try {
+    requestJwt = cookiesAll.find((cookie) => cookie.name === "jwt").value;
+    decodedJwt = jwt.decode(requestJwt);
+    userId = decodedJwt.id;
+    user = await accountModel.findById(userId);
+    isAdmin = user.isAdmin;
+  } catch {}
 
-  return (
-    <>
-      <WebsiteHeader />
-      <div className=" w-full flex justify-center items-center">
-        <h1 className="text-3xl font-semibold text-sky-800 p-10">
-          Du är inte en admin
-        </h1>
-      </div>
-    </>
-  );
+  if (isAdmin) {
+    redirect("./admin/home", "push");
+  }
+
+  redirect("./admin/access-denied", "push");
 }

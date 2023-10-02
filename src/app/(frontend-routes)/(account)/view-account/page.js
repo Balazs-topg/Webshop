@@ -4,6 +4,7 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { removeCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();
@@ -28,6 +29,7 @@ function Page() {
           fullWidth
           onClick={() => {
             localStorage.removeItem("jwt");
+            removeCookie("jwt");
             localStorage.removeItem("userInfo");
             router.push("./login");
           }}

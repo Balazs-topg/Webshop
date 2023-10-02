@@ -14,8 +14,8 @@ export async function POST(request, response) {
     : false;
 
   const jwt = passwordIsCorrect
-    ? createJwt(accountModel.findOne({ username: reqBody.username }._id))
-    : false;
+    ? createJwt(await accountModel.findOne({ email: reqBody.email }))
+    : undefined;
 
   return NextResponse.json(
     {

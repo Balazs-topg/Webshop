@@ -1,30 +1,21 @@
-"use client";
-import { Card, useSelect } from "@nextui-org/react";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import accountModel from "@/app/api/models/accountModel";
+import { redirect } from "next/navigation";
+import Home from "./Home";
 
-import Link from "next/link";
+export default async function page() {
+  console.log("bruhhhh");
+  const cookiesAll = cookies().getAll();
+  const requestJwt = cookiesAll.find((cookie) => cookie.name === "jwt").value;
+  const decodedJwt = jwt.decode(requestJwt);
+  const userId = decodedJwt.id;
+  const user = await accountModel.findById(userId);
+  const isAdmin = user.isAdmin;
 
-import { useDispatch, useSelector } from "react-redux";
-
-import AdminNav from "../AdminNav";
-
-import WebsiteHeader from "../../../components/WebsiteHeader";
-
-export default function Home() {
-  const dispatch = useDispatch();
-  const count = useSelector((state) => state.counter);
-  const cart = useSelector((state) => state.cart);
-
-  return (
-    <div className=" font-poppins">
-      <WebsiteHeader></WebsiteHeader>
-      <div className="flex">
-        <AdminNav></AdminNav>
-        <div className="w-full mx-auto max-w-xl">
-          <h1 className=" text-3xl font-semibold p-8 text-center">
-            Welcome back Admin!
-          </h1>
-        </div>
-      </div>
-    </div>
-  );
+  if (isAdmin) {
+    return <Home />;
+  } else {
+    redirect("/.admin/access-denied");
+  }
 }
