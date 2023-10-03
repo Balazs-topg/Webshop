@@ -30,6 +30,6 @@
     "src/app/redux/counter-slice.js",
     "src/app/redux/store.js",
     "src/app/Providers.jsx"
-  ],
+, "src/app/(frontend-routes)/admin/layout.tsx"  ],
   "exclude": ["node_modules"]
 }
