@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Input } from "@nextui-org/react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
+import { setCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();

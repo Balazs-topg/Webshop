@@ -10,6 +10,7 @@ export default async function isPageRequestAdmin(allCookies) {
     return false;
   }
 
+  console.log("userId ", jwt.decode(requestJwt));
   const userId = jwt.decode(requestJwt).id;
   const user = await accountModel.findById(userId);
   const isAdmin = user ? user.isAdmin : false;

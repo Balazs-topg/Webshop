@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Providers from "@/app/providers";
 import isPageRequestAdmin from "../utils/isPageRequestAdmin";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -21,9 +20,7 @@ export default async function RootLayout({
   if (await isPageRequestAdmin(cookies().getAll())) {
     return (
       <html lang="en">
-        <Providers>
-          <body className={inter.className}>{children}</body>
-        </Providers>
+        <body className={inter.className}>{children}</body>
       </html>
     );
   } else {

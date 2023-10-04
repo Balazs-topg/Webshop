@@ -35,14 +35,16 @@ export async function POST(request, response) {
 
   let jwt;
   if (signupSuccessful)
-    jwt = createJwt(accountModel.findOne({ username: reqBody.username }._id));
+    jwt = createJwt(
+      await accountModel.findOne({ username: reqBody.username })
+    );
 
   return NextResponse.json(
     {
       usernameIsTaken: usernameTaken,
       emailIsTaken: emailTaken,
       passwordIsWeak: passwordIsWeak,
-      jwt: jwt,
+      jwt: jwt ? jwt : undefined,
       signupIsSuccessful: signupSuccessful,
     },
     { status: 200 }
