@@ -30,6 +30,6 @@
     "src/app/redux/counter-slice.js",
     "src/app/redux/store.js",
     "src/app/Providers.tsx"
-, "src/app/(frontend-routes)/admin/layout.tsx", "src/app/(frontend-routes)/utils/isPageRequestAdmin.ts", "src/app/(frontend-routes)/(account)/login/page.jsx"  ],
+, "src/app/(frontend-routes)/admin/layout.tsx", "src/app/(frontend-routes)/utils/isPageRequestAdmin.ts", "src/app/(frontend-routes)/(account)/login/page.tsx"  ],
   "exclude": ["node_modules"]
 }

@@ -10,21 +10,22 @@ function Page() {
   const router = useRouter();
   useEffect(() => {
     try {
-      if (JSON.parse(localStorage.getItem("userInfo")).username) {
+      const userInfo = localStorage.getItem("userInfo");
+      if (userInfo !== null && JSON.parse(userInfo)) {
         router.push("./view-account");
       }
     } catch {}
-  }, []);
+  }, [router]);
 
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const [userFound, setUserFound] = useState(true);
   const [passwordIsWrong, setPasswordIsWrong] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const loginHandler = async (e) => {
+  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -34,8 +35,8 @@ function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+        email: emailRef.current!.value,
+        password: passwordRef.current!.value,
       }),
     });
     const data = await response.json();
@@ -50,7 +51,7 @@ function Page() {
         "userInfo",
         JSON.stringify({
           username: data.username,
-          email: emailRef.current.value,
+          email: emailRef.current!.value,
         })
       );
 
@@ -67,7 +68,7 @@ function Page() {
           isRequired
           isDisabled={isLoading}
           errorMessage={!userFound ? "Emailen är inte registrerad" : ""}
-          color={!userFound && "danger"}
+          color={!userFound ? "danger" : "default"}
           ref={emailRef}
           className="overflow-hidden rounded-xl"
           variant="bordered"
@@ -77,7 +78,7 @@ function Page() {
           isRequired
           isDisabled={isLoading}
           errorMessage={passwordIsWrong ? "Lösenordet är fel" : ""}
-          color={passwordIsWrong && "danger"}
+          color={passwordIsWrong ? "danger" : "default"}
           ref={passwordRef}
           className="overflow-hidden rounded-xl"
           variant="bordered"
