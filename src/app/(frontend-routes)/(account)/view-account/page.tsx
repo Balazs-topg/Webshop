@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
@@ -8,13 +8,20 @@ import { removeCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();
-  if (!JSON.parse(localStorage.getItem("userInfo")).username) {
-    router.push("./login");
-  }
 
-  const [username, setUsername] = useState(
-    JSON.parse(localStorage.getItem("userInfo")).username
-  );
+  useEffect(() => {
+    try {
+      const userInfo = localStorage.getItem("userInfo");
+      if (!(userInfo !== null && JSON.parse(userInfo))) {
+        router.push("./view-account");
+      }
+    } catch {}
+  }, [router]);
+
+  const storedUserInfo = localStorage.getItem("userInfo");
+  const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  const initialUsername = parsedUserInfo ? parsedUserInfo.username : "";
+  const [username, setUsername] = useState(initialUsername);
 
   return (
     <>

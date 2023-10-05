@@ -10,18 +10,17 @@ function Page() {
   const router = useRouter();
   useEffect(() => {
     try {
-      if (JSON.parse(localStorage.getItem("userInfo")).username) {
+      const userInfo = localStorage.getItem("userInfo");
+      if (userInfo !== null && JSON.parse(userInfo)) {
         router.push("./view-account");
       }
     } catch {}
-  }, []);
+  }, [router]);
 
-  const usernameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const repeatPasswordRef = useRef();
-
-  const consentRef = useRef();
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const repeatPasswordRef = useRef<HTMLInputElement>(null);
 
   const [usernameIsTaken, setUsernameIsTaken] = useState(false);
   const [emailIsTaken, setEmailIsTaken] = useState(false);
@@ -31,11 +30,11 @@ function Page() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const signupHandler = async (e) => {
+  const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (passwordRef.current.value !== repeatPasswordRef.current.value) {
+    if (passwordRef.current!.value !== repeatPasswordRef.current!.value) {
       console.log("wrong");
       setIsLoading(false);
       setRepeatWordIsIncorrect(true);
@@ -50,10 +49,9 @@ function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: usernameRef.current.value,
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-        consent: consentRef.current.checked,
+        username: usernameRef.current!.value,
+        email: emailRef.current!.value,
+        password: passwordRef.current!.value,
       }),
     });
     const data = await response.json();
@@ -68,8 +66,8 @@ function Page() {
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
-          username: usernameRef.current.value,
-          email: emailRef.current.value,
+          username: usernameRef.current!.value,
+          email: emailRef.current!.value,
         })
       );
     data.signupIsSuccessful && router.push("./signup-success");
@@ -87,7 +85,7 @@ function Page() {
         <Input
           isDisabled={isLoading}
           errorMessage={usernameIsTaken && "Användarnamnet är upptaget"}
-          color={usernameIsTaken && "danger"}
+          color={usernameIsTaken ? "danger" : "default"}
           className="overflow-hidden rounded-xl"
           isRequired
           ref={usernameRef}
@@ -97,8 +95,8 @@ function Page() {
         ></Input>
         <Input
           isDisabled={isLoading}
-          errorMessage={usernameIsTaken && "Emailet är redan registrerat"}
-          color={usernameIsTaken && "danger"}
+          errorMessage={emailIsTaken && "Emailet är redan registrerat"}
+          color={emailIsTaken ? "danger" : "default"}
           className="overflow-hidden rounded-xl"
           isRequired
           ref={emailRef}
@@ -109,7 +107,7 @@ function Page() {
         <Input
           isDisabled={isLoading}
           errorMessage={passwordIsWeak && "Lösenordet är för kort"}
-          color={passwordIsWeak && "danger"}
+          color={passwordIsWeak ? "danger" : "default"}
           className="overflow-hidden rounded-xl"
           isRequired
           ref={passwordRef}
@@ -120,7 +118,7 @@ function Page() {
         <Input
           isDisabled={isLoading}
           errorMessage={repeatPassIsIncorrect && "Lösenorden är olika"}
-          color={repeatPassIsIncorrect && "danger"}
+          color={repeatPassIsIncorrect ? "danger" : "default"}
           ref={repeatPasswordRef}
           className="overflow-hidden rounded-xl"
           isRequired
@@ -128,9 +126,7 @@ function Page() {
           type="password"
           label="Upprepa Lösenord"
         ></Input>
-        <Checkbox isRequired ref={consentRef}>
-          Jag godkänner GDPR
-        </Checkbox>
+        <Checkbox isRequired>Jag godkänner GDPR</Checkbox>
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
