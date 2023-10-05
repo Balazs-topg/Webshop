@@ -1,4 +1,4 @@
-export function setCookie(name, value, days = 28) {
+export function setCookie(name: string, value: string, days: number = 28) {
   let expires = "";
   if (days) {
     const date = new Date();
@@ -8,7 +8,7 @@ export function setCookie(name, value, days = 28) {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
-export function getCookie(name) {
+export function getCookie(name: string) {
   const nameEQ = name + "=";
   const ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
@@ -19,6 +19,6 @@ export function getCookie(name) {
   return null;
 }
 
-export function removeCookie(name) {
+export function removeCookie(name: string) {
   document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

@@ -1,16 +1,16 @@
 "use client";
-import { Card, useSelect } from "@nextui-org/react";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import { useDispatch, useSelector } from "react-redux";
 import { Button, Tooltip } from "@nextui-org/react";
-import { useState } from "react";
-
 import adminIcons from "./adminIcons";
 
-function TabButton({ name, currentTab }) {
+function TabButton({
+  name,
+  currentTab,
+}: {
+  name: "home" | "products" | "users";
+  currentTab: "home" | "products" | "users";
+}) {
   return (
     <Tooltip
       content={name}
@@ -31,9 +31,12 @@ function TabButton({ name, currentTab }) {
   );
 }
 
-function AdminNav({ children }) {
+function AdminNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const currentTab = pathname.split("/")[2];
+  if (pathname == null) return <div>check usePathname</div>;
+  const currentTab = pathname
+    ? (pathname.split("/")[2] as "home" | "products" | "users")
+    : "home";
 
   return (
     <div className="flex">

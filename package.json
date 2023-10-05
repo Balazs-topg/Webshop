@@ -16,14 +16,15 @@
     "framer-motion": "^10.16.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
-    "next": "latest",
+    "next": "^13.5.4",
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "^8.1.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.3",
     "@types/node": "latest",
-    "@types/react": "latest",
+    "@types/react": "^18.2.25",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "eslint": "latest",

@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     "src/app/redux/counter-slice.js",
     "src/app/redux/store.js",
-    "src/app/Providers.jsx"
-, "src/app/(frontend-routes)/admin/layout.tsx"  ],
+    "src/app/Providers.tsx"
+, "src/app/(frontend-routes)/admin/layout.tsx", "src/app/(frontend-routes)/utils/isPageRequestAdmin.ts", "src/app/(frontend-routes)/(account)/login/page.jsx"  ],
   "exclude": ["node_modules"]
 }

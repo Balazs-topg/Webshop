@@ -4,13 +4,21 @@ import { Button, Spinner } from "@nextui-org/react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
+type itemCardTypes = {
+  brandName: string;
+  productName: string;
+  image: string;
+  isInstock: boolean;
+  isFavourite: boolean;
+};
+
 export default function ItemCard({
   brandName,
   productName,
   image,
-  isInstock,
-  isFavourite,
-}) {
+  isInstock = true,
+  isFavourite = false,
+}: itemCardTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBuy = () => {

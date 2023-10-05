@@ -8,8 +8,16 @@ function WebsiteHeader() {
   const [username, setUsername] = useState("");
   useEffect(() => {
     try {
-      setUsername(JSON.parse(localStorage.getItem("userInfo")).username);
-    } catch {}
+      const storedUserInfo = localStorage.getItem("userInfo");
+      if (storedUserInfo) {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        if (parsedUserInfo && parsedUserInfo.username) {
+          setUsername(parsedUserInfo.username);
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing userInfo from localStorage:", error);
+    }
   }, []);
 
   const router = useRouter();
