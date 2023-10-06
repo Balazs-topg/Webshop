@@ -6,6 +6,6 @@ import isPageRequestAdmin from "../utils/isPageRequestAdmin";
 
 export default async function Home() {
   (await isPageRequestAdmin(cookies().getAll()))
-    ? redirect("./admin/home", "push")
-    : redirect("/admin/access-denied", "push");
+    ? redirect("./admin/home")
+    : redirect("/admin/access-denied");
 }

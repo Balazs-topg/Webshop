@@ -4,18 +4,24 @@ import "../../utils/connectToDB";
 import bcrypt from "bcrypt";
 import { createJwt } from "../../utils/createJwt";
 
-export async function POST(request, response) {
-  const reqBody = await request.json();
+type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export async function POST(request: Request, response: any) {
+  const reqBody: LoginRequest = await request.json();
 
   const user = await accountModel.findOne({ email: reqBody.email });
+  console.log("user: ", user);
 
   const passwordIsCorrect = user
     ? await bcrypt.compare(reqBody.password, user.password)
     : false;
 
   const jwt = passwordIsCorrect
-    ? createJwt(accountModel.findOne({ username: reqBody.username }._id))
-    : false;
+    ? createJwt(await accountModel.findOne({ email: reqBody.email }))
+    : undefined;
 
   return NextResponse.json(
     {
@@ -29,10 +35,10 @@ export async function POST(request, response) {
 }
 
 //boiler plate
-export async function GET(request) {}
-export async function HEAD(request) {}
+export async function GET(request: Request) {}
+export async function HEAD(request: Request) {}
 // export async function POST(request) {}
-export async function PUT(request) {}
-export async function DELETE(request) {}
-export async function PATCH(request) {}
-export async function OPTIONS(request) {}
+export async function PUT(request: Request) {}
+export async function DELETE(request: Request) {}
+export async function PATCH(request: Request) {}
+export async function OPTIONS(request: Request) {}

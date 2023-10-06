@@ -6,7 +6,7 @@ import { Input } from "@nextui-org/react";
 
 import { Select, SelectSection, SelectItem } from "@nextui-org/react";
 
-import { animals } from "./data";
+import { animals } from "./data.ts";
 
 import {
   Modal,
@@ -138,7 +138,7 @@ function AddNewTag() {
   );
 }
 
-function AddProduct({ className }) {
+function AddProduct({ className }: { className?: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -176,9 +176,7 @@ function AddProduct({ className }) {
                   <AddNewBrand />
                 </div>
                 <Input type="name" label="Product Name" />
-                <Button type="name" label="Picture" color="primary">
-                  Choose image
-                </Button>
+                <Button color="primary">Choose image</Button>
 
                 <div className="flex gap-2 items-center">
                   <Select label="Select Category" fullWidth>

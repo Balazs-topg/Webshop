@@ -1,34 +1,11 @@
 "use client";
-import { Card, useSelect } from "@nextui-org/react";
-
-import Link from "next/link";
-
-import { useDispatch, useSelector } from "react-redux";
-
 import AdminNav from "../AdminNav";
-
-import { Button } from "@nextui-org/react";
-
 import WebsiteHeader from "../../../components/WebsiteHeader";
-
-import adminIcons from "../adminIcons";
-
 import AddProduct from "./AddProduct";
 
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/react";
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const count = useSelector((state) => state.counter);
-  const cart = useSelector((state) => state.cart);
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (

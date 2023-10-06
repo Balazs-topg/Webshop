@@ -31,7 +31,7 @@ function TabButton({
   );
 }
 
-function AdminNav({ children }: { children: React.ReactNode }) {
+function AdminNav({ children }: { children?: React.ReactNode }) {
   const pathname = usePathname();
   if (pathname == null) return <div>check usePathname</div>;
   const currentTab = pathname
