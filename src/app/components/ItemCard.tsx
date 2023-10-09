@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { Ripples } from "react-ripples-continued";
 
 type itemCardTypes = {
   brandName: string;
@@ -46,7 +46,9 @@ export default function ItemCard({
         <div className="info space-y-2 py-2">
           <div className="font-medium border-b border-stone-100 flex items-center pb-2">
             {brandName}
-            <button className="bg-stone-200 ml-auto rounded-full p-1">
+            <button className="relative overflow-hidden bg-stone-200 ml-auto rounded-full p-1">
+              <Ripples opacity={0.5} duration={700} optimize />
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -71,16 +73,13 @@ export default function ItemCard({
           <div className="font-bold text-xl">32 kr</div>
           <div className="relative">
             <div className=" flex items-center gap-2">
-              <Button
+              <button
                 onClick={handleBuy}
-                className="relative bg-sky-800 flex items-center transition-all overflow-hidden rounded-full justify-center px-6 py-2 text-white [&>.dot]:hover:w-20 [&>.dot]:hover:h-20"
+                className="active:scale-95 relative overflow-hidden font-medium uppercase bg-sky-800 flex items-center transition-all rounded-full justify-center px-6 py-2 text-white"
               >
-                <div className=" z-10 uppercase font-semibold text-sm transition-all">
-                  {!isLoading && <div>köp</div>}
-                  {isLoading && <div className=""> </div>}
-                </div>
-                <div className="dot absolute top-1/2 -translate-y-1/2 rounded-full z-0 w-0 h-2 bg-sky-600 transition-all"></div>
-              </Button>
+                Köp
+                <Ripples opacity={0.5} duration={700} optimize />
+              </button>
             </div>
           </div>
         </div>

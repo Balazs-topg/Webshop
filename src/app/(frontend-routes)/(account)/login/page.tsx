@@ -100,12 +100,23 @@ function Page() {
         >
           Logga in
         </Button>
-        <p>
-          Är du inte registerad?{" "}
-          <Link className="text-sky-800 font-semibold" href="./signup">
-            registrera dig här
-          </Link>
-        </p>
+        <div className=" space-y-2">
+          <div>
+            Är du inte registerad?{" "}
+            <Link className="text-sky-800 font-semibold" href="./signup">
+              registrera dig här
+            </Link>
+          </div>
+          <div>
+            Glömt lösenord?{" "}
+            <Link
+              className="text-sky-800 font-semibold"
+              href="login/reset-password"
+            >
+              återställ lösenord
+            </Link>
+          </div>
+        </div>
       </form>
     </>
   );
