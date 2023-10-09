@@ -1,9 +1,4 @@
-"use client";
-import { Card, useSelect } from "@nextui-org/react";
-import Image from "next/image";
-
 import ItemCard from "../components/ItemCard";
-
 import WebsiteHeader from "../components/WebsiteHeader";
 
 export default function Home() {

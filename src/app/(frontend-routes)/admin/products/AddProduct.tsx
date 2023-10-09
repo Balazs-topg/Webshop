@@ -6,7 +6,7 @@ import { Input } from "@nextui-org/react";
 
 import { Select, SelectSection, SelectItem } from "@nextui-org/react";
 
-import { animals } from "./data.ts";
+import { animals } from "./data";
 
 import {
   Modal,

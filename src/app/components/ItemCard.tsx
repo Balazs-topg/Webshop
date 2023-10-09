@@ -1,6 +1,5 @@
 "use client";
-import { Button, Spinner } from "@nextui-org/react";
-
+import { Button } from "@/components/ui/button";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
@@ -78,11 +77,7 @@ export default function ItemCard({
               >
                 <div className=" z-10 uppercase font-semibold text-sm transition-all">
                   {!isLoading && <div>köp</div>}
-                  {isLoading && (
-                    <div>
-                      <Spinner size="sm" color="white" />
-                    </div>
-                  )}
+                  {isLoading && <div className=""> </div>}
                 </div>
                 <div className="dot absolute top-1/2 -translate-y-1/2 rounded-full z-0 w-0 h-2 bg-sky-600 transition-all"></div>
               </Button>

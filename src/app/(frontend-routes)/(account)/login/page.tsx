@@ -1,7 +1,10 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+
+import { Input, Button } from "@nextui-org/react";
+
 import WebsiteHeader from "@/app/components/WebsiteHeader";
-import { Button, Spinner, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setCookie } from "../../utils/manageCookies";
@@ -86,9 +89,10 @@ function Page() {
           type="password"
         ></Input>
         <Button
+          variant="solid"
           isDisabled={isLoading}
           isLoading={isLoading}
-          spinner={<Spinner color="white" size="sm"></Spinner>}
+          spinner={<Loader2 className=" animate-spin" absoluteStrokeWidth />}
           type="submit"
           size="lg"
           color="primary"
