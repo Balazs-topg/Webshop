@@ -6,18 +6,19 @@ import productModel from "../../models/productModel";
 
 import "../../utils/connectToDB";
 
-type AddProductType = {
-  name: string;
+type AddItemType = {
   brand: string;
   category: string;
   imgs: File[];
+  name: string;
   tags: string[];
+  price: number;
 };
 
 export async function POST(request: NextRequest, response: any) {
   console.log("request recived!");
 
-  const reqBody: AddProductType = await request.json();
+  const reqBody: AddItemType = await request.json();
   const reqJwt = request.headers.get("jwt");
 
   //authenticate jwt - if invalid then return 40
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest, response: any) {
     category: reqBody.category,
     imgs: reqBody.imgs,
     tags: reqBody.tags,
+    price: reqBody.price,
   });
   await newProduct.save();
 

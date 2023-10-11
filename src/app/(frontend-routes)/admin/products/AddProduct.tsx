@@ -28,6 +28,7 @@ type AddItemType = {
   imgs: File[];
   name: string;
   tags: string[];
+  price: number;
 };
 
 interface ImageDisplayProps {
@@ -236,6 +237,7 @@ function AddProduct({ className }: { className?: string }) {
   const [productImgs, setProductImgs] = useState<File[]>();
   const selectCategory = useRef<HTMLSelectElement>(null);
   const selectTagsRef = useRef<HTMLSelectElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
 
   async function getBrandsList() {
     const response = await fetch("/api/products/brands/get", {
@@ -307,6 +309,7 @@ function AddProduct({ className }: { className?: string }) {
       imgs: productImgs!,
       category: selectCategory.current!.value,
       tags: tags,
+      price: Number(priceRef.current?.value),
     };
 
     const response = await fetch("/api/products/add", {
@@ -369,6 +372,12 @@ function AddProduct({ className }: { className?: string }) {
                     label="Product Name"
                     isRequired
                     ref={productNameRef}
+                  />
+                  <Input
+                    type="number"
+                    label="Price (SEK)"
+                    isRequired
+                    ref={priceRef}
                   />
                   <div>
                     <Button color="primary" fullWidth>
