@@ -7,19 +7,6 @@ import "../../../utils/connectToDB";
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
-  const reqJwt = request.headers.get("jwt");
-
-  //authenticate jwt - if invalid then return 40
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.decode(reqJwt);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return false;
-  const user = await accountModel.findById(userId);
-  const isAdmin = user ? user.isAdmin : false;
-  if (!isAdmin) return NextResponse.json({}, { status: 401 });
-
   //find all
   const categories = await categoryModel.find();
 
