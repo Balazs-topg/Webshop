@@ -19,6 +19,7 @@ export async function POST(request: NextRequest, response: any) {
   console.log("request recived!");
 
   const reqBody: AddItemType = await request.json();
+
   const reqJwt = request.headers.get("jwt");
 
   //authenticate jwt - if invalid then return 40
@@ -37,11 +38,14 @@ export async function POST(request: NextRequest, response: any) {
   if (name) return NextResponse.json({}, { status: 400 });
 
   //push to db
+
+  //chat
+
   const newProduct = new productModel({
     name: reqBody.name,
     brand: reqBody.brand,
     category: reqBody.category,
-    imgs: reqBody.imgs,
+    imgs: "",
     tags: reqBody.tags,
     price: reqBody.price,
   });

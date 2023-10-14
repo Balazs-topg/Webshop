@@ -302,23 +302,24 @@ function AddProduct({ className }: { className?: string }) {
         tags.push(selectedTagsOptions[i].value);
       }
     }
-    //put together object
-    const addItemObject: AddItemType = {
-      brand: selectBrandRef.current!.value,
-      name: productNameRef.current!.value,
-      imgs: productImgs!,
-      category: selectCategory.current!.value,
-      tags: tags,
-      price: Number(priceRef.current?.value),
-    };
+
+    // Create a new FormData object
+    const formData = new FormData();
+    formData.append("brand", selectBrandRef.current!.value);
+    formData.append("name", productNameRef.current!.value);
+    formData.append("category", selectCategory.current!.value);
+    formData.append("tags", JSON.stringify(tags));
+    formData.append("price", priceRef.current!.value);
+    productImgs!.forEach((img, index) => {
+      formData.append(`img${index}`, img);
+    });
 
     const response = await fetch("/api/products/add", {
       method: "post",
       headers: {
-        "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
       },
-      body: JSON.stringify(addItemObject),
+      body: formData,
     });
     const data = await response.json();
     setIsLoading(false);

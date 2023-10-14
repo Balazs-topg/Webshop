@@ -6,6 +6,7 @@ import { Ripples } from "react-ripples-continued";
 type itemCardTypes = {
   brandName: string;
   productName: string;
+  price: number;
   image: string;
   isInstock: boolean;
   isFavourite: boolean;
@@ -15,6 +16,7 @@ export default function ItemCard({
   brandName,
   productName,
   image,
+  price,
   isInstock = true,
   isFavourite = false,
 }: itemCardTypes) {
@@ -70,7 +72,7 @@ export default function ItemCard({
           </div>
         </div>
         <div className="mt-auto flex justify-between items-end">
-          <div className="font-bold text-xl">32 kr</div>
+          <div className="font-bold text-xl">{price} kr</div>
           <div className="relative">
             <div className=" flex items-center gap-2">
               <button

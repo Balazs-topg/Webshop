@@ -6,7 +6,12 @@ const productSchema = new mongoose.Schema(
     price: { type: String, required: true },
     brand: { type: String, required: true },
     category: { type: String, required: true },
-    imgs: { type: Array, required: true },
+    imgs: [
+      {
+        type: Buffer,
+        required: true,
+      },
+    ],
     tags: { type: Array, required: true },
   },
   {
@@ -15,6 +20,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-const productModel = mongoose.models.products || mongoose.model("products", productSchema);
+const productModel =
+  mongoose.models.products || mongoose.model("products", productSchema);
 
 export default productModel;
