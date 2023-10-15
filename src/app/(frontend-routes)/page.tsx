@@ -78,21 +78,13 @@ export default function Home() {
         )}
       </div>
       <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
-        <ItemCard
-          price={32}
-          brandName="Alvedon"
-          productName="Tabletter 500 mg Paracetamol 20 st"
-          image="https://www.apohem.se/globalassets/produktbilder/7046260976108_1.jpg?ref=ED26DF427F&f.sharpen=70&w=900&format=jpg"
-          isFavourite={false}
-          isInstock={true}
-        ></ItemCard>
         {products.map((product) => {
           return (
             <ItemCard
               key={product._id}
               brandName={product.brand}
               productName={product.name}
-              image={product.imgs}
+              imageSrc={product.imgs[0]}
               price={product.price}
               isFavourite={false}
               isInstock={true}

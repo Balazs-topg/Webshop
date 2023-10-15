@@ -3,6 +3,8 @@ import adminIcons from "../adminIcons";
 import { Input } from "@nextui-org/react";
 import { Select, SelectSection, SelectItem } from "@nextui-org/react";
 
+import ImageUrlInput from "./ImageUrlInput";
+
 import { Loader2 } from "lucide-react";
 
 import { getCookie } from "../../utils/manageCookies";
@@ -29,24 +31,6 @@ type AddItemType = {
   name: string;
   tags: string[];
   price: number;
-};
-
-interface ImageDisplayProps {
-  file: File;
-}
-
-const ImageDisplay: React.FC<ImageDisplayProps> = ({ file }) => {
-  const [src, setSrc] = useState<string | null>(null);
-  useEffect(() => {
-    const fileToDataURL = (file: File) => {
-      const reader = new FileReader();
-      reader.onload = () => setSrc(reader.result as string);
-      reader.readAsDataURL(file);
-    };
-    fileToDataURL(file);
-  }, [file]);
-  if (!src) return null;
-  return <img src={src} alt="Uploaded content" />;
 };
 
 function AddNewBrand({ updateParent }: { updateParent: Function }) {
@@ -234,7 +218,7 @@ function AddProduct({ className }: { className?: string }) {
 
   const selectBrandRef = useRef<HTMLSelectElement>(null);
   const productNameRef = useRef<HTMLInputElement>(null);
-  const [productImgs, setProductImgs] = useState<File[]>();
+  const [productImgs, setProductImgs] = useState<string[]>([""]);
   const selectCategory = useRef<HTMLSelectElement>(null);
   const selectTagsRef = useRef<HTMLSelectElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
@@ -250,7 +234,6 @@ function AddProduct({ className }: { className?: string }) {
     const data = await response.json();
     setBrandsList(data);
   }
-
   async function getCategoryList() {
     const response = await fetch("/api/products/categories/get", {
       method: "get",
@@ -262,7 +245,6 @@ function AddProduct({ className }: { className?: string }) {
     const data = await response.json();
     setCategoryList(data);
   }
-
   async function getTagsList() {
     const response = await fetch("/api/products/tags/get", {
       method: "get",
@@ -280,21 +262,12 @@ function AddProduct({ className }: { className?: string }) {
     getTagsList();
   }, []);
 
-  const handleFilesSelected = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setProductImgs(files);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("handleSubmit called");
     setIsLoading(true);
 
-    //retrive values from multiple select
+    // Retrieve values from multiple select
     const selectedTagsOptions = selectTagsRef.current?.selectedOptions;
     const tags: string[] = [];
     if (selectedTagsOptions) {
@@ -303,23 +276,24 @@ function AddProduct({ className }: { className?: string }) {
       }
     }
 
-    // Create a new FormData object
-    const formData = new FormData();
-    formData.append("brand", selectBrandRef.current!.value);
-    formData.append("name", productNameRef.current!.value);
-    formData.append("category", selectCategory.current!.value);
-    formData.append("tags", JSON.stringify(tags));
-    formData.append("price", priceRef.current!.value);
-    productImgs!.forEach((img, index) => {
-      formData.append(`img${index}`, img);
-    });
+    // Create a new JSON object
+    const jsonData = {
+      brand: selectBrandRef.current!.value,
+      name: productNameRef.current!.value,
+      category: selectCategory.current!.value,
+      tags: tags,
+      price: priceRef.current!.value,
+      imgs: productImgs,
+    };
+    console.log(jsonData);
 
     const response = await fetch("/api/products/add", {
       method: "post",
       headers: {
+        "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
       },
-      body: formData,
+      body: JSON.stringify(jsonData),
     });
     const data = await response.json();
     setIsLoading(false);
@@ -381,23 +355,10 @@ function AddProduct({ className }: { className?: string }) {
                     ref={priceRef}
                   />
                   <div>
-                    <Button color="primary" fullWidth>
-                      <input
-                        className=" opacity-0 flex items-center justify-center bg-red-500 w-full h-full absolute top-0 left-0"
-                        type="file"
-                        accept=".jpg,.png,.webp"
-                        multiple
-                        onChange={handleFilesSelected}
-                      ></input>
-                      Chose images
-                    </Button>
-                    {productImgs?.map((image) => {
-                      return (
-                        <div key={0}>
-                          {image.name} <ImageDisplay file={image} />
-                        </div>
-                      );
-                    })}
+                    <ImageUrlInput
+                      state={productImgs}
+                      setState={setProductImgs}
+                    ></ImageUrlInput>
                   </div>
                   <div className="flex gap-2 items-center">
                     <Select
@@ -445,7 +406,34 @@ function AddProduct({ className }: { className?: string }) {
                   >
                     Add
                   </Button>
-                  {responseMessage}
+                  <Modal
+                    isOpen={Boolean(responseMessage)}
+                    onOpenChange={onOpenChange}
+                    isDismissable={false}
+                    size="sm"
+                  >
+                    <ModalContent>
+                      {(onClose) => (
+                        <>
+                          <ModalHeader className="flex flex-col gap-1">
+                            {responseMessage}{" "}
+                          </ModalHeader>
+                          <ModalFooter>
+                            <Button
+                              color="danger"
+                              variant="light"
+                              onPress={onClose}
+                            >
+                              Close
+                            </Button>
+                            <Button color="primary" onPress={onClose}>
+                              Okay
+                            </Button>
+                          </ModalFooter>
+                        </>
+                      )}
+                    </ModalContent>
+                  </Modal>
                 </ModalFooter>
               </>
             )}

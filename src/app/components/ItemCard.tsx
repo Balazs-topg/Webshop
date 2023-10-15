@@ -7,7 +7,7 @@ type itemCardTypes = {
   brandName: string;
   productName: string;
   price: number;
-  image: string;
+  imageSrc: string;
   isInstock: boolean;
   isFavourite: boolean;
 };
@@ -15,7 +15,7 @@ type itemCardTypes = {
 export default function ItemCard({
   brandName,
   productName,
-  image,
+  imageSrc,
   price,
   isInstock = true,
   isFavourite = false,
@@ -41,7 +41,7 @@ export default function ItemCard({
         <div className="img-cont relative bg-stone-100 p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden">
           <img
             className="mix-blend-multiply transition-all"
-            src={image}
+            src={imageSrc}
             alt=""
           />
         </div>

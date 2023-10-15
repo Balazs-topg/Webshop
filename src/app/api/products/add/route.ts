@@ -7,33 +7,7 @@ import "../../utils/connectToDB";
 export async function POST(request: NextRequest) {
   console.log("request recived!");
 
-  const formData = await request.formData();
-  const reqBody: any = {};
-
-  for (let [key, value] of formData.entries()) {
-    if (key.startsWith("img")) {
-      const file = value as any;
-      const chunks: any[] = [];
-      for await (const chunk of file.stream()) {
-        chunks.push(chunk);
-      }
-      const buffer = Buffer.concat(chunks);
-      reqBody[key] = buffer.toString("base64");
-    } else {
-      reqBody[key] = value;
-    }
-  }
-
-  // Convert img0, img1, img2, etc. to an img array
-  const imgArray = [];
-  for (let i = 0; reqBody.hasOwnProperty(`img${i}`); i++) {
-    imgArray.push(reqBody[`img${i}`]);
-    delete reqBody[`img${i}`]; // Remove the img0, img1, etc. properties from the object
-  }
-  // Add the img array to the object
-  reqBody.imgs = imgArray;
-
-  console.log(reqBody);
+  const reqBody: any = await request.json();
 
   const reqJwt = request.headers.get("jwt");
 
