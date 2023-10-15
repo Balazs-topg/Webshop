@@ -68,6 +68,7 @@ function Page() {
         JSON.stringify({
           username: usernameRef.current!.value,
           email: emailRef.current!.value,
+          id: data.id,
         })
       );
     data.signupIsSuccessful && router.push("./signup-success");

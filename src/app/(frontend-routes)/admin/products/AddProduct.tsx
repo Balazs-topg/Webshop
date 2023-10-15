@@ -362,12 +362,10 @@ function AddProduct({
                     isRequired
                     ref={priceRef}
                   />
-                  <div>
-                    <ImageUrlInput
-                      state={productImgs}
-                      setState={setProductImgs}
-                    ></ImageUrlInput>
-                  </div>
+                  <ImageUrlInput
+                    state={productImgs}
+                    setState={setProductImgs}
+                  ></ImageUrlInput>
                   <div className="flex gap-2 items-center">
                     <Select
                       label="Select Category"

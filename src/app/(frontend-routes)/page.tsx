@@ -19,7 +19,7 @@ function CategoryBtn({
     );
   }
   return (
-    <button className="relative bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
+    <button className="relative whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
       {title}
     </button>
   );

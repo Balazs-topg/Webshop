@@ -55,6 +55,7 @@ function Page() {
         JSON.stringify({
           username: data.username,
           email: emailRef.current!.value,
+          id: data.id,
         })
       );
 

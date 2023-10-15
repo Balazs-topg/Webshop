@@ -27,6 +27,7 @@ export async function POST(request: Request, response: any) {
     {
       loginIsSuccessful: passwordIsCorrect,
       username: user ? user.username : undefined,
+      id: user ? user._id : undefined,
       userFound: Boolean(user),
       jwt: jwt,
     },

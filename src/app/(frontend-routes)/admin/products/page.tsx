@@ -44,9 +44,9 @@ export default function Home() {
   return (
     <>
       <div className=" font-poppins">
-        <WebsiteHeader></WebsiteHeader>
+        <WebsiteHeader />
         <div className="flex">
-          <AdminNav></AdminNav>
+          <AdminNav />
           <div className="w-full p-4 space-y-4 max-w-2xl mx-auto">
             <div className="w-full">
               <AddProduct updateParent={getProducts} />

@@ -104,9 +104,11 @@ function ImageUrlInput({
               setState={setListOfUrls}
               key={index}
             ></UrlInput>
-            <div className=" rounded-xl overflow-hidden">
-              <img src={listOfUrls[index]} alt="" />
-            </div>
+            {listOfUrls[index] && (
+              <div className="rounded-xl overflow-hidden">
+                <img src={listOfUrls[index]} alt="" />
+              </div>
+            )}{" "}
           </>
         );
       })}

@@ -4,10 +4,24 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { removeCookie } from "../../utils/manageCookies";
+import { removeCookie, getCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();
+  const [userData, setUserData] = useState();
+  console.log(userData);
+
+  const getUserInfo = async (userId: string) => {
+    const response = await fetch(`/api/users/${userId}`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+    });
+    const data = await response.json();
+    setUserData(data);
+  };
 
   useEffect(() => {
     try {
@@ -17,6 +31,14 @@ function Page() {
       }
     } catch {}
   }, [router]);
+
+  useEffect(() => {
+    try {
+      const userInfoFromLocalStorage = localStorage.getItem("userInfo");
+      const userInfo = JSON.parse(userInfoFromLocalStorage!);
+      getUserInfo(userInfo.id);
+    } catch {}
+  }, []);
 
   const storedUserInfo = localStorage.getItem("userInfo");
   const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
@@ -43,6 +65,18 @@ function Page() {
         >
           Logga ut
         </Button>
+        {userData && userData.isAdmin && (
+          <Button
+            size="lg"
+            color="default"
+            fullWidth
+            onClick={() => {
+              router.push("/admin");
+            }}
+          >
+            Gå till admin panel
+          </Button>
+        )}
       </div>
     </>
   );
