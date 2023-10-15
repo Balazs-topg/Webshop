@@ -208,7 +208,13 @@ function AddNewTag({ updateParent }: { updateParent: Function }) {
   );
 }
 
-function AddProduct({ className }: { className?: string }) {
+function AddProduct({
+  className,
+  updateParent,
+}: {
+  className?: string;
+  updateParent: Function;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
@@ -296,6 +302,7 @@ function AddProduct({ className }: { className?: string }) {
       body: JSON.stringify(jsonData),
     });
     const data = await response.json();
+    updateParent();
     setIsLoading(false);
     setResponseMessage(data.message);
   };
@@ -307,8 +314,9 @@ function AddProduct({ className }: { className?: string }) {
       <Button
         variant="solid"
         color="primary"
-        className=" flex items-center "
+        className="flex items-center"
         onPress={onOpen}
+        fullWidth
       >
         Add product {adminIcons.plus}
       </Button>
@@ -408,7 +416,10 @@ function AddProduct({ className }: { className?: string }) {
                   </Button>
                   <Modal
                     isOpen={Boolean(responseMessage)}
-                    onOpenChange={onOpenChange}
+                    onOpenChange={() => {
+                      onOpenChange();
+                      setResponseMessage("");
+                    }}
                     isDismissable={false}
                     size="sm"
                   >
