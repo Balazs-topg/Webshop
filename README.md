@@ -17,12 +17,24 @@ Spara jwt i cookies istället för localstorage. coockies sparas på clienten s�
 fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin dashboarden med en server-component.
 
 - [x] Setup stack
-- [ ] Setup DB
-- [ ] Setup env
+- [x] Setup DB
+- [x] Setup env
 - [x] Skapa cards
 
 - [ ] Skapa admin dashboard
-  - [ ] Skapa log-in med bcrypt
-  - [ ] Lägga till items till db (brandName, productName, image, price, category)
+
+  - [x] Skapa log-in med bcrypt
+  - [x] Lägga till items till db (brandName, productName, image, price, category)
   - [ ] Redigera items
-  - [ ] Ta bort items från db
+  - [x] Ta bort items från db
+  - [ ] lägg till så att man kan kolla på alla användare
+  - [ ] lägg till så att man kan kolla inkomande order
+
+- [ ] Lägg till reset password (behöver först hitta en bra email-provider)
+- [ ] Lägg till förmåga att "inspektera" objekt
+- [ ] Lägg till "favoriter"
+- [ ] Lägg till hur många det finns i lagert
+- [ ] Lägg till kundvagn
+- [ ] Lägg till så att man kan filter mellan kategorier och märken och pris mm
+- [ ] Lägg till sök funktion
+- [ ] Lägg till så att man kan betala och lägga order, och få order nummer
