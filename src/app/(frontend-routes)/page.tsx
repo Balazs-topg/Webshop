@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import ItemCard from "../components/ItemCard";
 import WebsiteHeader from "../components/WebsiteHeader";
+import { getCookie } from "./utils/manageCookies";
 
 function CategoryBtn({
   title,
@@ -45,6 +46,7 @@ export default function Home() {
       method: "get",
       headers: {
         "Content-Type": "application/json",
+        jwt: getCookie("jwt")!, //! it acutally can be null tho, if the user isn't logged it, it will be null
       },
     });
     const data = await response.json();
@@ -87,7 +89,7 @@ export default function Home() {
               productName={product.name}
               imageSrc={product.imgs[0]}
               price={product.price}
-              isFavourite={false}
+              isFavourite={product.isFavourite}
               isInstock={true}
             ></ItemCard>
           );

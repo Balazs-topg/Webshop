@@ -31,7 +31,7 @@ fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin d
   - [ ] lägg till så att man kan kolla inkomande order
 
 - [ ] Lägg till reset password (behöver först hitta en bra email-provider)
-- [ ] Lägg till förmåga att "inspektera" objekt
+- [x] Lägg till förmåga att "inspektera" objekt
 - [ ] Lägg till "favoriter"
 - [ ] Lägg till hur många det finns i lagert
 - [ ] Lägg till kundvagn

@@ -3,6 +3,8 @@ import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Ripples } from "react-ripples-continued";
 import Link from "next/link";
+import { getCookie } from "../(frontend-routes)/utils/manageCookies";
+import { useRouter } from "next/navigation";
 
 type itemCardTypes = {
   brandName: string;
@@ -23,13 +25,32 @@ export default function ItemCard({
   isFavourite = false,
   id,
 }: itemCardTypes) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
 
   const handleBuy = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 800);
+  };
+
+  const handleFavourite = async () => {
+    setIsFavouriteState(!isFavouriteState);
+    const response = await fetch(
+      `/api/products/${id}/favourite/${
+        isFavouriteState ? "un-favourite" : "favourite"
+      }`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!, //! it acutally can be null tho, if the user isn't logged it, it will be null
+        },
+      }
+    );
+    const data = await response.json();
   };
 
   return (
@@ -43,7 +64,10 @@ export default function ItemCard({
       <div className="shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all">
         <div className="img-cont relative bg-stone-100 p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden">
           <img
-            className="mix-blend-multiply transition-all"
+            onClick={() => {
+              router.push(`product/${productName}`);
+            }}
+            className="mix-blend-multiply transition-all cursor-pointer"
             src={imageSrc}
             alt=""
           />
@@ -51,7 +75,14 @@ export default function ItemCard({
         <div className="info space-y-2 py-2">
           <div className="font-medium border-b border-stone-100 flex items-center pb-2">
             {brandName}
-            <button className="relative overflow-hidden bg-stone-200 ml-auto rounded-full p-1">
+            <button
+              className={
+                isFavouriteState
+                  ? "relative overflow-hidden bg-amber-300 ml-auto rounded-full p-1"
+                  : "relative overflow-hidden bg-stone-200 ml-auto rounded-full p-1"
+              }
+              onClick={handleFavourite}
+            >
               <Ripples opacity={0.5} duration={700} optimize />
               <svg
                 xmlns="http://www.w3.org/2000/svg"

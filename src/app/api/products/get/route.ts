@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import productModel from "../../models/productModel";
+import accountModel from "../../models/accountModel";
 import "../../utils/connectToDB";
 
 export async function GET(request: NextRequest, response: any) {
@@ -8,6 +9,29 @@ export async function GET(request: NextRequest, response: any) {
 
   // Find all products
   const products = await productModel.find();
+
+  // get user from JWT
+  const reqJwt = request.headers.get("jwt");
+  if (!reqJwt) return NextResponse.json({}, { status: 401 });
+  const decodedJwt = jwt.decode(reqJwt);
+  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
+    return NextResponse.json({}, { status: 401 });
+  const userId = decodedJwt.id;
+  if (!userId) return NextResponse.json({}, { status: 401 });
+  const user = await accountModel.findById(userId);
+
+  // get favs
+  products.map((product) => {
+    const frozenProduct = { ...product };
+    console.log(user.favourites.toString().includes(product._id));
+    if (user.favourites.toString().includes(product._id)) {
+      frozenProduct._doc.isFavourite = true;
+    } else {
+      frozenProduct._doc.isFavourite = false;
+    }
+    console.log(frozenProduct);
+    return frozenProduct;
+  });
 
   return NextResponse.json(products, { status: 200 });
 }
