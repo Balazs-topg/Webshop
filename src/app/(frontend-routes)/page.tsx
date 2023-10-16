@@ -82,6 +82,7 @@ export default function Home() {
           return (
             <ItemCard
               key={product._id}
+              id={product._id}
               brandName={product.brand}
               productName={product.name}
               imageSrc={product.imgs[0]}

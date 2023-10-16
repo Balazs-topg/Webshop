@@ -2,6 +2,7 @@
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Ripples } from "react-ripples-continued";
+import Link from "next/link";
 
 type itemCardTypes = {
   brandName: string;
@@ -10,6 +11,7 @@ type itemCardTypes = {
   imageSrc: string;
   isInstock: boolean;
   isFavourite: boolean;
+  id: string;
 };
 
 export default function ItemCard({
@@ -19,6 +21,7 @@ export default function ItemCard({
   price,
   isInstock = true,
   isFavourite = false,
+  id,
 }: itemCardTypes) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,7 +53,6 @@ export default function ItemCard({
             {brandName}
             <button className="relative overflow-hidden bg-stone-200 ml-auto rounded-full p-1">
               <Ripples opacity={0.5} duration={700} optimize />
-
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -65,7 +67,9 @@ export default function ItemCard({
               </svg>
             </button>
           </div>
-          <div className="font-bold">{productName}</div>
+          <Link href={`/product/${productName}`} className="font-bold">
+            {productName}
+          </Link>
           <div className="font-medium text-xs uppercase flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
             <div>finns i lager</div>
