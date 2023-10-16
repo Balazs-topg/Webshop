@@ -38,3 +38,5 @@ fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin d
 - [ ] Lägg till så att man kan filter mellan kategorier och märken och pris mm
 - [ ] Lägg till sök funktion
 - [ ] Lägg till så att man kan betala och lägga order, och få order nummer
+- [ ] Lägg till recensioner
+- [ ] SERCURITY : verify jwt bruhhhh

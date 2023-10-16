@@ -85,7 +85,7 @@ function ImageUrlInput({
   state: string[];
   setState: Function;
 }) {
-  const [listOfUrls, setListOfUrls] = useState<string[]>([""]);
+  const [listOfUrls, setListOfUrls] = useState<string[]>(state);
 
   //sync input prop state, to component state
   useEffect(() => {
