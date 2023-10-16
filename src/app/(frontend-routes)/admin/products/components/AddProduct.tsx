@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import adminIcons from "../adminIcons";
+import adminIcons from "../../adminIcons";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 
-import ImageUrlInput from "./ImageUrlInput";
+import ImageUrlInput from "./Addproduct-subcomponents/ImageUrlInput";
 
 import { Loader2 } from "lucide-react";
 
-import { getCookie } from "../../utils/manageCookies";
+import { getCookie } from "../../../utils/manageCookies";
 
 import { AddNewBrand } from "./Addproduct-subcomponents/addNew/AddNewBrand";
 import { AddNewCategory } from "./Addproduct-subcomponents/addNew/AddNewCategory";

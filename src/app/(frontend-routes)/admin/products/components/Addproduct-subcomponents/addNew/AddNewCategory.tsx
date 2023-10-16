@@ -10,14 +10,14 @@ import {
 import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 import { useRef } from "react";
 import { useDisclosure } from "@nextui-org/react";
-import adminIcons from "../../../adminIcons";
+import adminIcons from "../../../../adminIcons";
 
-export function AddNewTag({ updateParent }: { updateParent: Function }) {
+export function AddNewCategory({ updateParent }: { updateParent: Function }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const inputRef = useRef<HTMLInputElement>(null);
-  async function handleAddAddTag() {
-    const response = await fetch("/api/products/tags/add", {
+  async function handleAddCategory() {
+    const response = await fetch("/api/products/categories/add", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -46,10 +46,10 @@ export function AddNewTag({ updateParent }: { updateParent: Function }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Add new tag
+                Add new category
               </ModalHeader>
               <ModalBody>
-                <Input ref={inputRef} type="name" label="Tag" />
+                <Input ref={inputRef} type="name" label="Category Name" />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -57,7 +57,7 @@ export function AddNewTag({ updateParent }: { updateParent: Function }) {
                 </Button>
                 <Button
                   color="primary"
-                  onClick={handleAddAddTag}
+                  onClick={handleAddCategory}
                   onPress={onClose}
                 >
                   Add

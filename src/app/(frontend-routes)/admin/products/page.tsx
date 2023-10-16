@@ -1,7 +1,7 @@
 "use client";
 import AdminNav from "../AdminNav";
 import WebsiteHeader from "../../../components/WebsiteHeader";
-import AddProduct from "./AddProduct";
+import AddProduct from "./components/AddProduct";
 
 import { useDisclosure } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
@@ -11,7 +11,6 @@ import adminIcons from "../adminIcons";
 import { getCookie } from "../../utils/manageCookies";
 
 export default function Home() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [displayProducts, setDisplayProducts] = useState([]);
 
   async function getProducts() {

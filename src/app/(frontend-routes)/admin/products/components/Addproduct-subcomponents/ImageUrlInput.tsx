@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input, Button } from "@nextui-org/react";
-import adminIcons from "../adminIcons";
+import adminIcons from "../../../adminIcons";
 import Image from "next/image";
 
 function UrlInput({
