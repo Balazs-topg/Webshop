@@ -28,6 +28,7 @@ export default function ItemCard({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
+  const [isBeingClicked, setIsBeingClicked] = useState(false); // for styles, not for functionallity
 
   const handleBuy = () => {
     setIsLoading(true);
@@ -61,13 +62,27 @@ export default function ItemCard({
         duration: 0.2,
       }}
     >
-      <div className="shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all">
-        <div className="img-cont relative bg-stone-100 p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden">
+      <div
+        className={
+          !isBeingClicked
+            ? "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all"
+            : "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all scale-95"
+        }
+      >
+        <div
+          className="img-cont relative cursor-pointer bg-stone-100 p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden"
+          onClick={() => {
+            router.push(`product/${productName}`);
+          }}
+          onMouseDown={() => {
+            setIsBeingClicked(true);
+          }}
+          onMouseLeave={() => {
+            setIsBeingClicked(false);
+          }}
+        >
           <img
-            onClick={() => {
-              router.push(`product/${productName}`);
-            }}
-            className="mix-blend-multiply transition-all cursor-pointer"
+            className="mix-blend-multiply transition-all"
             src={imageSrc}
             alt=""
           />
