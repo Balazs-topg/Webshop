@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import adminIcons from "../adminIcons";
-import { Input } from "@nextui-org/react";
-import { Select, SelectSection, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@nextui-org/react";
 
 import ImageUrlInput from "./ImageUrlInput";
 
 import { Loader2 } from "lucide-react";
 
 import { getCookie } from "../../utils/manageCookies";
+
+import { AddNewBrand } from "./Addproduct-subcomponents/addNew/AddNewBrand";
+import { AddNewCategory } from "./Addproduct-subcomponents/addNew/AddNewCategory";
+import { AddNewTag } from "./Addproduct-subcomponents/addNew/AddNewTag";
 
 import {
   Modal,
@@ -19,7 +22,7 @@ import {
   Button,
 } from "@nextui-org/react";
 
-type TagCategoryOrBrand = {
+type TagOrCategoryOrBrand = {
   _id: string;
   name: string;
 };
@@ -32,181 +35,6 @@ type AddItemType = {
   tags: string[];
   price: number;
 };
-
-function AddNewBrand({ updateParent }: { updateParent: Function }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  async function handleAddBrand() {
-    const response = await fetch("/api/products/brands/add", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-      body: JSON.stringify({
-        name: inputRef.current!.value,
-      }),
-    });
-    updateParent();
-  }
-  return (
-    <>
-      <Button isIconOnly size="lg" color="primary" onPress={onOpen}>
-        {adminIcons.plus}
-      </Button>
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        size="sm"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Add new brand
-              </ModalHeader>
-              <ModalBody>
-                <Input ref={inputRef} type="name" label="Brand Name" />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={handleAddBrand}
-                  onPress={onClose}
-                >
-                  Add
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
-
-function AddNewCategory({ updateParent }: { updateParent: Function }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  async function handleAddCategory() {
-    const response = await fetch("/api/products/categories/add", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-      body: JSON.stringify({
-        name: inputRef.current!.value,
-      }),
-    });
-    updateParent();
-  }
-
-  return (
-    <>
-      <Button isIconOnly size="lg" color="primary" onPress={onOpen}>
-        {adminIcons.plus}
-      </Button>
-
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        size="sm"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Add new category
-              </ModalHeader>
-              <ModalBody>
-                <Input ref={inputRef} type="name" label="Category Name" />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={handleAddCategory}
-                  onPress={onClose}
-                >
-                  Add
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
-
-function AddNewTag({ updateParent }: { updateParent: Function }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  async function handleAddAddTag() {
-    const response = await fetch("/api/products/tags/add", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-      body: JSON.stringify({
-        name: inputRef.current!.value,
-      }),
-    });
-    updateParent();
-  }
-
-  return (
-    <>
-      <Button isIconOnly size="lg" color="primary" onPress={onOpen}>
-        {adminIcons.plus}
-      </Button>
-
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isDismissable={false}
-        size="sm"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Add new tag
-              </ModalHeader>
-              <ModalBody>
-                <Input ref={inputRef} type="name" label="Tag" />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={handleAddAddTag}
-                  onPress={onClose}
-                >
-                  Add
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
 
 function AddProduct({
   className,
@@ -342,7 +170,7 @@ function AddProduct({
                       isRequired
                       ref={selectBrandRef}
                     >
-                      {brandsList.map((brand: TagCategoryOrBrand) => (
+                      {brandsList.map((brand: TagOrCategoryOrBrand) => (
                         <SelectItem key={brand.name} value={brand.name}>
                           {brand.name}
                         </SelectItem>
@@ -373,7 +201,7 @@ function AddProduct({
                       isRequired
                       ref={selectCategory}
                     >
-                      {categoryList.map((category: TagCategoryOrBrand) => (
+                      {categoryList.map((category: TagOrCategoryOrBrand) => (
                         <SelectItem key={category.name} value={category.name}>
                           {category.name}
                         </SelectItem>
@@ -389,7 +217,7 @@ function AddProduct({
                       isRequired
                       ref={selectTagsRef}
                     >
-                      {tagsList.map((tag: TagCategoryOrBrand) => (
+                      {tagsList.map((tag: TagOrCategoryOrBrand) => (
                         <SelectItem key={tag.name} value={tag.name}>
                           {tag.name}
                         </SelectItem>

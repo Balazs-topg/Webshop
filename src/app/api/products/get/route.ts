@@ -13,7 +13,9 @@ export async function GET(request: NextRequest, response: any) {
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");
-  console.log("reqJwt : ", reqJwt);
+  console.log("reqJwt :", reqJwt);
+  console.log("typeof reqJwt :", typeof reqJwt);
+
   const loggedIn = Boolean(reqJwt !== "null");
 
   if (loggedIn) {

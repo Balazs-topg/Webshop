@@ -19,9 +19,11 @@ export default function Home() {
       method: "get",
       headers: {
         "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
       },
     });
     const data = await response.json();
+    console.log(data);
     setDisplayProducts(data);
     console.log(data);
   }
@@ -56,21 +58,45 @@ export default function Home() {
                 ? displayProducts.map((product, index) => {
                     return (
                       <div
-                        className=" bg-white rounded-lg py-2 px-4 flex items-center"
+                        className=" bg-white rounded-lg py-2 px-4 flex items-center justify-between"
                         key={product._id}
                       >
                         <div>{product.name}</div>
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          color="danger"
-                          className=" ml-auto"
-                          onClick={() => {
-                            removeProduct(product._id);
-                          }}
-                        >
-                          {adminIcons.trash}
-                        </Button>
+                        <div className=" space-x-3">
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            color="primary"
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  `Are you sure you want to remove ${product.name}?`
+                                )
+                              ) {
+                                removeProduct(product._id);
+                              }
+                            }}
+                          >
+                            {adminIcons.edit}
+                          </Button>
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            color="danger"
+                            className=" ml-auto"
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  `Are you sure you want to remove ${product.name}?`
+                                )
+                              ) {
+                                removeProduct(product._id);
+                              }
+                            }}
+                          >
+                            {adminIcons.trash}
+                          </Button>
+                        </div>
                       </div>
                     );
                   })
