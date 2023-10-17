@@ -4,17 +4,19 @@ import ItemCard from "../components/ItemCard";
 import WebsiteHeader from "../components/WebsiteHeader";
 import { getCookie } from "./utils/manageCookies";
 
+import { ProductType } from "../types/ProductType";
+
 function CategoryBtn({
   title,
-  isLoading,
+  isSkeleton,
 }: {
   title?: string;
-  isLoading?: boolean;
+  isSkeleton?: boolean;
 }) {
-  if (isLoading) {
+  if (isSkeleton) {
     return (
       <button className=" bg-white relative overflow-hidden px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
-        <div className=" absolute top-0 left-0 w-full h-full bg-stone-400 animate-pulse"></div>
+        <div className=" absolute top-0 left-0 w-full h-full bg-stone-300 animate-pulse"></div>
         <div className="opacity-0">loading...</div>
       </button>
     );
@@ -73,27 +75,35 @@ export default function Home() {
           })
         ) : (
           <>
-            <CategoryBtn isLoading />
-            <CategoryBtn isLoading />
-            <CategoryBtn isLoading />
+            <CategoryBtn isSkeleton />
+            <CategoryBtn isSkeleton />
+            <CategoryBtn isSkeleton />
           </>
         )}
       </div>
       <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
-        {products.map((product) => {
-          return (
-            <ItemCard
-              key={product._id}
-              id={product._id}
-              brandName={product.brand}
-              productName={product.name}
-              imageSrc={product.imgs[0]}
-              price={product.price}
-              isFavourite={product.isFavourite}
-              isInstock={true}
-            ></ItemCard>
-          );
-        })}
+        {products.length > 0 ? (
+          products.map((product: ProductType) => {
+            return (
+              <ItemCard
+                key={product._id}
+                id={product._id}
+                brandName={product.brand}
+                productName={product.name}
+                imageSrc={product.imgs[0]}
+                price={product.price}
+                isFavourite={product.isFavourite}
+                isInstock={true}
+              />
+            );
+          })
+        ) : (
+          <>
+            <ItemCard isSkeleton />
+            <ItemCard isSkeleton />
+            <ItemCard isSkeleton />
+          </>
+        )}
       </div>
     </div>
   );

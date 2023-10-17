@@ -10,16 +10,7 @@ import adminIcons from "../adminIcons";
 
 import { getCookie } from "../../utils/manageCookies";
 
-type ProductType = {
-  _id: string;
-  name: string;
-  price: number;
-  brand: string;
-  category: string;
-  imgs: string[];
-  tags: string[];
-  isFavourite: boolean;
-};
+import { ProductType } from "@/app/types/ProductType";
 
 export default function Home() {
   const [displayProducts, setDisplayProducts] = useState([]);
