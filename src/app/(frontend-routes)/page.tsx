@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import ItemCard from "../components/ItemCard";
 import WebsiteHeader from "../components/WebsiteHeader";
+import WebsiteFooter from "../components/WebsiteFooter";
+
 import { getCookie } from "./utils/manageCookies";
 
 import { ProductType } from "../types/ProductType";
@@ -62,49 +64,52 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="font-poppins">
-      <WebsiteHeader />
-      <div className="flex gap-2 px-4 py-3 bg-stone-200 overflow-auto">
-        {category.length > 0 ? (
-          category.map((category) => {
-            return (
-              <div key={category.id}>
-                <CategoryBtn title={category.name} />
-              </div>
-            );
-          })
-        ) : (
-          <>
-            <CategoryBtn isSkeleton />
-            <CategoryBtn isSkeleton />
-            <CategoryBtn isSkeleton />
-          </>
-        )}
+    <>
+      <div className="font-poppins min-h-screen">
+        <WebsiteHeader />
+        <div className="flex gap-2 px-4 py-3 bg-stone-200 overflow-auto">
+          {category.length > 0 ? (
+            category.map((category) => {
+              return (
+                <div key={category.id}>
+                  <CategoryBtn title={category.name} />
+                </div>
+              );
+            })
+          ) : (
+            <>
+              <CategoryBtn isSkeleton />
+              <CategoryBtn isSkeleton />
+              <CategoryBtn isSkeleton />
+            </>
+          )}
+        </div>
+        <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
+          {products.length > 0 ? (
+            products.map((product: ProductType) => {
+              return (
+                <ItemCard
+                  key={product._id}
+                  id={product._id}
+                  brandName={product.brand}
+                  productName={product.name}
+                  imageSrc={product.imgs[0]}
+                  price={product.price}
+                  isFavourite={product.isFavourite}
+                  isInstock={true}
+                />
+              );
+            })
+          ) : (
+            <>
+              <ItemCard isSkeleton />
+              <ItemCard isSkeleton />
+              <ItemCard isSkeleton />
+            </>
+          )}
+        </div>
       </div>
-      <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
-        {products.length > 0 ? (
-          products.map((product: ProductType) => {
-            return (
-              <ItemCard
-                key={product._id}
-                id={product._id}
-                brandName={product.brand}
-                productName={product.name}
-                imageSrc={product.imgs[0]}
-                price={product.price}
-                isFavourite={product.isFavourite}
-                isInstock={true}
-              />
-            );
-          })
-        ) : (
-          <>
-            <ItemCard isSkeleton />
-            <ItemCard isSkeleton />
-            <ItemCard isSkeleton />
-          </>
-        )}
-      </div>
-    </div>
+      <WebsiteFooter />
+    </>
   );
 }
