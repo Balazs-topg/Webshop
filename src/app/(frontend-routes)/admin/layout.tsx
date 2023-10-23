@@ -16,7 +16,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("accessing admin layout");
   if (await isPageRequestAdmin(cookies().getAll())) {
     return (
       <html lang="en">
