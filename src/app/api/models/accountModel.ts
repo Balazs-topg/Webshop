@@ -12,6 +12,7 @@ const accountSchema = new mongoose.Schema(
         ref: "SomeModel", // Replace 'SomeModel' with the name of the model these ObjectIds reference, if applicable
       },
     ],
+    isAdmin: { type: String, required: false },
   },
   {
     versionKey: false,

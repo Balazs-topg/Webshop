@@ -13,8 +13,6 @@ export async function GET(request: NextRequest, response: any) {
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");
-  console.log("reqJwt :", reqJwt);
-  console.log("typeof reqJwt :", typeof reqJwt);
 
   const loggedIn = Boolean(reqJwt !== "null");
 
@@ -30,13 +28,11 @@ export async function GET(request: NextRequest, response: any) {
     // get favs
     products.map((product) => {
       const frozenProduct = { ...product };
-      console.log(user.favourites.toString().includes(product._id));
       if (user.favourites.toString().includes(product._id)) {
         frozenProduct._doc.isFavourite = true;
       } else {
         frozenProduct._doc.isFavourite = false;
       }
-      console.log(frozenProduct);
       return frozenProduct;
     });
   }

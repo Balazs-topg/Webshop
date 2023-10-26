@@ -10,11 +10,17 @@ export async function GET(
   console.log("request recived!");
 
   const userId = params["user-id"]; // 'a', 'b', or 'c'
-  console.log(userId);
-
   const reqJwt = request.headers.get("jwt");
+  if (!reqJwt) return NextResponse.json({}, { status: 401 });
+
+  try {
+    jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
+  } catch {
+    return NextResponse.json({ status: 401 });
+  }
 
   const userData = await accountModel.findById(userId);
+  console.log(userData);
 
   return NextResponse.json(userData, { status: 200 });
 }

@@ -6,20 +6,27 @@ import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 export default async function isPageRequestAdmin(allCookies: RequestCookie[]) {
   if (!allCookies) return false;
 
-  const jwtCookie = String(
+  const jwtToken = String(
     allCookies.find((cookie) => cookie.name === "jwt")?.value
   );
-  if (!jwtCookie) return false;
 
-  const decodedJwt = jwt.decode(jwtCookie);
-  console.log("decodedJwt: ", decodedJwt);
+  if (!jwtToken) return false;
+
+  try {
+    jwt.verify(jwtToken, process.env.JWT_SECRET_KEY!);
+  } catch {
+    return false;
+  }
+
+  const decodedJwt = jwt.decode(jwtToken);
   if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
     return false;
+
   const userId = decodedJwt.id;
-  console.log("isPageRequestAdmin called");
   if (!userId) return false;
 
   const user = await accountModel.findById(userId);
+  console.log("userrrr", user);
   const isAdmin = user ? user.isAdmin : false;
 
   return isAdmin;

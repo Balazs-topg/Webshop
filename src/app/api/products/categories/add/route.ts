@@ -20,7 +20,7 @@ export async function POST(request: NextRequest, response: any) {
 
   //authenticate jwt - if invalid then return 40
   if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.decode(reqJwt);
+  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
   if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
     return NextResponse.json({}, { status: 401 });
   const userId = decodedJwt.id;
