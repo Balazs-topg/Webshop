@@ -55,7 +55,6 @@ export default function Home() {
     });
     const data = await response.json();
     setProducts(data);
-    console.log(data);
   }
 
   useEffect(() => {

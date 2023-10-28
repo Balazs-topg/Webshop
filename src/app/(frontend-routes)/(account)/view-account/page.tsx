@@ -9,7 +9,6 @@ import { removeCookie, getCookie } from "../../utils/manageCookies";
 function Page() {
   const router = useRouter();
   const [userData, setUserData] = useState();
-  console.log(userData);
 
   const getUserInfo = async (userId: string) => {
     const response = await fetch(`/api/users/${userId}`, {

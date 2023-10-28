@@ -7,6 +7,14 @@ import { Ripples } from "react-ripples-continued";
 
 function WebsiteHeader() {
   const [username, setUsername] = useState("");
+  const [productCount, setProductCount] = useState(0);
+
+  const fetchCount = async () => {
+    const response = await fetch("api/products/count", { method: "get" });
+    const data = await response.json();
+    setProductCount(data.count);
+  };
+
   useEffect(() => {
     try {
       const storedUserInfo = localStorage.getItem("userInfo");
@@ -19,6 +27,7 @@ function WebsiteHeader() {
     } catch (error) {
       console.error("Error parsing userInfo from localStorage:", error);
     }
+    fetchCount();
   }, []);
 
   const router = useRouter();
@@ -30,7 +39,7 @@ function WebsiteHeader() {
             web <span className="text-sky-800">shop</span>
           </Link>
           <Input
-            placeholder="Sök bland 0 produkter"
+            placeholder={`Sök bland ${productCount} produkter`}
             className="overflow-hidden rounded-full"
             startContent={
               <svg

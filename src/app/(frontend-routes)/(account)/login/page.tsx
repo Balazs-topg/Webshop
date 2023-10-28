@@ -43,7 +43,6 @@ function Page() {
       }),
     });
     const data = await response.json();
-    console.log(data);
 
     data.userFound ? setUserFound(true) : setUserFound(false);
     !data.loginIsSuccessful && setPasswordIsWrong(true);

@@ -23,7 +23,6 @@ export async function GET(request: NextRequest, response: any) {
   // Find all products
   // const products = await productModel.find();
   const products = await getBrandNames(await productModel.find());
-  console.log(products);
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");

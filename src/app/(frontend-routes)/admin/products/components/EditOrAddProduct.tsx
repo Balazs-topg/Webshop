@@ -138,8 +138,6 @@ function EditOrAddProduct({
       imgs: dataProductImgs,
     };
 
-    console.log(jsonData);
-
     const response = await fetch(
       isNew ? "/api/products/add" : `/api/products/${productId}/update`,
       {
@@ -156,14 +154,6 @@ function EditOrAddProduct({
     setIsLoading(false);
     setResponseMessage(data.message);
 
-    // const jsonData = {
-    //   brand: selectedBrand,
-    //   name: productName,
-    //   category: selectedCategory,
-    //   tags: selectedTags,
-    //   price: productPrice,
-    //   imgs: dataProductImgs,
-    // };
     if (isNew) {
       setSelectedBrand("");
       setProductName("");

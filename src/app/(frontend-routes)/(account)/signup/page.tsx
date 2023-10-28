@@ -35,7 +35,6 @@ function Page() {
     setIsLoading(true);
 
     if (passwordRef.current!.value !== repeatPasswordRef.current!.value) {
-      console.log("wrong");
       setIsLoading(false);
       setRepeatWordIsIncorrect(true);
       return;
@@ -55,7 +54,6 @@ function Page() {
       }),
     });
     const data = await response.json();
-    console.log(data);
 
     data.usernameIsTaken ? setUsernameIsTaken(true) : setUsernameIsTaken(false);
     data.emailIsTaken ? setEmailIsTaken(true) : setEmailIsTaken(false);
