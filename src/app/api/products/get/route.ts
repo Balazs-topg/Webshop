@@ -29,6 +29,7 @@ export async function GET(request: NextRequest, response: any) {
 
   const loggedIn = Boolean(reqJwt !== "null");
 
+  let productsWithFavs;
   if (loggedIn) {
     //auth jwt
     const decodedJwt = jwt.decode(reqJwt!);
@@ -39,17 +40,20 @@ export async function GET(request: NextRequest, response: any) {
     const user = await accountModel.findById(userId);
 
     // get favs
-    products.map((product) => {
-      const frozenProduct = { ...product };
-      if (user.favourites.toString().includes(product._id)) {
+    productsWithFavs = products.map((product) => {
+      const frozenProduct = product.toObject
+        ? product.toObject()
+        : { ...product };
+      if (user.favourites.map(String).includes(product._id.toString())) {
         frozenProduct.isFavourite = true;
       } else {
         frozenProduct.isFavourite = false;
       }
       return frozenProduct;
     });
+    return NextResponse.json(productsWithFavs, { status: 200 });
   }
-
+  console.log(productsWithFavs);
   return NextResponse.json(products, { status: 200 });
 }
 

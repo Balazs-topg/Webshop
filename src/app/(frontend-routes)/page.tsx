@@ -4,6 +4,8 @@ import ItemCard from "../components/ItemCard";
 import WebsiteHeader from "../components/WebsiteHeader";
 import WebsiteFooter from "../components/WebsiteFooter";
 
+import { Ripples } from "react-ripples-continued";
+
 import { getCookie } from "./utils/manageCookies";
 
 import { ProductType } from "../types/ProductType";
@@ -24,8 +26,9 @@ function CategoryBtn({
     );
   }
   return (
-    <button className="relative whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
+    <button className="relative overflow-hidden whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
       {title}
+      <Ripples fillAndHold color="gray" opacity={0.5} optimize />
     </button>
   );
 }
