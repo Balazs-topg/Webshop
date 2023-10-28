@@ -33,7 +33,7 @@ function SelectTagInput({
     >
       {fetchedTagList.map((category: TagOrCategoryOrBrand) => (
         <SelectItem
-          key={category.name}
+          key={category._id}
           value={category.name}
           textValue={category.name}
         >
@@ -43,7 +43,7 @@ function SelectTagInput({
               onClick={async () => {
                 if (
                   window.confirm(
-                    `are you sure you want to delete ${category.name}`
+                    `are you sure you want to delete ${category._id}`
                   )
                 ) {
                   await fetch(`/api/products/tags/${category._id}/remove`, {

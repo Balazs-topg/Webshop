@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import accountModel from "@/app/api/models/accountModel";
 import productModel from "@/app/api/models/productModel";
 import "../../../utils/connectToDB";
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
 
 export async function PUT(
   request: Request,
@@ -23,6 +25,9 @@ export async function PUT(
   //check if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({ status: 401 });
+
+  console.log("reqBody.brand", reqBody.brand);
+  console.log("reqBody.category", reqBody.category);
 
   const theProductWhichWeWantToUpdate = await productModel.findByIdAndUpdate(
     objectId,

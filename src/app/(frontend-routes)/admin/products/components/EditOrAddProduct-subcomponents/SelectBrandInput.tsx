@@ -28,15 +28,13 @@ function SelectBrandInput({
       onChange={(e) => setSelectedBrand(e.target.value)}
     >
       {fetchedBrandsList.map((brand: TagOrCategoryOrBrand) => (
-        <SelectItem key={brand.name} value={brand.name} textValue={brand.name}>
+        <SelectItem key={brand._id} value={brand._id} textValue={brand.name}>
           <div className="flex justify-between items-center">
             {brand.name}
             <div
               onClick={async () => {
                 if (
-                  window.confirm(
-                    `are you sure you want to delete ${brand.name}`
-                  )
+                  window.confirm(`are you sure you want to delete ${brand._id}`)
                 ) {
                   await fetch(`/api/products/brands/${brand._id}/remove`, {
                     method: "delete",

@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     price: { type: String, required: true },
-    brand: { type: String, required: true },
-    category: { type: String, required: true },
+    brand: { type: Schema.Types.ObjectId, required: true },
+    category: { type: Schema.Types.ObjectId, required: true },
     imgs: { type: Array, required: true },
-    tags: { type: Array, required: true },
+    tags: [{ type: Schema.Types.ObjectId }],
   },
   {
     versionKey: false,

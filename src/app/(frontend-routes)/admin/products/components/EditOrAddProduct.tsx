@@ -29,8 +29,8 @@ import SelectCategoryInput from "./EditOrAddProduct-subcomponents/SelectCategory
 import SelectTagInput from "./EditOrAddProduct-subcomponents/SelectTagInput";
 
 export type TagOrCategoryOrBrand = {
-  _id: string;
   name: string;
+  _id: string;
 };
 
 type AddItemType = {
@@ -127,8 +127,6 @@ function EditOrAddProduct({
 
     //remove empty url things from data
     const dataProductImgs = productImgs.filter((item) => item && item);
-    console.log(productImgs);
-    console.log(dataProductImgs);
 
     // Create a new JSON object
     const jsonData = {
@@ -139,6 +137,8 @@ function EditOrAddProduct({
       price: productPrice,
       imgs: dataProductImgs,
     };
+
+    console.log(jsonData);
 
     const response = await fetch(
       isNew ? "/api/products/add" : `/api/products/${productId}/update`,
@@ -152,7 +152,6 @@ function EditOrAddProduct({
       }
     );
     const data = await response.json();
-    console.log("data", data);
     updateParent && updateParent();
     setIsLoading(false);
     setResponseMessage(data.message);

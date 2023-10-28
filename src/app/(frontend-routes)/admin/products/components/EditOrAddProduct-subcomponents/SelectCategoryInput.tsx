@@ -29,8 +29,8 @@ function SelectCategoryInput({
     >
       {fetchedCategoryList.map((category: TagOrCategoryOrBrand) => (
         <SelectItem
-          key={category.name}
-          value={category.name}
+          key={category._id}
+          value={category._id}
           textValue={category.name}
         >
           <div className="flex justify-between items-center">
@@ -39,7 +39,7 @@ function SelectCategoryInput({
               onClick={async () => {
                 if (
                   window.confirm(
-                    `are you sure you want to delete ${category.name}`
+                    `are you sure you want to delete ${category._id}`
                   )
                 ) {
                   await fetch(

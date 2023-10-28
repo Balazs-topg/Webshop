@@ -4,6 +4,7 @@ import productModel from "@/app/api/models/productModel";
 import Image from "next/image";
 import "../../../api/utils/connectToDB";
 import { Ripples } from "react-ripples-continued";
+import brandModel from "@/app/api/models/brandModel";
 
 export default async function Page({
   params,
@@ -12,6 +13,15 @@ export default async function Page({
 }) {
   const productName = decodeURIComponent(params["product-name"]);
   const product = await productModel.findOne({ name: productName });
+  const brand = await brandModel.findById("" + product.brand);
+  product.brandName = brand.name;
+  // product.map(async (product) => {
+  //   const frozenProduct = { ...product };
+  //   const brandName = await brandModel.findById("" + product.brand);
+  //   frozenProduct._doc.brandName = brandName.name;
+  //   return frozenProduct;
+  // });
+
   return (
     <>
       <WebsiteHeader />
@@ -29,7 +39,7 @@ export default async function Page({
           <div className="flex-1 shrink-0 flex flex-col">
             <div className="whitespace-nowrap flex flex-col items-start">
               <h2 className="font-bold text-2xl text-sky-800">
-                {product.brand}
+                {product.brandName}
               </h2>
               <h1 className="font-semibold text-4xl">{product.name}</h1>
             </div>

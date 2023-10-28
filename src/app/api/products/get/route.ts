@@ -3,13 +3,19 @@ import jwt from "jsonwebtoken";
 import productModel from "../../models/productModel";
 import accountModel from "../../models/accountModel";
 import "../../utils/connectToDB";
-import { type } from "os";
+import brandModel from "../../models/brandModel";
 
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
   // Find all products
   const products = await productModel.find();
+  products.map(async (product) => {
+    const frozenProduct = { ...product };
+    const brandName = await brandModel.findById("" + product.brand);
+    frozenProduct._doc.brandName = brandName.name;
+    return frozenProduct;
+  });
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");
