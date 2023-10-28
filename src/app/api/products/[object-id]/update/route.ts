@@ -2,16 +2,14 @@ import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 import accountModel from "@/app/api/models/accountModel";
 import productModel from "@/app/api/models/productModel";
-import "../../../../utils/connectToDB";
+import "../../../utils/connectToDB";
 
-export async function POST(
+export async function PUT(
   request: Request,
   { params }: { params: { "object-id": string; action: string } }
 ) {
-  console.log("request reciveddd!");
-
+  const reqBody: any = await request.json();
   const objectId = params["object-id"]; // 'a', 'b', or 'c'
-  const action = params.action;
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");
@@ -22,20 +20,14 @@ export async function POST(
   const userId = decodedJwt.id;
   if (!userId) return NextResponse.json({}, { status: 401 });
   const user = await accountModel.findById(userId);
+  //check if admin
+  const isAdmin = user ? user.isAdmin : false;
+  if (!isAdmin) return NextResponse.json({ status: 401 });
 
-  //favourite logic
-  if (!user.favourites) user.favourites = [];
-
-  if (action == "un-favourite") {
-    user.favourites.splice(user.favourites.indexOf(objectId), 1);
-  } else if (action == "favourite") {
-    //if its not in favourites
-    if (!user.favourites.includes(objectId)) {
-      user.favourites.push(objectId);
-      user.markModified("favourites");
-    }
-  }
-  await user.save();
+  const theProductWhichWeWantToUpdate = await productModel.findByIdAndUpdate(
+    objectId,
+    reqBody
+  );
 
   return NextResponse.json({ status: 200 });
 }
@@ -43,8 +35,8 @@ export async function POST(
 //boiler plate
 export async function GET(request: Request) {}
 export async function HEAD(request: Request) {}
-// export async function POST(request: Request) {}
-export async function PUT(request: Request) {}
+export async function POST(request: Request) {}
+// export async function PUT(request: Request) {}
 export async function DELETE(request: Request) {}
 export async function PATCH(request: Request) {}
 export async function OPTIONS(request: Request) {}

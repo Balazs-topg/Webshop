@@ -17,7 +17,7 @@ export async function DELETE(
 
   // Authenticate JWT
   if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.decode(reqJwt);
+  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
   if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
     return NextResponse.json({}, { status: 401 });
   const userId = decodedJwt.id;

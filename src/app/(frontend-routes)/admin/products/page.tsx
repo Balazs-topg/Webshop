@@ -4,6 +4,8 @@ import WebsiteHeader from "../../../components/WebsiteHeader";
 import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 
+import EditOrAddProduct from "./components/EditOrAddProduct";
+
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import adminIcons from "../adminIcons";
@@ -24,9 +26,7 @@ export default function Home() {
       },
     });
     const data = await response.json();
-    console.log(data);
     setDisplayProducts(data);
-    console.log(data);
   }
 
   async function removeProduct(id: string) {
@@ -52,7 +52,7 @@ export default function Home() {
           <AdminNav />
           <div className="w-full p-4 space-y-4 max-w-2xl mx-auto">
             <div className="w-full">
-              <AddProduct updateParent={getProducts} />
+              <EditOrAddProduct isNew updateParent={getProducts} />
             </div>
             <div className=" rounded-2xl bg-stone-100 p-4 space-y-2">
               {displayProducts
@@ -64,13 +64,14 @@ export default function Home() {
                       >
                         <div>{product.name}</div>
                         <div className="flex gap-3">
-                          <EditProduct
+                          <EditOrAddProduct
                             brand={product.brand}
                             name={product.name}
                             price={product.price}
                             imageUrl={product.imgs}
                             category={product.category}
                             tags={product.tags}
+                            productId={product._id}
                             updateParent={getProducts}
                           />
                           <Button

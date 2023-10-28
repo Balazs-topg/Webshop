@@ -18,7 +18,7 @@ export default async function isPageRequestAdmin(allCookies: RequestCookie[]) {
     return false;
   }
 
-  const decodedJwt = jwt.decode(jwtToken);
+  const decodedJwt = jwt.verify(jwtToken, process.env.JWT_SECRET_KEY!);
   if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
     return false;
 
@@ -26,7 +26,6 @@ export default async function isPageRequestAdmin(allCookies: RequestCookie[]) {
   if (!userId) return false;
 
   const user = await accountModel.findById(userId);
-  console.log("userrrr", user);
   const isAdmin = user ? user.isAdmin : false;
 
   return isAdmin;

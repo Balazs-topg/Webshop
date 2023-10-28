@@ -19,9 +19,7 @@ export async function GET(
     return NextResponse.json({ status: 401 });
   }
 
-  const userData = await accountModel.findById(userId);
-  console.log(userData);
-
+  const userData = await accountModel.findById(userId).select("-password");
   return NextResponse.json(userData, { status: 200 });
 }
 
