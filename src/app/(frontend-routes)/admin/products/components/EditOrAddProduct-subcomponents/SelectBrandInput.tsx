@@ -34,7 +34,7 @@ function SelectBrandInput({
             <div
               onClick={async () => {
                 if (
-                  window.confirm(`are you sure you want to delete ${brand._id}`)
+                  window.confirm(`are you sure you want to delete ${brand.name}`)
                 ) {
                   await fetch(`/api/products/brands/${brand._id}/remove`, {
                     method: "delete",

@@ -39,7 +39,7 @@ function SelectCategoryInput({
               onClick={async () => {
                 if (
                   window.confirm(
-                    `are you sure you want to delete ${category._id}`
+                    `are you sure you want to delete ${category.name}`
                   )
                 ) {
                   await fetch(
