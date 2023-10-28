@@ -1,22 +1,19 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-
-import accountModel from "../../../models/accountModel";
+import accountModel from "../../../../models/accountModel";
 import categoryModel from "@/app/api/models/categoryModel";
+import "../../../../utils/connectToDB";
+import { addCategoryRequest } from "../../add/route";
 
-import "../../../utils/connectToDB";
-import bcrypt from "bcrypt";
-import { createJwt } from "../../../utils/createJwt";
+export async function PUT(
+  request: Request,
+  { params }: { params: { "category-id": string; action: string } }
+) {
+  console.log("request recived for delete!");
 
-export type addCategoryRequest = {
-  name?: string;
-};
-
-export async function POST(request: NextRequest, response: any) {
-  console.log("request recived!");
-
-  const reqBody: addCategoryRequest = await request.json();
   const reqJwt = request.headers.get("jwt");
+  const categoryId = params["category-id"]; // 'a', 'b', or 'c'
+  const reqBody: addCategoryRequest = await request.json();
 
   //authenticate jwt - if invalid then return 40
   if (!reqJwt) return NextResponse.json({}, { status: 401 });
@@ -29,25 +26,16 @@ export async function POST(request: NextRequest, response: any) {
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
-  //check if it alredy exists
-  const category =
-    (await categoryModel.countDocuments({ name: reqBody.name })) > 0;
-  if (category) return NextResponse.json({}, { status: 400 });
+  const category = await categoryModel.findByIdAndUpdate(categoryId, reqBody);
 
-  //push to db
-  const newCategory = new categoryModel({
-    name: reqBody.name,
-  });
-  await newCategory.save();
-
-  return NextResponse.json({}, { status: 200 });
+  return NextResponse.json({ status: 200 });
 }
 
 //boiler plate
 export async function GET(request: Request) {}
 export async function HEAD(request: Request) {}
-// export async function POST(request) {}
-export async function PUT(request: Request) {}
+export async function POST(request: Request) {}
+// export async function PUT(request: Request) {}
 export async function DELETE(request: Request) {}
 export async function PATCH(request: Request) {}
 export async function OPTIONS(request: Request) {}

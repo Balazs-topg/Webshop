@@ -10,7 +10,7 @@ const getBrandNames = async (products: any[]) => {
     products.map(async (product: any) => {
       const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
       const brand = await brandModel.findById("" + product.brand);
-      frozenProduct.brandName = brand.name;
+      frozenProduct.brandName = brand && brand.name;
       return frozenProduct;
     })
   );

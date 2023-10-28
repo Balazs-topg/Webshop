@@ -19,6 +19,33 @@ function SelectTagInput({
   selectedTags,
   setSelectedTags,
 }: selecTagInterface) {
+  const handleRemove = async (tag: TagOrCategoryOrBrand) => {
+    if (window.confirm(`are you sure you want to delete ${tag.name}`)) {
+      await fetch(`/api/products/tags/${tag._id}/remove`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!,
+        },
+      }).then(() => {
+        getTagList();
+      });
+    }
+  };
+  const handleEdit = async (tag: TagOrCategoryOrBrand) => {
+    const newName = prompt(`What do you wish to rename ${tag.name} to?`);
+    await fetch(`/api/products/tags/${tag._id}/update`, {
+      method: "put",
+      body: JSON.stringify({ name: newName }),
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+    }).then(() => {
+      getTagList();
+    });
+  };
+
   return (
     <Select
       label="Select Tags"
@@ -31,34 +58,24 @@ function SelectTagInput({
         setSelectedTags(e.target.value.split(","));
       }}
     >
-      {fetchedTagList.map((category: TagOrCategoryOrBrand) => (
-        <SelectItem
-          key={category._id}
-          value={category.name}
-          textValue={category.name}
-        >
-          <div className="flex justify-between items-center">
-            {category.name}
+      {fetchedTagList.map((tag: TagOrCategoryOrBrand) => (
+        <SelectItem key={tag._id} value={tag.name} textValue={tag.name}>
+          <div className="flex items-center gap-4">
+            {tag.name}
             <div
-              onClick={async () => {
-                if (
-                  window.confirm(
-                    `are you sure you want to delete ${category.name}`
-                  )
-                ) {
-                  await fetch(`/api/products/tags/${category._id}/remove`, {
-                    method: "delete",
-                    headers: {
-                      "Content-Type": "application/json",
-                      jwt: getCookie("jwt")!,
-                    },
-                  }).then(() => {
-                    getTagList();
-                  });
-                }
+              className="ml-auto"
+              onClick={() => {
+                handleRemove(tag);
               }}
             >
               {adminIcons.trash}
+            </div>
+            <div
+              onClick={() => {
+                handleEdit(tag);
+              }}
+            >
+              {adminIcons.edit}
             </div>
           </div>
         </SelectItem>

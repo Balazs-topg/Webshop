@@ -19,6 +19,34 @@ function SelectBrandInput({
   selectedBrand,
   setSelectedBrand,
 }: selectBrandInterface) {
+  const handleRemove = async (brand: TagOrCategoryOrBrand) => {
+    if (window.confirm(`are you sure you want to delete ${brand.name}`)) {
+      await fetch(`/api/products/brands/${brand._id}/remove`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!,
+        },
+      }).then(() => {
+        getBrandsList();
+      });
+    }
+  };
+
+  const handleEdit = async (brand: TagOrCategoryOrBrand) => {
+    const newName = prompt(`What do you wish to rename ${brand.name} to?`);
+    await fetch(`/api/products/brands/${brand._id}/update`, {
+      method: "put",
+      body: JSON.stringify({ name: newName }),
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+    }).then(() => {
+      getBrandsList();
+    });
+  };
+
   return (
     <Select
       defaultSelectedKeys={[brand!]}
@@ -29,26 +57,22 @@ function SelectBrandInput({
     >
       {fetchedBrandsList.map((brand: TagOrCategoryOrBrand) => (
         <SelectItem key={brand._id} value={brand._id} textValue={brand.name}>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4">
             {brand.name}
             <div
-              onClick={async () => {
-                if (
-                  window.confirm(`are you sure you want to delete ${brand.name}`)
-                ) {
-                  await fetch(`/api/products/brands/${brand._id}/remove`, {
-                    method: "delete",
-                    headers: {
-                      "Content-Type": "application/json",
-                      jwt: getCookie("jwt")!,
-                    },
-                  }).then(() => {
-                    getBrandsList();
-                  });
-                }
+              className="ml-auto"
+              onClick={() => {
+                handleRemove(brand);
               }}
             >
               {adminIcons.trash}
+            </div>{" "}
+            <div
+              onClick={() => {
+                handleEdit(brand);
+              }}
+            >
+              <div>{adminIcons.edit}</div>
             </div>
           </div>
         </SelectItem>

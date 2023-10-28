@@ -19,6 +19,34 @@ function SelectCategoryInput({
   selectedCategory,
   setSelectedCategory,
 }: selectcategoryInterface) {
+  const handleRemove = async (category: TagOrCategoryOrBrand) => {
+    if (window.confirm(`are you sure you want to delete ${category.name}`)) {
+      await fetch(`/api/products/categories/${category._id}/remove`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!,
+        },
+      }).then(() => {
+        getCategoryList();
+      });
+    }
+  };
+
+  const handleEdit = async (category: TagOrCategoryOrBrand) => {
+    const newName = prompt(`What do you wish to rename ${category.name} to?`);
+    await fetch(`/api/products/categories/${category._id}/update`, {
+      method: "put",
+      body: JSON.stringify({ name: newName }),
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+    }).then(() => {
+      getCategoryList();
+    });
+  };
+
   return (
     <Select
       defaultSelectedKeys={[category!]}
@@ -33,31 +61,22 @@ function SelectCategoryInput({
           value={category._id}
           textValue={category.name}
         >
-          <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4">
             {category.name}
             <div
-              onClick={async () => {
-                if (
-                  window.confirm(
-                    `are you sure you want to delete ${category.name}`
-                  )
-                ) {
-                  await fetch(
-                    `/api/products/categories/${category._id}/remove`,
-                    {
-                      method: "delete",
-                      headers: {
-                        "Content-Type": "application/json",
-                        jwt: getCookie("jwt")!,
-                      },
-                    }
-                  ).then(() => {
-                    getCategoryList();
-                  });
-                }
+              className="ml-auto"
+              onClick={() => {
+                handleRemove(category);
               }}
             >
               {adminIcons.trash}
+            </div>
+            <div
+              onClick={() => {
+                handleEdit(category);
+              }}
+            >
+              <div>{adminIcons.edit}</div>
             </div>
           </div>
         </SelectItem>

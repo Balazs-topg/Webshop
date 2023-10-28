@@ -155,7 +155,11 @@ export default function ItemCard({
               }
               onClick={handleFavourite}
             >
-              <Ripples fillAndHold opacity={0.5} duration={700} optimize />
+              {isFavouriteState ? (
+                <Ripples fillAndHold opacity={0.6} color="rgb(231 229 228)" />
+              ) : (
+                <Ripples fillAndHold opacity={0.6} color="rgb(252 211 77)" />
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
