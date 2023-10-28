@@ -16,27 +16,32 @@ Spara jwt i cookies istället för localstorage. coockies sparas på clienten s�
 
 fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin dashboarden med en server-component.
 
-- [x] Setup stack
-- [x] Setup DB
-- [x] Setup env
-- [x] Skapa cards
+Både rditing och upladdning av items bör gå genom en komponent, då blir det mycket enklare.
 
-- [ ] Skapa admin dashboard
+- [ ] Skapa admin panel
 
-  - [x] Skapa log-in med bcrypt
-  - [x] Lägga till items till db (brandName, productName, image, price, category)
-  - [ ] Redigera items
-  - [x] Ta bort items från db
+  - [ ] Byt ut drilling i admin panelen till context api
+  - [ ] Fixa så onödiga api requests i admin panalen
+  - [ ] Fixa så att api routsen är mer logiska typ, det är _inte_ RESTFUL atm
   - [ ] lägg till så att man kan kolla på alla användare
   - [ ] lägg till så att man kan kolla inkomande order
+  - [x] Skapa log-in med bcrypt
+  - [x] Lägga till items till db (brandName, productName, image, price, category)
+  - [x] Ta bort items från db
+  - [x] Redigera items
 
 - [ ] Lägg till reset password (behöver först hitta en bra email-provider)
-- [x] Lägg till förmåga att "inspektera" objekt
-- [x] Lägg till "favoriter"
 - [ ] Lägg till hur många det finns i lagert
 - [ ] Lägg till kundvagn
 - [ ] Lägg till så att man kan filter mellan kategorier och märken och pris mm
 - [ ] Lägg till sök funktion
 - [ ] Lägg till så att man kan betala och lägga order, och få order nummer
 - [ ] Lägg till recensioner
-- [ ] SERCURITY : verify jwt bruhhhh
+- [x] Lägg till "favoriter"
+- [x] Lägg till förmåga att "inspektera" objekt
+- [x] SERCURITY : verify jwt bruhhhh
+
+- [x] Setup stack
+- [x] Setup DB
+- [x] Setup env
+- [x] Skapa cards
