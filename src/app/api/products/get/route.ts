@@ -5,17 +5,25 @@ import accountModel from "../../models/accountModel";
 import "../../utils/connectToDB";
 import brandModel from "../../models/brandModel";
 
+const getBrandNames = async (products: any[]) => {
+  const updatedProducts = await Promise.all(
+    products.map(async (product: any) => {
+      const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
+      const brand = await brandModel.findById("" + product.brand);
+      frozenProduct.brandName = brand.name;
+      return frozenProduct;
+    })
+  );
+  return updatedProducts;
+};
+
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
   // Find all products
-  const products = await productModel.find();
-  products.map(async (product) => {
-    const frozenProduct = { ...product };
-    const brandName = await brandModel.findById("" + product.brand);
-    frozenProduct._doc.brandName = brandName.name;
-    return frozenProduct;
-  });
+  // const products = await productModel.find();
+  const products = await getBrandNames(await productModel.find());
+  console.log(products);
 
   // get user from JWT
   const reqJwt = request.headers.get("jwt");
@@ -35,9 +43,9 @@ export async function GET(request: NextRequest, response: any) {
     products.map((product) => {
       const frozenProduct = { ...product };
       if (user.favourites.toString().includes(product._id)) {
-        frozenProduct._doc.isFavourite = true;
+        frozenProduct.isFavourite = true;
       } else {
-        frozenProduct._doc.isFavourite = false;
+        frozenProduct.isFavourite = false;
       }
       return frozenProduct;
     });

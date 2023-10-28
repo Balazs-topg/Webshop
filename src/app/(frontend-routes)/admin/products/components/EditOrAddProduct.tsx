@@ -155,6 +155,23 @@ function EditOrAddProduct({
     updateParent && updateParent();
     setIsLoading(false);
     setResponseMessage(data.message);
+
+    // const jsonData = {
+    //   brand: selectedBrand,
+    //   name: productName,
+    //   category: selectedCategory,
+    //   tags: selectedTags,
+    //   price: productPrice,
+    //   imgs: dataProductImgs,
+    // };
+    if (isNew) {
+      setSelectedBrand("");
+      setProductName("");
+      setProductImgs([""]);
+      setSelectedCategory("");
+      setSelectedTags([]);
+      setProductPrice(0);
+    }
   };
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -254,7 +271,7 @@ function EditOrAddProduct({
                       <Loader2 className="animate-spin" absoluteStrokeWidth />
                     }
                   >
-                    Edit
+                    {isNew ? "Add new" : "Edit"}
                   </Button>
                   <Modal
                     isOpen={Boolean(responseMessage)}
