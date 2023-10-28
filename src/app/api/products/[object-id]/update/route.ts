@@ -29,7 +29,10 @@ export async function PUT(
     reqBody
   );
 
-  return NextResponse.json({ status: 200 });
+  return NextResponse.json(
+    { message: "successfully updated item" },
+    { status: 200 }
+  );
 }
 
 //boiler plate

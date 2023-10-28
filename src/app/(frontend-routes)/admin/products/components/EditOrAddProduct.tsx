@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import adminIcons from "../../adminIcons";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 
-import ImageUrlInput from "./Addproduct-subcomponents/ImageUrlInput";
+import ImageUrlInput from "./EditOrAddProduct-subcomponents/ImageUrlInput";
 
 import { Loader2 } from "lucide-react";
 
 import { getCookie } from "../../../utils/manageCookies";
 
-import { AddNewBrand } from "./Addproduct-subcomponents/addNew/AddNewBrand";
-import { AddNewCategory } from "./Addproduct-subcomponents/addNew/AddNewCategory";
-import { AddNewTag } from "./Addproduct-subcomponents/addNew/AddNewTag";
+import { AddNewBrand } from "./EditOrAddProduct-subcomponents/addNew/AddNewBrand";
+import { AddNewCategory } from "./EditOrAddProduct-subcomponents/addNew/AddNewCategory";
+import { AddNewTag } from "./EditOrAddProduct-subcomponents/addNew/AddNewTag";
 
 import {
   Modal,
@@ -22,7 +22,13 @@ import {
   Button,
 } from "@nextui-org/react";
 
-type TagOrCategoryOrBrand = {
+import { Ripples } from "react-ripples-continued";
+
+import SelectBrandInput from "./EditOrAddProduct-subcomponents/SelectBrandInput";
+import SelectCategoryInput from "./EditOrAddProduct-subcomponents/SelectCategoryInput";
+import SelectTagInput from "./EditOrAddProduct-subcomponents/SelectTagInput";
+
+export type TagOrCategoryOrBrand = {
   _id: string;
   name: string;
 };
@@ -156,15 +162,21 @@ function EditOrAddProduct({
 
   return (
     <div className={className}>
-      <Button
-        variant="solid"
-        color="primary"
-        className="flex items-center"
-        onPress={onOpen}
-        fullWidth
-      >
-        Add Or Edit product {adminIcons.plus}
-      </Button>
+      {isNew ? (
+        <Button
+          variant="solid"
+          color="primary"
+          className="flex items-center"
+          onPress={onOpen}
+          fullWidth
+        >
+          Add new product {adminIcons.plus}
+        </Button>
+      ) : (
+        <Button size="sm" isIconOnly color="primary" onPress={onOpen}>
+          {adminIcons.edit}
+        </Button>
+      )}
 
       <Modal
         scrollBehavior="inside"
@@ -183,19 +195,13 @@ function EditOrAddProduct({
                 </ModalHeader>
                 <ModalBody>
                   <div className="flex gap-2 items-center">
-                    <Select
-                      defaultSelectedKeys={[brand!]}
-                      label="Select Brand"
-                      isRequired
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
-                    >
-                      {fetchedBrandsList.map((brand: TagOrCategoryOrBrand) => (
-                        <SelectItem key={brand.name} value={brand.name}>
-                          {brand.name}
-                        </SelectItem>
-                      ))}
-                    </Select>
+                    <SelectBrandInput
+                      fetchedBrandsList={fetchedBrandsList}
+                      brand={brand!}
+                      getBrandsList={getBrandsList}
+                      selectedBrand={selectedBrand!}
+                      setSelectedBrand={setSelectedBrand}
+                    />
                     <AddNewBrand updateParent={getBrandsList} />
                   </div>
                   <Input
@@ -217,42 +223,23 @@ function EditOrAddProduct({
                     setState={setProductImgs}
                   ></ImageUrlInput>
                   <div className="flex gap-2 items-center">
-                    <Select
-                      label="Select Category"
-                      fullWidth
-                      isRequired
-                      defaultSelectedKeys={[category!]}
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                    >
-                      {fetchedCategoryList.map(
-                        (category: TagOrCategoryOrBrand) => (
-                          <SelectItem key={category.name} value={category.name}>
-                            {category.name}
-                          </SelectItem>
-                        )
-                      )}
-                    </Select>
+                    <SelectCategoryInput
+                      fetchedCategoryList={fetchedCategoryList}
+                      category={category!}
+                      getCategoryList={getCategoryList}
+                      selectedCategory={selectedCategory!}
+                      setSelectedCategory={setSelectedCategory}
+                    />
                     <AddNewCategory updateParent={getCategoryList} />
                   </div>
                   <div className="flex gap-2 items-center">
-                    <Select
-                      label="Select Tags"
-                      fullWidth
-                      selectionMode="multiple"
-                      isRequired
-                      defaultSelectedKeys={tags}
-                      value={selectedTags}
-                      onChange={(e) => {
-                        setSelectedTags(e.target.value.split(","));
-                      }}
-                    >
-                      {fetchedTagsList.map((tag: TagOrCategoryOrBrand) => (
-                        <SelectItem key={tag.name} value={tag.name}>
-                          {tag.name}
-                        </SelectItem>
-                      ))}
-                    </Select>
+                    <SelectTagInput
+                      fetchedTagList={fetchedTagsList}
+                      tags={tags!}
+                      getTagList={getTagsList}
+                      selectedTags={selectedTags!}
+                      setSelectedTags={setSelectedTags}
+                    />
                     <AddNewTag updateParent={getTagsList} />
                   </div>
                 </ModalBody>

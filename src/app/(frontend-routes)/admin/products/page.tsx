@@ -1,8 +1,6 @@
 "use client";
 import AdminNav from "../AdminNav";
 import WebsiteHeader from "../../../components/WebsiteHeader";
-import AddProduct from "./components/AddProduct";
-import EditProduct from "./components/EditProduct";
 
 import EditOrAddProduct from "./components/EditOrAddProduct";
 
