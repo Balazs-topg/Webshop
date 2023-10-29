@@ -34,9 +34,9 @@ Både rditing och upladdning av items bör gå genom en komponent, då blir det 
 - [ ] Lägg till hur många det finns i lagert
 - [ ] Lägg till kundvagn
 - [ ] Lägg till så att man kan filter mellan kategorier och märken och pris mm
-- [ ] Lägg till sök funktion
 - [ ] Lägg till så att man kan betala och lägga order, och få order nummer
 - [ ] Lägg till recensioner
+- [x] Lägg till sök funktion
 - [x] Lägg till "favoriter"
 - [x] Lägg till förmåga att "inspektera" objekt
 - [x] SERCURITY : verify jwt bruhhhh

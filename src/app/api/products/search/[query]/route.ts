@@ -89,7 +89,7 @@ function removeTheDiff(array: ProductType[][]): ProductType[] {
       results.push(product);
     }
   }
-
+  
   return results;
 }
 

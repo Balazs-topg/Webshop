@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import adminIcons from "../../adminIcons";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 
@@ -27,6 +27,8 @@ import { Ripples } from "react-ripples-continued";
 import SelectBrandInput from "./EditOrAddProduct-subcomponents/SelectBrandInput";
 import SelectCategoryInput from "./EditOrAddProduct-subcomponents/SelectCategoryInput";
 import SelectTagInput from "./EditOrAddProduct-subcomponents/SelectTagInput";
+
+import { AdminProductsPageContext } from "../page";
 
 export type TagOrCategoryOrBrand = {
   name: string;
@@ -81,45 +83,9 @@ function EditOrAddProduct({
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
   const [productPrice, setProductPrice] = useState(price);
 
-  async function getBrandsList() {
-    const response = await fetch("/api/products/brands/get", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-    });
-    const data = await response.json();
-    setFetchedBrandsList(data);
-  }
-  async function getCategoryList() {
-    const response = await fetch("/api/products/categories/get", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-    });
-    const data = await response.json();
-    setFetchedCategoryList(data);
-  }
-  async function getTagsList() {
-    const response = await fetch("/api/products/tags/get", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-    });
-    const data = await response.json();
-    setFetcherTagsList(data);
-  }
-
-  useEffect(() => {
-    getBrandsList();
-    getCategoryList();
-    getTagsList();
-  }, []);
+  const productsPageContext = useContext(AdminProductsPageContext);
+  const contextState = productsPageContext.state;
+  const contextSetState = productsPageContext.setState;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -202,13 +168,11 @@ function EditOrAddProduct({
                 <ModalBody>
                   <div className="flex gap-2 items-center">
                     <SelectBrandInput
-                      fetchedBrandsList={fetchedBrandsList}
                       brand={brand!}
-                      getBrandsList={getBrandsList}
                       selectedBrand={selectedBrand!}
                       setSelectedBrand={setSelectedBrand}
                     />
-                    <AddNewBrand updateParent={getBrandsList} />
+                    <AddNewBrand updateParent={contextState.getBrandsList} />
                   </div>
                   <Input
                     value={productName}
@@ -230,23 +194,21 @@ function EditOrAddProduct({
                   ></ImageUrlInput>
                   <div className="flex gap-2 items-center">
                     <SelectCategoryInput
-                      fetchedCategoryList={fetchedCategoryList}
                       category={category!}
-                      getCategoryList={getCategoryList}
                       selectedCategory={selectedCategory!}
                       setSelectedCategory={setSelectedCategory}
                     />
-                    <AddNewCategory updateParent={getCategoryList} />
+                    <AddNewCategory
+                      updateParent={contextState.getCategoryList}
+                    />
                   </div>
                   <div className="flex gap-2 items-center">
                     <SelectTagInput
-                      fetchedTagList={fetchedTagsList}
                       tags={tags!}
-                      getTagList={getTagsList}
                       selectedTags={selectedTags!}
                       setSelectedTags={setSelectedTags}
                     />
-                    <AddNewTag updateParent={getTagsList} />
+                    <AddNewTag updateParent={contextState.getTagsList} />
                   </div>
                 </ModalBody>
                 <ModalFooter>

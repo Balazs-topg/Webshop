@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Select, SelectItem, Input } from "@nextui-org/react";
 import { TagOrCategoryOrBrand } from "../EditOrAddProduct";
 import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 import adminIcons from "../../../adminIcons";
 
+import { AdminProductsPageContext } from "../../page";
+
 interface selecTagInterface {
-  fetchedTagList: any[];
   tags: string[];
-  getTagList: Function;
   selectedTags: string[];
   setSelectedTags: Function;
 }
 
 function SelectTagInput({
-  fetchedTagList,
   tags,
-  getTagList,
   selectedTags,
   setSelectedTags,
 }: selecTagInterface) {
+  const productsPageContext = useContext(AdminProductsPageContext);
+  const contextState = productsPageContext.state;
+  const contextSetState = productsPageContext.setState;
+
   const handleRemove = async (tag: TagOrCategoryOrBrand) => {
     if (window.confirm(`are you sure you want to delete ${tag.name}`)) {
       await fetch(`/api/products/tags/${tag._id}/remove`, {
@@ -28,7 +30,7 @@ function SelectTagInput({
           jwt: getCookie("jwt")!,
         },
       }).then(() => {
-        getTagList();
+        contextState.getTagList();
       });
     }
   };
@@ -42,7 +44,7 @@ function SelectTagInput({
         jwt: getCookie("jwt")!,
       },
     }).then(() => {
-      getTagList();
+      contextState.getTagList();
     });
   };
 
@@ -58,7 +60,7 @@ function SelectTagInput({
         setSelectedTags(e.target.value.split(","));
       }}
     >
-      {fetchedTagList.map((tag: TagOrCategoryOrBrand) => (
+      {contextState.fetchedTagsList.map((tag: TagOrCategoryOrBrand) => (
         <SelectItem key={tag._id} value={tag.name} textValue={tag.name}>
           <div className="flex items-center gap-4">
             {tag.name}

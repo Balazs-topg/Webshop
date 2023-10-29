@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Select, SelectItem, Input } from "@nextui-org/react";
 import { TagOrCategoryOrBrand } from "../EditOrAddProduct";
 import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 import adminIcons from "../../../adminIcons";
 
+import { AdminProductsPageContext } from "../../page";
+
 interface selectcategoryInterface {
-  fetchedCategoryList: any[];
   category: string;
-  getCategoryList: Function;
   selectedCategory: string;
   setSelectedCategory: Function;
 }
 
 function SelectCategoryInput({
-  fetchedCategoryList,
   category,
-  getCategoryList,
   selectedCategory,
   setSelectedCategory,
 }: selectcategoryInterface) {
+  const productsPageContext = useContext(AdminProductsPageContext);
+  const contextState = productsPageContext.state;
+  const contextSetState = productsPageContext.setState;
+
   const handleRemove = async (category: TagOrCategoryOrBrand) => {
     if (window.confirm(`are you sure you want to delete ${category.name}`)) {
       await fetch(`/api/products/categories/${category._id}/remove`, {
@@ -28,7 +30,7 @@ function SelectCategoryInput({
           jwt: getCookie("jwt")!,
         },
       }).then(() => {
-        getCategoryList();
+        contextState.getCategoryList();
       });
     }
   };
@@ -43,7 +45,7 @@ function SelectCategoryInput({
         jwt: getCookie("jwt")!,
       },
     }).then(() => {
-      getCategoryList();
+      contextState.getCategoryList();
     });
   };
 
@@ -55,7 +57,7 @@ function SelectCategoryInput({
       value={selectedCategory}
       onChange={(e) => setSelectedCategory(e.target.value)}
     >
-      {fetchedCategoryList.map((category: TagOrCategoryOrBrand) => (
+      {contextState.fetchedCategoryList.map((category: TagOrCategoryOrBrand) => (
         <SelectItem
           key={category._id}
           value={category._id}
