@@ -1,16 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { ReactEventHandler, useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { Ripples } from "react-ripples-continued";
+import { useRouter } from "next/navigation";
 
-function WebsiteHeader() {
+function WebsiteHeader({ searchValue }: { searchValue?: string }) {
   const [username, setUsername] = useState("");
   const [productCount, setProductCount] = useState(0);
 
+  const [currentSearch, setCurrentSearch] = useState(searchValue);
+
   const fetchCount = async () => {
-    const response = await fetch("api/products/count", { method: "get" });
+    const response = await fetch("/api/products/count", { method: "get" });
     const data = await response.json();
     setProductCount(data.count);
   };
@@ -31,6 +33,12 @@ function WebsiteHeader() {
   }, []);
 
   const router = useRouter();
+
+  const handleSearch = (value: string) => {
+    console.log(value);
+    router.push(`/search?q=${value}`);
+  };
+
   return (
     <nav className=" sticky z-10 w-full bg-stone-100 flex justify-center font-poppins">
       <div className="max-w-5xl w-full p-4">
@@ -57,7 +65,16 @@ function WebsiteHeader() {
             }
             radius="full"
             color="primary"
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === "Enter") {
+                handleSearch(e.currentTarget.value);
+              }
+            }}
             variant="faded"
+            onInput={(e) => {
+              setCurrentSearch(e.currentTarget.value);
+            }}
+            value={currentSearch}
           ></Input>
 
           {!username ? (
