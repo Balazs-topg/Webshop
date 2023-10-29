@@ -34,7 +34,7 @@ function Page() {
         <div className=" max-w-5xl bg-stone-200 mx-auto">
           <h2 className=" text-center p-2">Visar sökresultat för {search}</h2>
         </div>
-        <div className="flex gap-4 p-4">
+        <div className="flex gap-4 p-4 overflow-x-auto">
           {searchComplete && fetchedSearchResults.length === 0 && (
             <h2 className=" w-full text-center p-2">
               vi hittade tyvärr inget 😔
