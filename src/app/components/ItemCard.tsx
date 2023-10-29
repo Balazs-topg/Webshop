@@ -17,6 +17,18 @@ type itemCardTypes = {
   isSkeleton?: boolean;
 };
 
+function addSpacesForPrice(price: string | number) {
+  const priceArr = String(price).split("");
+  const newArr: any = [];
+  priceArr.forEach((char, iteration) => {
+    newArr.push(char);
+    if ((priceArr.length - 1 - iteration) % 3 == 0) {
+      newArr.push(" ");
+    }
+  });
+  return newArr.join("");
+}
+
 export default function ItemCard({
   brandName,
   productName,
@@ -183,7 +195,7 @@ export default function ItemCard({
           </div>
         </div>
         <div className="mt-auto flex justify-between items-end">
-          <div className="font-bold text-xl">{price} kr</div>
+          <div className="font-bold text-xl">{addSpacesForPrice(price)} kr</div>
           <div className="relative">
             <div className=" flex items-center gap-2">
               <button
