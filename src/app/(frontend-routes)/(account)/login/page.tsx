@@ -8,6 +8,7 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { setCookie } from "../../utils/manageCookies";
+import WebsiteFooter from "@/app/components/WebsiteFooter";
 
 function Page() {
   const router = useRouter();
@@ -118,6 +119,7 @@ function Page() {
           </div>
         </div>
       </form>
+      <WebsiteFooter />
     </>
   );
 }

@@ -118,7 +118,12 @@ function WebsiteHeader({ searchValue }: { searchValue?: string }) {
               </svg>
             </button>
           )}
-          <button className=" bg-sky-800 flex justify-center items-center p-2 rounded-full relative active:scale-95 transition-all">
+          <button
+            onClick={() => {
+              router.push("/cart");
+            }}
+            className=" bg-sky-800 flex justify-center items-center p-2 rounded-full relative active:scale-95 transition-all"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

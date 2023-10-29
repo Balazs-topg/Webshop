@@ -20,11 +20,11 @@ Både rditing och upladdning av items bör gå genom en komponent, då blir det 
 
 - [ ] Skapa admin panel
 
-  - [ ] Byt ut drilling i admin panelen till context api
-  - [ ] Fixa så onödiga api requests i admin panalen
   - [ ] Fixa så att api routsen är mer logiska typ, det är _inte_ RESTFUL atm
   - [ ] lägg till så att man kan kolla på alla användare
   - [ ] lägg till så att man kan kolla inkomande order
+  - [x] Fixa så onödiga api requests i admin panalen
+  - [x] Byt ut drilling i admin panelen till context api
   - [x] Skapa log-in med bcrypt
   - [x] Lägga till items till db (brandName, productName, image, price, category)
   - [x] Ta bort items från db

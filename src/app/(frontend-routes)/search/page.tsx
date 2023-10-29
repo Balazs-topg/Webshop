@@ -36,7 +36,7 @@ function Page() {
     <>
       <WebsiteHeader searchValue={search} />
       <div className=" min-h-screen">
-        <div className=" max-w-5xl bg-stone-200 mx-auto">
+        <div className="bg-stone-200">
           <h2 className=" text-center p-2">Visar sökresultat för {search}</h2>
         </div>
         <div className="flex gap-4 p-4 overflow-x-auto">
