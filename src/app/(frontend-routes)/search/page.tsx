@@ -6,6 +6,7 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 import WebsiteFooter from "@/app/components/WebsiteFooter";
 import ItemCard from "@/app/components/ItemCard";
 import { ProductType } from "@/app/types/ProductType";
+import { getCookie } from "../utils/manageCookies";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -18,6 +19,10 @@ function Page() {
     setSearchComplete(false);
     const response = await fetch(`/api/products/search/${search}`, {
       method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
     });
     const data = await response.json();
     setFetchedSearchResults(data);

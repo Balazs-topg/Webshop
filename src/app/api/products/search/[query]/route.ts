@@ -4,6 +4,9 @@ import "../../../utils/connectToDB";
 import brandModel from "@/app/api/models/brandModel";
 import tagModel from "@/app/api/models/tagModel";
 import categoryModel from "@/app/api/models/categoryModel";
+import accountModel from "@/app/api/models/accountModel";
+import { ProductType } from "@/app/types/ProductType";
+import jwt from "jsonwebtoken";
 
 const getBrandNames = async (products: any[]) => {
   const updatedProducts = await Promise.all(
@@ -17,18 +20,13 @@ const getBrandNames = async (products: any[]) => {
   return updatedProducts;
 };
 
-export async function GET(
-  request: Request,
-  { params }: { params: { query: string; action: string } }
-) {
-  console.log("request recived!");
-  const query = new RegExp(params["query"], "i");
-
+//takes a keyword an returns a promise that queries the database
+const keywordToResults = async (keyword: RegExp) => {
   //search for all matching tags, brands, categories
-  const matchingTags = await tagModel.find({ name: query }).select("_id");
-  const matchingBrands = await brandModel.find({ name: query }).select("_id");
+  const matchingTags = await tagModel.find({ name: keyword }).select("_id");
+  const matchingBrands = await brandModel.find({ name: keyword }).select("_id");
   const matchingCategories = await categoryModel
-    .find({ name: query })
+    .find({ name: keyword })
     .select("_id");
 
   //get just the ids from them
@@ -39,17 +37,87 @@ export async function GET(
   //preform search
   const queryResult = await productModel.find({
     $or: [
-      { name: query },
+      { name: keyword },
       { brand: { $in: brandIds } },
       { tags: { $in: tagIds } },
       { category: { $in: categoryIds } },
     ],
   });
+  return queryResult;
+};
 
-  const queryResultWithBrandNames = await getBrandNames(queryResult);
-  console.log("queryResultWithBrandNames", queryResultWithBrandNames);
+const getFavs = async (products: ProductType[], reqJwt: string | null) => {
+  if (!reqJwt) return products;
 
-  return NextResponse.json(queryResultWithBrandNames, { status: 200 });
+  //auth jwt
+  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
+  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
+    return products;
+  const userId = decodedJwt.id;
+  if (!userId) return products;
+  const user = await accountModel.findById(userId);
+
+  // get favs
+  let productsWithFavs = products.map((product: ProductType) => {
+    const frozenProduct = product ? product : { ...(product as ProductType) };
+    if (user.favourites.map(String).includes(product._id.toString())) {
+      frozenProduct.isFavourite = true;
+    } else {
+      frozenProduct.isFavourite = false;
+    }
+    return frozenProduct;
+  });
+  return productsWithFavs;
+};
+
+//takes an array of arrays containing products.
+function removeTheDiff(array: ProductType[][]): ProductType[] {
+  // If there are no arrays or the first array is empty, return an empty array
+  if (array.length === 0 || array[0].length === 0) {
+    return [];
+  }
+
+  const referenceArray = array[0];
+  const results: ProductType[] = [];
+
+  for (const product of referenceArray) {
+    if (
+      array.every((array) =>
+        array.some((p) => p._id.toString() === product._id.toString())
+      )
+    ) {
+      results.push(product);
+    }
+  }
+
+  return results;
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: { query: string; action: string } }
+) {
+  //init
+  const query: string = params["query"];
+  console.log(`search request recived! ${query}`);
+  const reqJwt = request.headers.get("jwt");
+
+  //query
+  const queryArr = query.split(" ");
+  const resultOfqueries = queryArr.map(
+    async (query) => await keywordToResults(new RegExp(query, "i"))
+  );
+  const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
+  console.log(resultOfQueriesArr);
+
+  const removedDiff = removeTheDiff(resultOfQueriesArr);
+  const removedDiffWBrandNames = await getBrandNames(removedDiff);
+  const removedDiffWBrandNamesWFavs = await getFavs(
+    removedDiffWBrandNames,
+    reqJwt
+  );
+
+  return NextResponse.json(removedDiffWBrandNamesWFavs, { status: 200 });
 }
 
 //boiler plate
