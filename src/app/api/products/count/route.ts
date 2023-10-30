@@ -1,10 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import productModel from "../../models/productModel";
+import ProductModel from "../../models/ProductModel";
 import "../../utils/connectToDB";
 
 export async function GET(request: NextRequest, response: any) {
-  const count = await productModel.count();
+  const count = await ProductModel.count();
   return NextResponse.json({ count: count }, { status: 200 });
 }
 

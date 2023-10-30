@@ -1,4 +1,13 @@
-import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+
+export interface Product extends Document {
+  name: string;
+  price: string;
+  brand: Schema.Types.ObjectId;
+  imgs: string;
+  tags: Schema.Types.ObjectId[];
+  category: Schema.Types.ObjectId;
+}
 
 const productSchema = new mongoose.Schema(
   {
@@ -15,7 +24,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-const productModel =
+const ProductModel =
   mongoose.models.products || mongoose.model("products", productSchema);
 
-export default productModel;
+export default ProductModel;

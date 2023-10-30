@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import accountModel from "../../models/accountModel";
+import AccountModel from "../../models/AccountModel";
 import "../../utils/connectToDB";
 import bcrypt from "bcrypt";
 import { createJwt } from "../../utils/createJwt";
@@ -12,7 +12,7 @@ type LoginRequest = {
 export async function POST(request: Request, response: any) {
   const reqBody: LoginRequest = await request.json();
 
-  const user = await accountModel.findOne({ email: reqBody.email });
+  const user = await AccountModel.findOne({ email: reqBody.email });
   console.log("user: ", user);
 
   const passwordIsCorrect = user
@@ -20,7 +20,7 @@ export async function POST(request: Request, response: any) {
     : false;
 
   const jwt = passwordIsCorrect
-    ? createJwt(await accountModel.findOne({ email: reqBody.email }))
+    ? createJwt(await AccountModel.findOne({ email: reqBody.email }))
     : undefined;
 
   return NextResponse.json(

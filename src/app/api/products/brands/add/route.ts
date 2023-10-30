@@ -1,12 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-
-import accountModel from "../../../models/accountModel";
-import brandModel from "@/app/api/models/brandModel";
-
+import BrandModel from "@/app/api/models/BrandModel";
 import "../../../utils/connectToDB";
-import bcrypt from "bcrypt";
-import { createJwt } from "../../../utils/createJwt";
+
+import getUser from "@/app/api/utils/getUser";
 
 type addBrandRequest = {
   name?: string;
@@ -16,26 +12,18 @@ export async function POST(request: NextRequest, response: any) {
   console.log("request recived!");
 
   const reqBody: addBrandRequest = await request.json();
-  const reqJwt = request.headers.get("jwt");
 
-  //authenticate jwt - if invalid then return 40
-
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return false;
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
+  //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
   //check if it alredy exists
-  const brand = (await brandModel.countDocuments({ name: reqBody.name })) > 0;
+  const brand = (await BrandModel.countDocuments({ name: reqBody.name })) > 0;
   if (brand) return NextResponse.json({}, { status: 400 });
 
   //push to db
-  const newBrand = new brandModel({
+  const newBrand = new BrandModel({
     name: reqBody.name,
   });
   await newBrand.save();

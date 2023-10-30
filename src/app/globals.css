@@ -11,10 +11,11 @@
     margin: 0;
   }
 }
-
+/* 
 *:focus {
   outline-color: #075985;
-}
+} 
+*/
 
 :root {
   --background: 0 0% 100%;

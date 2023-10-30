@@ -1,4 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface Tag extends Document {
+  name: string;
+}
 
 const tagSchema = new mongoose.Schema(
   {
@@ -10,7 +14,6 @@ const tagSchema = new mongoose.Schema(
   }
 );
 
-const tagModel =
-  mongoose.models.tags || mongoose.model("tags", tagSchema);
+const TagModel = mongoose.models.tags || mongoose.model("tags", tagSchema);
 
-export default tagModel;
+export default TagModel;

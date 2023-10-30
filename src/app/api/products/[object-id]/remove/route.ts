@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "@/app/api/models/accountModel";
-import productModel from "@/app/api/models/productModel";
+import AccountModel from "@/app/api/models/AccountModel";
+import ProductModel from "@/app/api/models/ProductModel";
 import "../../../utils/connectToDB";
+import getUser from "@/app/api/utils/getUser";
 
 export async function DELETE(
   request: Request,
@@ -13,21 +14,13 @@ export async function DELETE(
   const objectId = params["object-id"]; // 'a', 'b', or 'c'
   console.log(objectId);
 
-  const reqJwt = request.headers.get("jwt");
-
-  // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
+  //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
   // remove from db
-  await productModel.findByIdAndDelete(String(objectId));
+  await ProductModel.findByIdAndDelete(String(objectId));
 
   return NextResponse.json({ status: 200 });
 }

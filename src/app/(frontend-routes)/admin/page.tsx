@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import accountModel from "@/app/api/models/accountModel";
+import AccountModel from "@/app/api/models/AccountModel";
 import { redirect } from "next/navigation";
 import "../../api/utils/connectToDB";
 import isPageRequestAdmin from "../utils/isPageRequestAdmin";

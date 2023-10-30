@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import accountModel from "@/app/api/models/accountModel";
+import AccountModel from "@/app/api/models/AccountModel";
 import "../../utils/connectToDB";
 import bcrypt from "bcrypt";
 
@@ -11,9 +11,7 @@ type LoginRequest = {
 export async function POST(request: Request, response: any) {
   const reqBody: LoginRequest = await request.json();
 
-  
-
-  const user = await accountModel.findOne({ email: reqBody.email });
+  const user = await AccountModel.findOne({ email: reqBody.email });
   console.log("user: ", user);
 
   return NextResponse.json({}, { status: 200 });

@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "../../../../models/accountModel";
+import AccountModel from "../../../../models/AccountModel";
 import "../../../../utils/connectToDB";
 import { addCategoryRequest } from "../../../categories/add/route";
-import tagModel from "@/app/api/models/tagModel";
+import TagModel from "@/app/api/models/TagModel";
 
 export async function PUT(
   request: Request,
@@ -22,11 +22,11 @@ export async function PUT(
     return NextResponse.json({}, { status: 401 });
   const userId = decodedJwt.id;
   if (!userId) return false;
-  const user = await accountModel.findById(userId);
+  const user = await AccountModel.findById(userId);
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
-  const tag = await tagModel.findByIdAndUpdate(tagId, reqBody);
+  const tag = await TagModel.findByIdAndUpdate(tagId, reqBody);
 
   return NextResponse.json({ status: 200 });
 }

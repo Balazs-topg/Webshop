@@ -1,9 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import accountModel from "../../../../models/accountModel";
-import categoryModel from "@/app/api/models/categoryModel";
+import CategoryModel from "@/app/api/models/CategoryModel";
 import "../../../../utils/connectToDB";
 import { addCategoryRequest } from "../../add/route";
+import getUser from "@/app/api/utils/getUser";
 
 export async function PUT(
   request: Request,
@@ -15,18 +14,11 @@ export async function PUT(
   const categoryId = params["category-id"]; // 'a', 'b', or 'c'
   const reqBody: addCategoryRequest = await request.json();
 
-  //authenticate jwt - if invalid then return 40
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return false;
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
-  const category = await categoryModel.findByIdAndUpdate(categoryId, reqBody);
+  await CategoryModel.findByIdAndUpdate(categoryId, reqBody);
 
   return NextResponse.json({ status: 200 });
 }

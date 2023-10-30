@@ -1,31 +1,25 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "../../../../models/accountModel";
-import categoryModel from "@/app/api/models/categoryModel";
+import AccountModel from "../../../../models/AccountModel";
+import CategoryModel from "@/app/api/models/CategoryModel";
 import "../../../../utils/connectToDB";
 import { addCategoryRequest } from "../../../categories/add/route";
-import brandModel from "@/app/api/models/brandModel";
+import BrandModel from "@/app/api/models/BrandModel";
+import getUser from "@/app/api/utils/getUser";
 
 export async function PUT(
   request: Request,
   { params }: { params: { "brand-id": string; action: string } }
 ) {
-  const reqJwt = request.headers.get("jwt");
   const brandId = params["brand-id"]; // 'a', 'b', or 'c'
   const reqBody: addCategoryRequest = await request.json();
 
-  //authenticate jwt - if invalid then return 40
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return false;
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
+  //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
-  const category = await brandModel.findByIdAndUpdate(brandId, reqBody);
+  const category = await BrandModel.findByIdAndUpdate(brandId, reqBody);
 
   return NextResponse.json({ status: 200 });
 }

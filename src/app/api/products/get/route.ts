@@ -1,15 +1,15 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import productModel from "../../models/productModel";
-import accountModel from "../../models/accountModel";
+import ProductModel from "../../models/ProductModel";
 import "../../utils/connectToDB";
-import brandModel from "../../models/brandModel";
+import BrandModel from "../../models/BrandModel";
+import getUser from "../../utils/getUser";
+import getIsLoggedIn from "../../utils/getIsLoggedIn";
 
 const getBrandNames = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product: any) => {
       const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
-      const brand = await brandModel.findById("" + product.brand);
+      const brand = await BrandModel.findById("" + product.brand);
       frozenProduct.brandName = brand && brand.name;
       return frozenProduct;
     })
@@ -22,22 +22,13 @@ export async function GET(request: NextRequest, response: any) {
 
   // Find all products
   // const products = await productModel.find();
-  const products = await getBrandNames(await productModel.find());
+  const products = await getBrandNames(await ProductModel.find());
 
-  // get user from JWT
-  const reqJwt = request.headers.get("jwt");
-
-  const loggedIn = Boolean(reqJwt !== "null");
-
+  const loggedIn = getIsLoggedIn(request);
   let productsWithFavs;
   if (loggedIn) {
     //auth jwt
-    const decodedJwt = jwt.decode(reqJwt!);
-    if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-      return NextResponse.json({}, { status: 401 });
-    const userId = decodedJwt.id;
-    if (!userId) return NextResponse.json({}, { status: 401 });
-    const user = await accountModel.findById(userId);
+    const user = await getUser(request);
 
     // get favs
     productsWithFavs = products.map((product) => {

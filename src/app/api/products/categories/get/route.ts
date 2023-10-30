@@ -1,14 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import accountModel from "../../../models/accountModel";
-import categoryModel from "@/app/api/models/categoryModel";
+import CategoryModel from "@/app/api/models/CategoryModel";
 import "../../../utils/connectToDB";
 
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
   //find all
-  const categories = await categoryModel.find();
+  const categories = await CategoryModel.find();
 
   return NextResponse.json(categories, { status: 200 });
 }

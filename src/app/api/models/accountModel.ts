@@ -1,5 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 const { Schema } = mongoose;
+
+interface CartItem {
+  item: mongoose.Types.ObjectId;
+  quantity?: number;
+}
+
+export interface Account extends Document {
+  email: string;
+  username: string;
+  password: string;
+  favourites: mongoose.Types.ObjectId[];
+  cart: CartItem[];
+  isAdmin?: string;
+}
 
 const accountSchema = new mongoose.Schema(
   {
@@ -27,7 +41,7 @@ const accountSchema = new mongoose.Schema(
   }
 );
 
-const accountModel =
+const AccountModel =
   mongoose.models.accounts || mongoose.model("accounts", accountSchema);
 
-export default accountModel;
+export default AccountModel;

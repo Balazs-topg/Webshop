@@ -1,4 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface Brand extends Document {
+  name: string;
+}
 
 const brandSchema = new mongoose.Schema(
   {
@@ -10,7 +14,7 @@ const brandSchema = new mongoose.Schema(
   }
 );
 
-const brandModel =
+const BrandModel =
   mongoose.models.brands || mongoose.model("brands", brandSchema);
 
-export default brandModel;
+export default BrandModel;

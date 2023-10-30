@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import accountModel from "../../models/accountModel";
+import AccountModel from "../../models/AccountModel";
 import "../../utils/connectToDB";
 import bcrypt from "bcrypt";
 import { createJwt } from "../../utils/createJwt";
@@ -10,17 +10,17 @@ type SignupRequestBody = {
   password: string;
 };
 
-async function isUsernameTaken(model: typeof accountModel, username: string) {
+async function isUsernameTaken(model: typeof AccountModel, username: string) {
   return (await model.countDocuments({ username: username })) > 0;
 }
-async function isEmailTaken(model: typeof accountModel, email: string) {
+async function isEmailTaken(model: typeof AccountModel, email: string) {
   return (await model.countDocuments({ email: email })) > 0;
 }
 function isPasswordWeak(password: string) {
   return password.length < 5;
 }
 async function pushToDb(body: SignupRequestBody) {
-  const newAccount = new accountModel({
+  const newAccount = new AccountModel({
     username: body.username,
     email: body.email,
     password: await bcrypt.hash(body.password, 10),
@@ -31,8 +31,8 @@ async function pushToDb(body: SignupRequestBody) {
 export async function POST(request: Request, response: any) {
   const reqBody = await request.json();
 
-  const usernameTaken = await isUsernameTaken(accountModel, reqBody.username);
-  const emailTaken = await isEmailTaken(accountModel, reqBody.email);
+  const usernameTaken = await isUsernameTaken(AccountModel, reqBody.username);
+  const emailTaken = await isEmailTaken(AccountModel, reqBody.email);
   const passwordIsWeak = isPasswordWeak(reqBody.password);
 
   let signupSuccessful = false;
@@ -41,9 +41,9 @@ export async function POST(request: Request, response: any) {
 
   let jwt;
   if (signupSuccessful)
-    jwt = createJwt(await accountModel.findOne({ username: reqBody.username }));
+    jwt = createJwt(await AccountModel.findOne({ username: reqBody.username }));
 
-  const recentlyCreateduser = await accountModel.findOne({
+  const recentlyCreateduser = await AccountModel.findOne({
     username: reqBody.username,
   });
 

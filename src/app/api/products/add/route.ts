@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "../../models/accountModel";
-import productModel from "../../models/productModel";
+import AccountModel from "../../models/AccountModel";
+import ProductModel from "../../models/ProductModel";
 import "../../utils/connectToDB";
+import getUser from "../../utils/getUser";
 
 export async function POST(request: NextRequest) {
   console.log("request recived!");
@@ -11,23 +12,17 @@ export async function POST(request: NextRequest) {
 
   const reqJwt = request.headers.get("jwt");
 
-  // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
+  //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
   // Check if name already exists
-  const name = (await productModel.countDocuments({ name: reqBody.name })) > 0;
+  const name = (await ProductModel.countDocuments({ name: reqBody.name })) > 0;
   if (name) return NextResponse.json({}, { status: 400 });
 
   // Push to db
-  const newProduct = new productModel({
+  const newProduct = new ProductModel({
     name: reqBody.name,
     brand: reqBody.brand,
     category: reqBody.category,

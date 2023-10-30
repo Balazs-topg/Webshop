@@ -1,11 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import accountModel from "../models/accountModel";
-import productModel from "../models/productModel";
-import brandModel from "../models/brandModel";
+import ProductModel from "../models/ProductModel";
+import BrandModel from "../models/BrandModel";
 import { ProductType } from "@/app/types/ProductType";
 import "../utils/connectToDB";
-import { CoinsIcon, CopySlash } from "lucide-react";
+import getUser from "../utils/getUser";
+import mongoose from "mongoose";
 
 interface reqBodyCart {
   productId: string;
@@ -23,31 +22,28 @@ export async function POST(request: NextRequest) {
   const reqBody: reqBodyCart = await request.json();
   const reqJwt = request.headers.get("jwt");
 
-  // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
 
   // addToCart
   if (!user.cart) user.cart = [];
 
-  // if item is alredy in cart
   if (
-    user.cart.some((itemObject: cartItemInterface) => {
+    // if item is alredy in cart
+    user.cart.some((itemObject) => {
       return String(itemObject.item) === reqBody.productId;
     })
   ) {
-    user.cart.forEach((itemObject: cartItemInterface) => {
+    user.cart.forEach((itemObject) => {
       if (String(itemObject.item) === reqBody.productId) {
-        itemObject.quantity++;
+        itemObject.quantity!++;
       }
     });
   } else {
-    user.cart.push({ item: reqBody.productId, quantity: 1 });
+    // if item isn't in cart
+    user.cart.push({
+      item: new mongoose.Types.ObjectId(reqBody.productId),
+      quantity: 1,
+    });
   }
   user.save();
 
@@ -61,7 +57,7 @@ const getBrandNames = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product: any) => {
       const frozenProduct = product;
-      const brand = await brandModel.findById("" + product.brand);
+      const brand = await BrandModel.findById("" + product.brand);
       frozenProduct.brandName = brand && brand.name;
       return frozenProduct;
     })
@@ -86,7 +82,7 @@ const getFavs = async (products: ProductType[], user: any) => {
 const addProductInfoToCart = async (userCart: any[], user: any) => {
   const productPromises = userCart.map(
     async (itemObject: cartItemInterface) => {
-      return await productModel.findById(String(itemObject.item));
+      return await ProductModel.findById(String(itemObject.item));
     }
   );
   const productInfo = await Promise.all(productPromises);
@@ -107,23 +103,15 @@ export async function GET(request: NextRequest) {
 
   const reqJwt = request.headers.get("jwt");
 
-  // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
 
-  const userCart = user.cart.toObject();
+  const userCart = user.cart;
   const userCartWInfo = await addProductInfoToCart(userCart, user);
 
   return NextResponse.json(userCartWInfo, { status: 200 });
 }
 
 //set new qqt
-
 interface setNewQqt {
   itemId: string;
   newQuantity: number;
@@ -136,13 +124,7 @@ export async function PUT(request: NextRequest) {
   const reqBody: setNewQqt = await request.json();
 
   // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
 
   const theItemWereUpdating = user.cart.find(
     (item: any) => String(item.item) === reqBody.itemId
@@ -153,7 +135,7 @@ export async function PUT(request: NextRequest) {
   }
 
   user.cart = user.cart.map((item: any) => {
-    if (String(theItemWereUpdating.item) === String(item.item)) {
+    if (String(theItemWereUpdating!.item) === String(item.item)) {
       return theItemWereUpdating;
     } else {
       return item;
@@ -174,20 +156,13 @@ export async function DELETE(request: NextRequest) {
   const reqJwt = request.headers.get("jwt");
   const reqBody: deleteItemFromCart = await request.json();
 
-  // Authenticate JWT
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
 
   const theItemWereUpdating = user.cart.find(
     (item: any) => String(item.item) === reqBody.itemId
   );
 
-  const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating);
+  const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating!);
   user.cart.splice(indexOfItemThatWeWillRemove, 1);
   await user.save();
 

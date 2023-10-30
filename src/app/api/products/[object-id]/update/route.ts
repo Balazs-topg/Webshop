@@ -1,10 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import accountModel from "@/app/api/models/accountModel";
-import productModel from "@/app/api/models/productModel";
+import ProductModel from "@/app/api/models/ProductModel";
 import "../../../utils/connectToDB";
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Types;
+import getUser from "@/app/api/utils/getUser";
 
 export async function PUT(
   request: Request,
@@ -13,26 +10,15 @@ export async function PUT(
   const reqBody: any = await request.json();
   const objectId = params["object-id"]; // 'a', 'b', or 'c'
 
-  // get user from JWT
-  const reqJwt = request.headers.get("jwt");
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
-  //check if admin
+  const user = await getUser(request);
+  //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({ status: 401 });
 
   console.log("reqBody.brand", reqBody.brand);
   console.log("reqBody.category", reqBody.category);
 
-  const theProductWhichWeWantToUpdate = await productModel.findByIdAndUpdate(
-    objectId,
-    reqBody
-  );
+  await ProductModel.findByIdAndUpdate(objectId, reqBody);
 
   return NextResponse.json(
     { message: "successfully updated item" },

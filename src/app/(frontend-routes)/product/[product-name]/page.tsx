@@ -1,10 +1,10 @@
 import React from "react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
-import productModel from "@/app/api/models/productModel";
+import ProductModel from "@/app/api/models/ProductModel";
 import Image from "next/image";
 import "../../../api/utils/connectToDB";
 import { Ripples } from "react-ripples-continued";
-import brandModel from "@/app/api/models/brandModel";
+import BrandModel from "@/app/api/models/BrandModel";
 
 export default async function Page({
   params,
@@ -12,8 +12,8 @@ export default async function Page({
   params: { "product-name": string };
 }) {
   const productName = decodeURIComponent(params["product-name"]);
-  const product = await productModel.findOne({ name: productName });
-  const brand = await brandModel.findById("" + product.brand);
+  const product = await ProductModel.findOne({ name: productName });
+  const brand = await BrandModel.findById("" + product.brand);
   product.brandName = brand.name;
   // product.map(async (product) => {
   //   const frozenProduct = { ...product };

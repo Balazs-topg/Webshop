@@ -1,8 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
-import accountModel from "@/app/api/models/accountModel";
-import productModel from "@/app/api/models/productModel";
 import "../../../../utils/connectToDB";
+import getUser from "@/app/api/utils/getUser";
+import mongoose from "mongoose";
 
 export async function POST(
   request: Request,
@@ -10,18 +9,10 @@ export async function POST(
 ) {
   console.log("request reciveddd!");
 
-  const objectId = params["object-id"]; // 'a', 'b', or 'c'
+  const objectId = new mongoose.Types.ObjectId(params["object-id"]);
   const action = params.action;
 
-  // get user from JWT
-  const reqJwt = request.headers.get("jwt");
-  if (!reqJwt) return NextResponse.json({}, { status: 401 });
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return NextResponse.json({}, { status: 401 });
-  const userId = decodedJwt.id;
-  if (!userId) return NextResponse.json({}, { status: 401 });
-  const user = await accountModel.findById(userId);
+  const user = await getUser(request);
 
   //favourite logic
   if (!user.favourites) user.favourites = [];

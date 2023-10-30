@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import accountModel from "@/app/api/models/accountModel";
+import AccountModel from "@/app/api/models/AccountModel";
 import "../../api/utils/connectToDB";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
@@ -25,7 +25,7 @@ export default async function isPageRequestAdmin(allCookies: RequestCookie[]) {
   const userId = decodedJwt.id;
   if (!userId) return false;
 
-  const user = await accountModel.findById(userId);
+  const user = await AccountModel.findById(userId);
   const isAdmin = user ? user.isAdmin : false;
 
   return isAdmin;

@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "../../../../models/accountModel";
-import tagModel from "@/app/api/models/tagModel";
+import AccountModel from "../../../../models/AccountModel";
+import TagModel from "@/app/api/models/TagModel";
 import "../../../../utils/connectToDB";
 
 export async function DELETE(
@@ -20,11 +20,11 @@ export async function DELETE(
     return NextResponse.json({}, { status: 401 });
   const userId = decodedJwt.id;
   if (!userId) return false;
-  const user = await accountModel.findById(userId);
+  const user = await AccountModel.findById(userId);
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({}, { status: 401 });
 
-  const tag = await tagModel.findByIdAndDelete(tagId);
+  const tag = await TagModel.findByIdAndDelete(tagId);
 
   return NextResponse.json({ status: 200 });
 }

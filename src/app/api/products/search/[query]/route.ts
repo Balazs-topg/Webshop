@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
-import productModel from "@/app/api/models/productModel";
+import ProductModel from "@/app/api/models/ProductModel";
 import "../../../utils/connectToDB";
-import brandModel from "@/app/api/models/brandModel";
-import tagModel from "@/app/api/models/tagModel";
-import categoryModel from "@/app/api/models/categoryModel";
-import accountModel from "@/app/api/models/accountModel";
+import BrandModel from "@/app/api/models/BrandModel";
+import TagModel from "@/app/api/models/TagModel";
+import CategoryModel from "@/app/api/models/CategoryModel";
+import AccountModel from "@/app/api/models/AccountModel";
 import { ProductType } from "@/app/types/ProductType";
 import jwt from "jsonwebtoken";
 
@@ -12,7 +12,7 @@ const getBrandNames = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product: any) => {
       const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
-      const brand = await brandModel.findById("" + product.brand);
+      const brand = await BrandModel.findById("" + product.brand);
       frozenProduct.brandName = brand && brand.name;
       return frozenProduct;
     })
@@ -23,11 +23,11 @@ const getBrandNames = async (products: any[]) => {
 //takes a keyword an returns a promise that queries the database
 const keywordToResults = async (keyword: RegExp) => {
   //search for all matching tags, brands, categories
-  const matchingTags = await tagModel.find({ name: keyword }).select("_id");
-  const matchingBrands = await brandModel.find({ name: keyword }).select("_id");
-  const matchingCategories = await categoryModel
-    .find({ name: keyword })
-    .select("_id");
+  const matchingTags = await TagModel.find({ name: keyword }).select("_id");
+  const matchingBrands = await BrandModel.find({ name: keyword }).select("_id");
+  const matchingCategories = await CategoryModel.find({ name: keyword }).select(
+    "_id"
+  );
 
   //get just the ids from them
   const tagIds = matchingTags.map((tag) => tag._id);
@@ -35,7 +35,7 @@ const keywordToResults = async (keyword: RegExp) => {
   const categoryIds = matchingCategories.map((category) => category._id);
 
   //preform search
-  const queryResult = await productModel.find({
+  const queryResult = await ProductModel.find({
     $or: [
       { name: keyword },
       { brand: { $in: brandIds } },
@@ -55,7 +55,7 @@ const getFavs = async (products: ProductType[], reqJwt: string | null) => {
     return products;
   const userId = decodedJwt.id;
   if (!userId) return products;
-  const user = await accountModel.findById(userId);
+  const user = await AccountModel.findById(userId);
 
   // get favs
   let productsWithFavs = products.map((product: ProductType) => {
@@ -89,7 +89,7 @@ function removeTheDiff(array: ProductType[][]): ProductType[] {
       results.push(product);
     }
   }
-  
+
   return results;
 }
 

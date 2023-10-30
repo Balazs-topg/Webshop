@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import accountModel from "../../models/accountModel";
+import AccountModel from "../../models/AccountModel";
 import "../../utils/connectToDB";
 
 export async function GET(
@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json({ status: 401 });
   }
 
-  const userData = await accountModel.findById(userId).select("-password");
+  const userData = await AccountModel.findById(userId).select("-password");
   return NextResponse.json(userData, { status: 200 });
 }
 
