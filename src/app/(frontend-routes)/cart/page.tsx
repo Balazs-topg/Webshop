@@ -22,18 +22,33 @@ interface CartItemInterface {
   brand: string;
   count: number;
   id: string;
+  updateQuantity: Function;
+  removeItemFromCart: Function;
 }
 
-function CartItem({ name, price, img, brand, count, id }: CartItemInterface) {
+function CartItem({
+  name,
+  price,
+  img,
+  brand,
+  count,
+  id,
+  updateQuantity,
+  removeItemFromCart,
+}: CartItemInterface) {
   const [productCount, setProductCount] = useState(count);
 
-  const handleDecrement = async () => {
-    setProductCount((prevCount) => prevCount - 1);
-    setNewQQt(productCount - 1);
+  const handleDecrement = () => {
+    const newQuantity = productCount - 1;
+    setProductCount(newQuantity);
+    setNewQQt(newQuantity);
+    updateQuantity(id, newQuantity);
   };
-  const handleIncrement = async () => {
-    setProductCount((prevCount) => prevCount + 1);
-    setNewQQt(productCount + 1);
+  const handleIncrement = () => {
+    const newQuantity = productCount + 1;
+    setProductCount(newQuantity);
+    setNewQQt(newQuantity);
+    updateQuantity(id, newQuantity);
   };
 
   const setNewQQt = async (qqt = 0) => {
@@ -65,7 +80,12 @@ function CartItem({ name, price, img, brand, count, id }: CartItemInterface) {
       </div>
       <div className="ml-auto flex flex-col items-end">
         <div className="mb-auto flex gap-1">
-          <button className="active:scale-95 transition-all relative overflow-hidden bg-stone-100 p-1 rounded-full flex justify-center items-center">
+          <button
+            onClick={() => {
+              removeItemFromCart(id);
+            }}
+            className="active:scale-95 transition-all relative overflow-hidden bg-stone-100 p-1 rounded-full flex justify-center items-center"
+          >
             {adminIcons.trash}
             <Ripples fillAndHold color="gray" opacity={0.5} optimize />
           </button>
@@ -99,9 +119,13 @@ function CartItem({ name, price, img, brand, count, id }: CartItemInterface) {
             <input
               type="number"
               className="w-10 flex justify-center text-center bg-stone-100 outline-none"
+              step={1}
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const intValue = Math.floor(+e.currentTarget.value);
+                e.currentTarget.value = String(intValue); // Update the input value to be the integer value
                 setProductCount(+e.currentTarget.value);
                 setNewQQt(+e.currentTarget.value);
+                updateQuantity(id, +e.currentTarget.value);
               }}
               value={productCount}
             />
@@ -124,7 +148,15 @@ const tempImg =
 
 function Page() {
   const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState<Number>();
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+
+  const updateCartItemQuantity = (itemId: string, newQuantity: number) => {
+    setCartItems((prevItems: any) =>
+      prevItems.map((item: any) =>
+        item._id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
 
   useMemo(() => {
     let totalPrice = 0;
@@ -141,6 +173,23 @@ function Page() {
       cartItemsCount = cartItemsCount + cartItem.quantity;
     });
     return cartItemsCount;
+  };
+
+  const removeItemFromCart = async (id: string) => {
+    setCartItems(
+      cartItems.filter((item: any) => (item._id !== id ? true : false))
+    );
+    const response = await fetch("/api/cart", {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+      body: JSON.stringify({
+        itemId: id,
+      }),
+    });
+    const data = await response.json();
   };
 
   const getCartItems = async () => {
@@ -174,6 +223,8 @@ function Page() {
             cartItems.map((cartItem: any) => {
               return (
                 <CartItem
+                  removeItemFromCart={removeItemFromCart}
+                  updateQuantity={updateCartItemQuantity}
                   id={cartItem._id}
                   key={cartItem._id}
                   name={cartItem.name}
@@ -186,7 +237,7 @@ function Page() {
             })}
           <div className="px-2 mt-2 gap-2 border-stone-100 font-semibold flex justify-between">
             Total summa:
-            <span>{totalPrice} kr</span>
+            <span>{addSpacesForPrice(totalPrice)} kr</span>
           </div>
         </div>
         <button className="bg-sky-800 outline-offset-4 rounded-sm w-full p-3 text-white active:scale-[0.97] transition-all relative overflow-hidden">

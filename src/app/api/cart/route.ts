@@ -150,12 +150,41 @@ export async function PUT(request: NextRequest) {
 
   return NextResponse.json({ status: 200 }, { status: 200 });
 }
+interface deleteItemFromCart {
+  itemId: string;
+}
+
+export async function DELETE(request: NextRequest) {
+  console.log("request recived!");
+
+  const reqJwt = request.headers.get("jwt");
+  const reqBody: deleteItemFromCart = await request.json();
+
+  // Authenticate JWT
+  if (!reqJwt) return NextResponse.json({}, { status: 401 });
+  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
+  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
+    return NextResponse.json({}, { status: 401 });
+  const userId = decodedJwt.id;
+  if (!userId) return NextResponse.json({}, { status: 401 });
+  const user = await accountModel.findById(userId);
+
+  const theItemWereUpdating = user.cart.find(
+    (item: any) => String(item.item) === reqBody.itemId
+  );
+
+  const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating);
+  user.cart.splice(indexOfItemThatWeWillRemove, 1);
+  await user.save();
+
+  return NextResponse.json({ status: 200 }, { status: 200 });
+}
 
 //boiler plate
 // export async function GET(request: Request) {}
 export async function HEAD(request: Request) {}
 // export async function POST(request: Request) {}
 // export async function PUT(request: Request) {}
-export async function DELETE(request: Request) {}
+// export async function DELETE(request: Request) {}
 export async function PATCH(request: Request) {}
 export async function OPTIONS(request: Request) {}
