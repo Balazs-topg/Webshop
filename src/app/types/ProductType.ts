@@ -8,4 +8,5 @@ export type ProductType = {
   imgs: string[];
   tags: string[];
   isFavourite: boolean;
+  quantity?: number;
 };

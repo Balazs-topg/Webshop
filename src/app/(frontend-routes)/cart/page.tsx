@@ -1,11 +1,19 @@
 "use client";
-import React, { ReactEventHandler, useState } from "react";
+import React, {
+  ReactEventHandler,
+  use,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
 import WebsiteFooter from "@/app/components/WebsiteFooter";
 import addSpacesForPrice from "../utils/addSpacesForPrice";
 import adminIcons from "../admin/adminIcons";
+import { getCookie } from "../utils/manageCookies";
 
 import { Ripples } from "react-ripples-continued";
+import { ProductType } from "@/app/types/ProductType";
 
 interface CartItemInterface {
   name: string;
@@ -13,14 +21,39 @@ interface CartItemInterface {
   img: string;
   brand: string;
   count: number;
+  id: string;
 }
 
-function CartItem({ name, price, img, brand, count }: CartItemInterface) {
-  const [productCount, setProductCount] = useState(0);
+function CartItem({ name, price, img, brand, count, id }: CartItemInterface) {
+  const [productCount, setProductCount] = useState(count);
+
+  const handleDecrement = async () => {
+    setProductCount((prevCount) => prevCount - 1);
+    setNewQQt(productCount - 1);
+  };
+  const handleIncrement = async () => {
+    setProductCount((prevCount) => prevCount + 1);
+    setNewQQt(productCount + 1);
+  };
+
+  const setNewQQt = async (qqt = 0) => {
+    const response = await fetch("/api/cart", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+      body: JSON.stringify({
+        itemId: id,
+        newQuantity: qqt,
+      }),
+    });
+    const data = await response.json();
+  };
 
   return (
     <div className="pb-2 px-2 flex gap-2 border-b-2 border-stone-100 rounded-lg">
-      <div className="w-24 aspect-square rounded-sm overflow-hidden flex">
+      <div className="w-24 aspect-square bg-stone-100 rounded-sm overflow-hidden flex justify-center">
         <img src={img} alt="" />
       </div>
       <div className="flex flex-col">
@@ -55,10 +88,9 @@ function CartItem({ name, price, img, brand, count }: CartItemInterface) {
             </svg>
             <Ripples fillAndHold color="gray" opacity={0.5} optimize />
           </button>
-
           <div className="ml-auto bg-stone-100 rounded-full p-1 flex gap-1 text-lg font-semibold">
             <button
-              onClick={() => setProductCount(productCount - 1)}
+              onClick={handleDecrement}
               className="relative select-none overflow-hidden bg-white rounded-full w-8 h-8 flex items-center justify-center hover:shadow active:scale-95 transition-all"
             >
               -
@@ -69,11 +101,12 @@ function CartItem({ name, price, img, brand, count }: CartItemInterface) {
               className="w-10 flex justify-center text-center bg-stone-100 outline-none"
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setProductCount(+e.currentTarget.value);
+                setNewQQt(+e.currentTarget.value);
               }}
               value={productCount}
             />
             <button
-              onClick={() => setProductCount(productCount + 1)}
+              onClick={handleIncrement}
               className="relative select-none overflow-hidden bg-white rounded-full w-8 h-8 flex items-center justify-center hover:shadow active:scale-95 transition-all"
             >
               +
@@ -90,50 +123,75 @@ const tempImg =
   "https://external-preview.redd.it/inWIpQ4kwOsX0RsF1RMqDSWiX1YnQlPYUqa4zEFU5m8.jpg?auto=webp&s=2a13426c7340d7b08cc24b101129e1fd5a2eff28";
 
 function Page() {
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState<Number>();
+
+  useMemo(() => {
+    let totalPrice = 0;
+    cartItems.forEach((product: ProductType) => {
+      totalPrice = totalPrice + +product.price * product.quantity!;
+    });
+    console.log(totalPrice);
+    setTotalPrice(totalPrice);
+  }, [cartItems]);
+
+  const totalItemsCount = (cartItems: ProductType[]) => {
+    let cartItemsCount = 0;
+    cartItems.forEach((cartItem: any) => {
+      cartItemsCount = cartItemsCount + cartItem.quantity;
+    });
+    return cartItemsCount;
+  };
+
+  const getCartItems = async () => {
+    const response = await fetch("/api/cart", {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+    });
+    const data = await response.json();
+    setCartItems(data);
+  };
+
+  useEffect(() => {
+    getCartItems();
+  }, []);
+
   return (
     <>
       <WebsiteHeader />
       <div className="max-w-lg min-h-screen mx-auto p-6 space-y-4">
         <h1 className="text-3xl font-semibold text-sky-800 flex">
-          Kundvagn <span className="ml-auto opacity-50">(99)</span>
+          Kundvagn{" "}
+          <span className="ml-auto opacity-50">
+            ({totalItemsCount(cartItems)})
+          </span>
         </h1>
         <div className="rounded-lg mt-4 flex flex-col gap-2">
-          <CartItem
-            name="andre tate"
-            price={10000}
-            img={tempImg}
-            brand={"Adidas"}
-            count={1}
-          />
-          <CartItem
-            name="andre tate"
-            price={10000}
-            img={tempImg}
-            brand={"Adidas"}
-            count={1}
-          />
-          <CartItem
-            name="andre tate"
-            price={10000}
-            img={tempImg}
-            brand={"Adidas"}
-            count={1}
-          />
-          <CartItem
-            name="andre tate"
-            price={10000}
-            img={tempImg}
-            brand={"Adidas"}
-            count={1}
-          />
+          {cartItems &&
+            cartItems.map((cartItem: any) => {
+              return (
+                <CartItem
+                  id={cartItem._id}
+                  key={cartItem._id}
+                  name={cartItem.name}
+                  price={cartItem.price}
+                  img={cartItem.imgs[0]}
+                  brand={cartItem.brandName}
+                  count={cartItem.quantity}
+                />
+              );
+            })}
           <div className="px-2 mt-2 gap-2 border-stone-100 font-semibold flex justify-between">
             Total summa:
-            <span>{1000} kr</span>
+            <span>{totalPrice} kr</span>
           </div>
         </div>
         <button className="bg-sky-800 outline-offset-4 rounded-sm w-full p-3 text-white active:scale-[0.97] transition-all relative overflow-hidden">
           Till kassan
-          <Ripples fillAndHold opacity={0.5} optimize />
+          <Ripples duration={1000} fillAndHold opacity={0.4} optimize />
         </button>
       </div>
       <WebsiteFooter />

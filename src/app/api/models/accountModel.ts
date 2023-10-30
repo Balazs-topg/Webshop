@@ -9,7 +9,14 @@ const accountSchema = new mongoose.Schema(
     favourites: [
       {
         type: Schema.Types.ObjectId,
-        ref: "SomeModel", // Replace 'SomeModel' with the name of the model these ObjectIds reference, if applicable
+      },
+    ],
+    cart: [
+      {
+        item: {
+          type: Schema.Types.ObjectId,
+        },
+        quantity: { type: Number, required: false },
       },
     ],
     isAdmin: { type: String, required: false },

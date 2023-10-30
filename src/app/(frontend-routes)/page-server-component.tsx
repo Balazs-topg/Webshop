@@ -1,16 +1,12 @@
-"use client";
-import { useEffect, useState } from "react";
 import ItemCard from "../components/ItemCard";
 import WebsiteHeader from "../components/WebsiteHeader";
 import WebsiteFooter from "../components/WebsiteFooter";
 
 import { Ripples } from "react-ripples-continued";
-
-import { getCookie } from "./utils/manageCookies";
-
+import { cookies } from "next/headers";
 import { ProductType } from "../types/ProductType";
 
-function CategoryBtn({
+async function CategoryBtn({
   title,
   isSkeleton,
 }: {
@@ -19,51 +15,58 @@ function CategoryBtn({
 }) {
   if (isSkeleton) {
     return (
-      <button className=" bg-white relative overflow-hidden px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all hover:shadow">
+      <button className=" bg-white relative overflow-hidden px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
         <div className=" absolute top-0 left-0 w-full h-full bg-stone-300 animate-pulse"></div>
         <div className="opacity-0">loading...</div>
       </button>
     );
   }
   return (
-    <button className="relative overflow-hidden whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all hover:shadow">
+    <button className="relative overflow-hidden whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
       {title}
       <Ripples fillAndHold color="gray" opacity={0.5} optimize />
     </button>
   );
 }
 
-export default function Home() {
-  const [category, setCategory] = useState([]);
-  const [products, setProducts] = useState([]);
+export default async function Home() {
+  // const [category, setCategory] = useState([]);
+  // const [products, setProducts] = useState([]);
 
+  const cookieStore = cookies();
+
+  let category;
   async function getBrandsList() {
-    const response = await fetch("/api/products/categories/get", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/products/categories/get",
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
-    setCategory(data);
+    category = data;
   }
 
+  console.log("jwt cookies", cookieStore.get("jwt"));
+
+  let products;
   async function getProducts() {
-    const response = await fetch("/api/products/get", {
+    const response = await fetch("http://localhost:3000/api/products/get", {
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        jwt: getCookie("jwt")!, //! it acutally can be null tho, if the user isn't logged it, it will be null
+        jwt: cookieStore.get("jwt")!.value, //! it acutally can be null tho, if the user isn't logged it, it will be null
       },
     });
     const data = await response.json();
-    setProducts(data);
+    products = data;
   }
 
-  useEffect(() => {
-    getBrandsList();
-    getProducts();
-  }, []);
+  await getBrandsList();
+  await getProducts();
 
   return (
     <>

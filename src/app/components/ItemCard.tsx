@@ -33,11 +33,15 @@ export default function ItemCard({
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   const [isBeingClicked, setIsBeingClicked] = useState(false); // for styles, not for functionallity
 
-  const handleBuy = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
+  const handleBuy = async () => {
+    const response = await fetch("/api/cart", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        jwt: getCookie("jwt")!,
+      },
+      body: JSON.stringify({ productId: id }),
+    });
   };
 
   const handleFavourite = async () => {
@@ -50,7 +54,7 @@ export default function ItemCard({
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          jwt: getCookie("jwt")!, //! it acutally can be null tho, if the user isn't logged it, it will be null
+          jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
         },
       }
     );
