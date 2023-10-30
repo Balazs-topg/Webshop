@@ -86,7 +86,7 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
+        <div className="p-4 flex items-center gap-2 overflow-x-auto overflow-y-hidden selection:bg-sky-200">
           {products.length > 0 ? (
             products.map((product: ProductType) => {
               return (
