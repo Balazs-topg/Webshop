@@ -24,6 +24,7 @@ interface CartItemInterface {
   id: string;
   updateQuantity: Function;
   removeItemFromCart: Function;
+  isFavouriteProp: boolean;
 }
 
 function CartItem({
@@ -35,8 +36,27 @@ function CartItem({
   id,
   updateQuantity,
   removeItemFromCart,
+  isFavouriteProp,
 }: CartItemInterface) {
   const [productCount, setProductCount] = useState(count);
+  const [isFavourite, setIsFavourite] = useState(isFavouriteProp);
+
+  const handleFavourite = async () => {
+    setIsFavourite(!isFavourite);
+    const response = await fetch(
+      `/api/products/${id}/favourite/${
+        isFavourite ? "un-favourite" : "favourite"
+      }`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
+        },
+      }
+    );
+    const data = await response.json();
+  };
 
   const handleDecrement = () => {
     let newQuantity = productCount - 1;
@@ -107,7 +127,14 @@ function CartItem({
           </button>
         </div>
         <div className="flex gap-2 items-center">
-          <button className="active:scale-95 transition-all w-8 h-8  relative overflow-hidden bg-stone-100 p-1 rounded-full flex justify-center items-center">
+          <button
+            onClick={handleFavourite}
+            className={
+              isFavourite
+                ? "active:scale-95 transition-all w-8 h-8 relative overflow-hidden bg-amber-300 p-1 rounded-full flex justify-center items-center"
+                : "active:scale-95 transition-all w-8 h-8 relative overflow-hidden bg-stone-100  p-1 rounded-full flex justify-center items-center"
+            }
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -242,6 +269,7 @@ function Page() {
             cartItems.map((cartItem: any) => {
               return (
                 <CartItem
+                  isFavouriteProp={cartItem.isFavourite}
                   removeItemFromCart={removeItemFromCart}
                   updateQuantity={updateCartItemQuantity}
                   id={cartItem._id}

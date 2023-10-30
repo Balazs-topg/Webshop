@@ -69,7 +69,21 @@ const getBrandNames = async (products: any[]) => {
   return updatedProducts;
 };
 
-const addProductInfoToCart = async (userCart: any[]) => {
+const getFavs = async (products: ProductType[], user: any) => {
+  // get favs
+  let productsWithFavs = products.map((product: ProductType) => {
+    const frozenProduct = product ? product : { ...(product as ProductType) };
+    if (user.favourites.map(String).includes(product._id.toString())) {
+      frozenProduct.isFavourite = true;
+    } else {
+      frozenProduct.isFavourite = false;
+    }
+    return frozenProduct;
+  });
+  return productsWithFavs;
+};
+
+const addProductInfoToCart = async (userCart: any[], user: any) => {
   const productPromises = userCart.map(
     async (itemObject: cartItemInterface) => {
       return await productModel.findById(String(itemObject.item));
@@ -85,7 +99,7 @@ const addProductInfoToCart = async (userCart: any[]) => {
     return productWcartInfo;
   }) as ProductType[];
 
-  return getBrandNames(productInfoWithQqt);
+  return getFavs(await getBrandNames(productInfoWithQqt), user);
 };
 
 export async function GET(request: NextRequest) {
@@ -103,7 +117,7 @@ export async function GET(request: NextRequest) {
   const user = await accountModel.findById(userId);
 
   const userCart = user.cart.toObject();
-  const userCartWInfo = await addProductInfoToCart(userCart);
+  const userCartWInfo = await addProductInfoToCart(userCart, user);
 
   return NextResponse.json(userCartWInfo, { status: 200 });
 }
