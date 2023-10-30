@@ -51,21 +51,35 @@ function CartItem({
     updateQuantity(id, newQuantity);
   };
 
+  const [timeOutId, setTimeOutId] = useState<any>(count);
   const setNewQQt = async (qqt = 0) => {
-    const response = await fetch("/api/cart", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-      body: JSON.stringify({
-        itemId: id,
-        newQuantity: qqt,
-      }),
-    });
-    const data = await response.json();
-  };
+    const callApi = async () => {
+      const response = await fetch("/api/cart", {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: getCookie("jwt")!,
+        },
+        body: JSON.stringify({
+          itemId: id,
+          newQuantity: qqt,
+        }),
+      });
+      const data = await response.json();
+    };
 
+    // Clear the previous timeout if it exists
+    if (timeOutId) {
+      clearTimeout(timeOutId);
+    }
+
+    // Set a new timeout
+    const newTimeoutID = setTimeout(async () => {
+      callApi();
+    }, 200); // 1 second delay
+
+    setTimeOutId(newTimeoutID);
+  };
   return (
     <div className="pb-2 px-2 flex gap-2 border-b-2 border-stone-100 rounded-lg">
       <div className="w-24 aspect-square bg-stone-100 rounded-sm overflow-hidden flex justify-center">
