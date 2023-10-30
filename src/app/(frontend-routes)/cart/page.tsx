@@ -39,13 +39,15 @@ function CartItem({
   const [productCount, setProductCount] = useState(count);
 
   const handleDecrement = () => {
-    const newQuantity = productCount - 1;
+    let newQuantity = productCount - 1;
+    if (newQuantity <= 0) newQuantity = 1;
     setProductCount(newQuantity);
     setNewQQt(newQuantity);
     updateQuantity(id, newQuantity);
   };
   const handleIncrement = () => {
-    const newQuantity = productCount + 1;
+    let newQuantity = productCount + 1;
+    if (newQuantity <= 0) newQuantity = 1;
     setProductCount(newQuantity);
     setNewQQt(newQuantity);
     updateQuantity(id, newQuantity);
@@ -135,7 +137,10 @@ function CartItem({
               className="w-10 flex justify-center text-center bg-stone-100 outline-none"
               step={1}
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const intValue = Math.floor(+e.currentTarget.value);
+                let intValue = Math.floor(+e.currentTarget.value);
+                if (intValue <= 0) {
+                  intValue = 1; // Set to default value of 1
+                }
                 e.currentTarget.value = String(intValue); // Update the input value to be the integer value
                 setProductCount(+e.currentTarget.value);
                 setNewQQt(+e.currentTarget.value);
