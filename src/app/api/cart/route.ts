@@ -5,6 +5,7 @@ import { ProductType } from "@/app/types/ProductType";
 import "../utils/connectToDB";
 import getUser from "../utils/getUser";
 import mongoose from "mongoose";
+import getBrandNames from "../utils/getBrandNames";
 
 interface reqBodyCart {
   productId: string;
@@ -20,7 +21,6 @@ export async function POST(request: NextRequest) {
   console.log("request recived!");
 
   const reqBody: reqBodyCart = await request.json();
-  const reqJwt = request.headers.get("jwt");
 
   const user = await getUser(request);
 
@@ -52,18 +52,6 @@ export async function POST(request: NextRequest) {
     { status: 200 }
   );
 }
-
-const getBrandNames = async (products: any[]) => {
-  const updatedProducts = await Promise.all(
-    products.map(async (product: any) => {
-      const frozenProduct = product;
-      const brand = await BrandModel.findById("" + product.brand);
-      frozenProduct.brandName = brand && brand.name;
-      return frozenProduct;
-    })
-  );
-  return updatedProducts;
-};
 
 const getFavs = async (products: ProductType[], user: any) => {
   // get favs
@@ -101,8 +89,6 @@ const addProductInfoToCart = async (userCart: any[], user: any) => {
 export async function GET(request: NextRequest) {
   console.log("request recived!");
 
-  const reqJwt = request.headers.get("jwt");
-
   const user = await getUser(request);
 
   const userCart = user.cart;
@@ -120,7 +106,6 @@ interface setNewQqt {
 export async function PUT(request: NextRequest) {
   console.log("request recived!");
 
-  const reqJwt = request.headers.get("jwt");
   const reqBody: setNewQqt = await request.json();
 
   // Authenticate JWT
@@ -153,7 +138,6 @@ interface deleteItemFromCart {
 export async function DELETE(request: NextRequest) {
   console.log("request recived!");
 
-  const reqJwt = request.headers.get("jwt");
   const reqBody: deleteItemFromCart = await request.json();
 
   const user = await getUser(request);

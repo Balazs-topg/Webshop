@@ -29,7 +29,7 @@ export default function ItemCard({
   isSkeleton = false,
 }: itemCardTypes) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   const [isBeingClicked, setIsBeingClicked] = useState(false); // for styles, not for functionallity
 

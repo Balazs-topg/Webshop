@@ -12,6 +12,7 @@ export const AdminProductsPageContext = createContext<adminContextType>({
   setState: () => {},
 });
 
+
 function Page() {
   const [adminContextState, setAdminContextState] = useState();
 

@@ -1,28 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
 import ProductModel from "../../models/ProductModel";
 import "../../utils/connectToDB";
-import BrandModel from "../../models/BrandModel";
 import getUser from "../../utils/getUser";
 import getIsLoggedIn from "../../utils/getIsLoggedIn";
-
-const getBrandNames = async (products: any[]) => {
-  const updatedProducts = await Promise.all(
-    products.map(async (product: any) => {
-      const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
-      const brand = await BrandModel.findById("" + product.brand);
-      frozenProduct.brandName = brand && brand.name;
-      return frozenProduct;
-    })
-  );
-  return updatedProducts;
-};
+import getBrandNames from "../../utils/getBrandNames";
 
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
   // Find all products
   // const products = await productModel.find();
-  const products = await getBrandNames(await ProductModel.find());
+  const products = await ProductModel.find();
 
   const loggedIn = getIsLoggedIn(request);
   let productsWithFavs;
@@ -42,7 +30,10 @@ export async function GET(request: NextRequest, response: any) {
       }
       return frozenProduct;
     });
-    return NextResponse.json(productsWithFavs, { status: 200 });
+    const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);
+    console.log("productsWFavsAndWBrandNames", productsWFavsAndWBrandNames);
+
+    return NextResponse.json(productsWFavsAndWBrandNames, { status: 200 });
   }
   console.log(productsWithFavs);
   return NextResponse.json(products, { status: 200 });

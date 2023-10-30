@@ -5,9 +5,7 @@ import WebsiteHeader from "../components/WebsiteHeader";
 import WebsiteFooter from "../components/WebsiteFooter";
 
 import { Ripples } from "react-ripples-continued";
-
 import { getCookie } from "./utils/manageCookies";
-
 import { ProductType } from "../types/ProductType";
 
 function CategoryBtn({
@@ -53,7 +51,7 @@ export default function Home() {
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        jwt: getCookie("jwt")!, //! it acutally can be null tho, if the user isn't logged it, it will be null
+        jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
       },
     });
     const data = await response.json();

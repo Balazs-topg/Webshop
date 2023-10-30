@@ -1,27 +1,16 @@
 import { NextResponse, NextRequest } from "next/server";
-import ProductModel from "@/app/api/models/ProductModel";
+import ProductModel, { Product } from "@/app/api/models/ProductModel";
 import "../../../utils/connectToDB";
 import BrandModel from "@/app/api/models/BrandModel";
 import TagModel from "@/app/api/models/TagModel";
 import CategoryModel from "@/app/api/models/CategoryModel";
 import AccountModel from "@/app/api/models/AccountModel";
-import { ProductType } from "@/app/types/ProductType";
+import { ProductToPlainObject } from "@/app/api/models/ProductModel";
 import jwt from "jsonwebtoken";
-
-const getBrandNames = async (products: any[]) => {
-  const updatedProducts = await Promise.all(
-    products.map(async (product: any) => {
-      const frozenProduct = product.toObject(); // Convert Mongoose document to plain object
-      const brand = await BrandModel.findById("" + product.brand);
-      frozenProduct.brandName = brand && brand.name;
-      return frozenProduct;
-    })
-  );
-  return updatedProducts;
-};
+import getBrandNames from "@/app/api/utils/getBrandNames";
 
 //takes a keyword an returns a promise that queries the database
-const keywordToResults = async (keyword: RegExp) => {
+const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
   //search for all matching tags, brands, categories
   const matchingTags = await TagModel.find({ name: keyword }).select("_id");
   const matchingBrands = await BrandModel.find({ name: keyword }).select("_id");
@@ -35,7 +24,7 @@ const keywordToResults = async (keyword: RegExp) => {
   const categoryIds = matchingCategories.map((category) => category._id);
 
   //preform search
-  const queryResult = await ProductModel.find({
+  const queryResult: Product[] = await ProductModel.find({
     $or: [
       { name: keyword },
       { brand: { $in: brandIds } },
@@ -46,7 +35,10 @@ const keywordToResults = async (keyword: RegExp) => {
   return queryResult;
 };
 
-const getFavs = async (products: ProductType[], reqJwt: string | null) => {
+const getFavs = async (
+  products: ProductToPlainObject[],
+  reqJwt: string | null
+) => {
   if (!reqJwt) return products;
 
   //auth jwt
@@ -58,8 +50,10 @@ const getFavs = async (products: ProductType[], reqJwt: string | null) => {
   const user = await AccountModel.findById(userId);
 
   // get favs
-  let productsWithFavs = products.map((product: ProductType) => {
-    const frozenProduct = product ? product : { ...(product as ProductType) };
+  let productsWithFavs = products.map((product: ProductToPlainObject) => {
+    const frozenProduct = product
+      ? product
+      : { ...(product as ProductToPlainObject) };
     if (user.favourites.map(String).includes(product._id.toString())) {
       frozenProduct.isFavourite = true;
     } else {
@@ -71,14 +65,14 @@ const getFavs = async (products: ProductType[], reqJwt: string | null) => {
 };
 
 //takes an array of arrays containing products.
-function removeTheDiff(array: ProductType[][]): ProductType[] {
+function removeTheDiff(array: Product[][]): Product[] {
   // If there are no arrays or the first array is empty, return an empty array
   if (array.length === 0 || array[0].length === 0) {
     return [];
   }
 
   const referenceArray = array[0];
-  const results: ProductType[] = [];
+  const results = [];
 
   for (const product of referenceArray) {
     if (
@@ -111,7 +105,10 @@ export async function GET(
   console.log(resultOfQueriesArr);
 
   const removedDiff = removeTheDiff(resultOfQueriesArr);
-  const removedDiffWBrandNames = await getBrandNames(removedDiff);
+  const removedDiffPlainObj = removedDiff.map((item) => {
+    return item.toObject();
+  });
+  const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
   const removedDiffWBrandNamesWFavs = await getFavs(
     removedDiffWBrandNames,
     reqJwt

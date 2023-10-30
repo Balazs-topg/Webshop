@@ -1,5 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface ProductToPlainObject {
+  _id: string; //*
+  name: string;
+  price: string;
+  brand: string;
+  imgs: string;
+  tags: string[];
+  category: string;
+}
+
 export interface Product extends Document {
   name: string;
   price: string;
