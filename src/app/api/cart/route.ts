@@ -6,6 +6,7 @@ import "../utils/connectToDB";
 import getUser from "../utils/getUser";
 import mongoose from "mongoose";
 import getBrandNames from "../utils/getBrandNames";
+import getFavs from "../utils/getFavs";
 
 interface reqBodyCart {
   productId: string;
@@ -52,20 +53,6 @@ export async function POST(request: NextRequest) {
     { status: 200 }
   );
 }
-
-const getFavs = async (products: ProductType[], user: any) => {
-  // get favs
-  let productsWithFavs = products.map((product: ProductType) => {
-    const frozenProduct = product ? product : { ...(product as ProductType) };
-    if (user.favourites.map(String).includes(product._id.toString())) {
-      frozenProduct.isFavourite = true;
-    } else {
-      frozenProduct.isFavourite = false;
-    }
-    return frozenProduct;
-  });
-  return productsWithFavs;
-};
 
 const addProductInfoToCart = async (userCart: any[], user: any) => {
   const productPromises = userCart.map(

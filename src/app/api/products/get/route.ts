@@ -1,41 +1,29 @@
 import { NextResponse, NextRequest } from "next/server";
-import ProductModel from "../../models/ProductModel";
+import ProductModel, { Product } from "../../models/ProductModel";
 import "../../utils/connectToDB";
 import getUser from "../../utils/getUser";
 import getIsLoggedIn from "../../utils/getIsLoggedIn";
 import getBrandNames from "../../utils/getBrandNames";
+import getFavs from "../../utils/getFavs";
 
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
 
   // Find all products
   // const products = await productModel.find();
-  const products = await ProductModel.find();
+  const products: Product[] = await ProductModel.find();
+  const productsToPlainObjects = products.map((item) => {
+    return item.toObject();
+  });
 
   const loggedIn = getIsLoggedIn(request);
-  let productsWithFavs;
   if (loggedIn) {
-    //auth jwt
     const user = await getUser(request);
 
-    // get favs
-    productsWithFavs = products.map((product) => {
-      const frozenProduct = product.toObject
-        ? product.toObject()
-        : { ...product };
-      if (user.favourites.map(String).includes(product._id.toString())) {
-        frozenProduct.isFavourite = true;
-      } else {
-        frozenProduct.isFavourite = false;
-      }
-      return frozenProduct;
-    });
+    const productsWithFavs = await getFavs(productsToPlainObjects, user);
     const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);
-    console.log("productsWFavsAndWBrandNames", productsWFavsAndWBrandNames);
-
     return NextResponse.json(productsWFavsAndWBrandNames, { status: 200 });
   }
-  console.log(productsWithFavs);
   return NextResponse.json(products, { status: 200 });
 }
 

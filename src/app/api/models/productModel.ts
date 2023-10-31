@@ -8,6 +8,9 @@ export interface ProductToPlainObject {
   imgs: string;
   tags: string[];
   category: string;
+  //* not from db, but will be set by other functions n shit:
+  isFavourite?: boolean;
+  brandName?: boolean;
 }
 
 export interface Product extends Document {

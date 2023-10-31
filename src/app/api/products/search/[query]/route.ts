@@ -4,10 +4,9 @@ import "../../../utils/connectToDB";
 import BrandModel from "@/app/api/models/BrandModel";
 import TagModel from "@/app/api/models/TagModel";
 import CategoryModel from "@/app/api/models/CategoryModel";
-import AccountModel from "@/app/api/models/AccountModel";
-import { ProductToPlainObject } from "@/app/api/models/ProductModel";
-import jwt from "jsonwebtoken";
 import getBrandNames from "@/app/api/utils/getBrandNames";
+import getUser from "@/app/api/utils/getUser";
+import getFavs from "@/app/api/utils/getFavs";
 
 //takes a keyword an returns a promise that queries the database
 const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
@@ -35,34 +34,6 @@ const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
   return queryResult;
 };
 
-const getFavs = async (
-  products: ProductToPlainObject[],
-  reqJwt: string | null
-) => {
-  if (!reqJwt) return products;
-
-  //auth jwt
-  const decodedJwt = jwt.verify(reqJwt, process.env.JWT_SECRET_KEY!);
-  if (!(decodedJwt && typeof decodedJwt === "object" && "id" in decodedJwt))
-    return products;
-  const userId = decodedJwt.id;
-  if (!userId) return products;
-  const user = await AccountModel.findById(userId);
-
-  // get favs
-  let productsWithFavs = products.map((product: ProductToPlainObject) => {
-    const frozenProduct = product
-      ? product
-      : { ...(product as ProductToPlainObject) };
-    if (user.favourites.map(String).includes(product._id.toString())) {
-      frozenProduct.isFavourite = true;
-    } else {
-      frozenProduct.isFavourite = false;
-    }
-    return frozenProduct;
-  });
-  return productsWithFavs;
-};
 
 //takes an array of arrays containing products.
 function removeTheDiff(array: Product[][]): Product[] {
@@ -94,7 +65,7 @@ export async function GET(
   //init
   const query: string = params["query"];
   console.log(`search request recived! ${query}`);
-  const reqJwt = request.headers.get("jwt");
+  const user = await getUser(request);
 
   //query
   const queryArr = query.split(" ");
@@ -102,7 +73,6 @@ export async function GET(
     async (query) => await keywordToResults(new RegExp(query, "i"))
   );
   const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
-  console.log(resultOfQueriesArr);
 
   const removedDiff = removeTheDiff(resultOfQueriesArr);
   const removedDiffPlainObj = removedDiff.map((item) => {
@@ -111,7 +81,7 @@ export async function GET(
   const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
   const removedDiffWBrandNamesWFavs = await getFavs(
     removedDiffWBrandNames,
-    reqJwt
+    user
   );
 
   return NextResponse.json(removedDiffWBrandNamesWFavs, { status: 200 });

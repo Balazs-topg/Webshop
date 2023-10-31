@@ -1,6 +1,10 @@
 import { ProductToPlainObject } from "../models/ProductModel";
+import { Account } from "../models/AccountModel";
 
-const getFavs = async (products: ProductToPlainObject[], user: any) => {
+const getFavs = async (
+  products: ProductToPlainObject[],
+  user: Account
+): Promise<ProductToPlainObject[]> => {
   // get favs
   let productsWithFavs = products.map((product: ProductToPlainObject) => {
     const frozenProduct = product
@@ -15,4 +19,5 @@ const getFavs = async (products: ProductToPlainObject[], user: any) => {
   });
   return productsWithFavs;
 };
+
 export default getFavs;
