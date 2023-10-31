@@ -11,7 +11,7 @@ import adminIcons from "../adminIcons";
 import { getCookie } from "../../utils/manageCookies";
 import { ProductType } from "@/app/types/ProductType";
 
-import { AdminProductsPageContext } from "./page";
+import { AdminProductsPageContext } from "./AdminProductsPageContext";
 
 export default function ProductsPage() {
   const productsPageContext = useContext(AdminProductsPageContext);

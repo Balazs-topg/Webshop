@@ -4,7 +4,7 @@ import { TagOrCategoryOrBrand } from "../EditOrAddProduct";
 import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 import adminIcons from "../../../adminIcons";
 
-import { AdminProductsPageContext } from "../../page";
+import { AdminProductsPageContext } from "../../AdminProductsPageContext";
 
 interface selectBrandInterface {
   brand: string;

@@ -188,7 +188,9 @@ export default function ItemCard({
           </div>
         </div>
         <div className="mt-auto flex items-end justify-between">
-          <div className="text-xl font-bold">{addSpacesForPrice(price)} kr</div>
+          <div className="text-xl font-bold">
+            {addSpacesForPrice(price!)} kr
+          </div>
           <div className="relative">
             <div className=" flex items-center gap-2">
               <button

@@ -2,13 +2,20 @@
 import React, { useRef, useState, useEffect } from "react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Button } from "@nextui-org/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { removeCookie, getCookie } from "../../utils/manageCookies";
+import isBrowser from "../../utils/isBrowser";
+
+interface UserData {
+  id: string;
+  username: string;
+  isAdmin: boolean;
+  // Add other fields as necessary
+}
 
 function Page() {
   const router = useRouter();
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const getUserInfo = async (userId: string) => {
     const response = await fetch(`/api/users/${userId}`, {
@@ -23,6 +30,8 @@ function Page() {
   };
 
   useEffect(() => {
+    if (!isBrowser) return; // Ensure this runs only in the browser
+
     try {
       const userInfo = localStorage.getItem("userInfo");
       if (!(userInfo !== null && JSON.parse(userInfo))) {
@@ -32,6 +41,8 @@ function Page() {
   }, [router]);
 
   useEffect(() => {
+    if (!isBrowser) return; // Ensure this runs only in the browser
+
     try {
       const userInfoFromLocalStorage = localStorage.getItem("userInfo");
       const userInfo = JSON.parse(userInfoFromLocalStorage!);
@@ -39,7 +50,7 @@ function Page() {
     } catch {}
   }, []);
 
-  const storedUserInfo = localStorage.getItem("userInfo");
+  const storedUserInfo = isBrowser ? localStorage.getItem("userInfo") : null; // Conditional access
   const parsedUserInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
   const initialUsername = parsedUserInfo ? parsedUserInfo.username : "";
   const [username, setUsername] = useState(initialUsername);
@@ -56,9 +67,12 @@ function Page() {
           color="primary"
           fullWidth
           onClick={() => {
-            localStorage.removeItem("jwt");
-            removeCookie("jwt");
-            localStorage.removeItem("userInfo");
+            if (isBrowser) {
+              // Conditional access
+              localStorage.removeItem("jwt");
+              removeCookie("jwt");
+              localStorage.removeItem("userInfo");
+            }
             router.push("./login");
           }}
         >

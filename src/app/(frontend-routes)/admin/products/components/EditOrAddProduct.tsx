@@ -28,7 +28,7 @@ import SelectBrandInput from "./EditOrAddProduct-subcomponents/SelectBrandInput"
 import SelectCategoryInput from "./EditOrAddProduct-subcomponents/SelectCategoryInput";
 import SelectTagInput from "./EditOrAddProduct-subcomponents/SelectTagInput";
 
-import { AdminProductsPageContext } from "../page";
+import { AdminProductsPageContext } from "../AdminProductsPageContext";
 
 export type TagOrCategoryOrBrand = {
   name: string;
