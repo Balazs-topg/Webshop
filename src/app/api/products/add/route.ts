@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(
     { message: "successfully added item" },
-    { status: 200 }
+    { status: 200 },
   );
 }
 

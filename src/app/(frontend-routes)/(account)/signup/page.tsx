@@ -67,7 +67,7 @@ function Page() {
           username: usernameRef.current!.value,
           email: emailRef.current!.value,
           id: data.id,
-        })
+        }),
       );
     data.signupIsSuccessful && router.push("./signup-success");
     setIsLoading(false);
@@ -78,7 +78,7 @@ function Page() {
       <WebsiteHeader />
       <form
         onSubmit={signupHandler}
-        className=" max-w-lg mx-auto p-6 space-y-4"
+        className=" mx-auto max-w-lg space-y-4 p-6"
       >
         <h1 className="text-3xl font-semibold text-sky-800">Registrera</h1>
         <Input
@@ -139,7 +139,7 @@ function Page() {
         </Button>
         <p>
           Är du redan registrerad?{" "}
-          <Link className="text-sky-800 font-semibold" href="./login">
+          <Link className="font-semibold text-sky-800" href="./login">
             logga in här
           </Link>
         </p>

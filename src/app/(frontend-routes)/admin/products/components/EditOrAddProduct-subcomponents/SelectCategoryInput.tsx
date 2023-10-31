@@ -57,32 +57,34 @@ function SelectCategoryInput({
       value={selectedCategory}
       onChange={(e) => setSelectedCategory(e.target.value)}
     >
-      {contextState.fetchedCategoryList.map((category: TagOrCategoryOrBrand) => (
-        <SelectItem
-          key={category._id}
-          value={category._id}
-          textValue={category.name}
-        >
-          <div className="flex items-center gap-4">
-            {category.name}
-            <div
-              className="ml-auto"
-              onClick={() => {
-                handleRemove(category);
-              }}
-            >
-              {adminIcons.trash}
+      {contextState.fetchedCategoryList.map(
+        (category: TagOrCategoryOrBrand) => (
+          <SelectItem
+            key={category._id}
+            value={category._id}
+            textValue={category.name}
+          >
+            <div className="flex items-center gap-4">
+              {category.name}
+              <div
+                className="ml-auto"
+                onClick={() => {
+                  handleRemove(category);
+                }}
+              >
+                {adminIcons.trash}
+              </div>
+              <div
+                onClick={() => {
+                  handleEdit(category);
+                }}
+              >
+                <div>{adminIcons.edit}</div>
+              </div>
             </div>
-            <div
-              onClick={() => {
-                handleEdit(category);
-              }}
-            >
-              <div>{adminIcons.edit}</div>
-            </div>
-          </div>
-        </SelectItem>
-      ))}
+          </SelectItem>
+        ),
+      )}
     </Select>
   );
 }

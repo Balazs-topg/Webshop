@@ -9,7 +9,7 @@ import getUser from "@/app/api/utils/getUser";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { "brand-id": string; action: string } }
+  { params }: { params: { "brand-id": string; action: string } },
 ) {
   const brandId = params["brand-id"]; // 'a', 'b', or 'c'
   const reqBody: addCategoryRequest = await request.json();

@@ -14,7 +14,7 @@ const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
   const matchingTags = await TagModel.find({ name: keyword }).select("_id");
   const matchingBrands = await BrandModel.find({ name: keyword }).select("_id");
   const matchingCategories = await CategoryModel.find({ name: keyword }).select(
-    "_id"
+    "_id",
   );
 
   //get just the ids from them
@@ -34,7 +34,6 @@ const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
   return queryResult;
 };
 
-
 //takes an array of arrays containing products.
 function removeTheDiff(array: Product[][]): Product[] {
   // If there are no arrays or the first array is empty, return an empty array
@@ -48,7 +47,7 @@ function removeTheDiff(array: Product[][]): Product[] {
   for (const product of referenceArray) {
     if (
       array.every((array) =>
-        array.some((p) => p._id.toString() === product._id.toString())
+        array.some((p) => p._id.toString() === product._id.toString()),
       )
     ) {
       results.push(product);
@@ -60,7 +59,7 @@ function removeTheDiff(array: Product[][]): Product[] {
 
 export async function GET(
   request: Request,
-  { params }: { params: { query: string; action: string } }
+  { params }: { params: { query: string; action: string } },
 ) {
   //init
   const query: string = params["query"];
@@ -70,7 +69,7 @@ export async function GET(
   //query
   const queryArr = query.split(" ");
   const resultOfqueries = queryArr.map(
-    async (query) => await keywordToResults(new RegExp(query, "i"))
+    async (query) => await keywordToResults(new RegExp(query, "i")),
   );
   const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
 
@@ -81,7 +80,7 @@ export async function GET(
   const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
   const removedDiffWBrandNamesWFavs = await getFavs(
     removedDiffWBrandNames,
-    user
+    user,
   );
 
   return NextResponse.json(removedDiffWBrandNamesWFavs, { status: 200 });

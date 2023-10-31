@@ -7,7 +7,7 @@ import TagModel from "@/app/api/models/TagModel";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { "tag-id": string; action: string } }
+  { params }: { params: { "tag-id": string; action: string } },
 ) {
   console.log("request recived for delete!");
 

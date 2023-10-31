@@ -37,11 +37,11 @@ function Page() {
       <WebsiteHeader searchValue={search} />
       <div className=" min-h-screen">
         <div className="bg-stone-200">
-          <h2 className=" text-center p-2">Visar sökresultat för {search}</h2>
+          <h2 className=" p-2 text-center">Visar sökresultat för {search}</h2>
         </div>
-        <div className="flex gap-4 p-4 overflow-x-auto overflow">
+        <div className="overflow flex gap-4 overflow-x-auto p-4">
           {searchComplete && fetchedSearchResults.length === 0 && (
-            <h2 className=" w-full text-center p-2">
+            <h2 className=" w-full p-2 text-center">
               vi hittade tyvärr inget 😔
             </h2>
           )}

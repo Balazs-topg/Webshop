@@ -15,14 +15,14 @@ async function CategoryBtn({
 }) {
   if (isSkeleton) {
     return (
-      <button className=" bg-white relative overflow-hidden px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
-        <div className=" absolute top-0 left-0 w-full h-full bg-stone-300 animate-pulse"></div>
+      <button className=" relative select-none overflow-hidden rounded-md bg-white px-4 py-1 text-sm font-medium shadow transition-all active:scale-95">
+        <div className=" absolute left-0 top-0 h-full w-full animate-pulse bg-stone-300"></div>
         <div className="opacity-0">loading...</div>
       </button>
     );
   }
   return (
-    <button className="relative overflow-hidden whitespace-nowrap bg-white px-4 py-1 rounded-md text-sm font-medium select-none active:scale-95 transition-all shadow">
+    <button className="relative select-none overflow-hidden whitespace-nowrap rounded-md bg-white px-4 py-1 text-sm font-medium shadow transition-all active:scale-95">
       {title}
       <Ripples fillAndHold color="gray" opacity={0.5} optimize />
     </button>
@@ -44,7 +44,7 @@ export default async function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     const data = await response.json();
     category = data;
@@ -70,9 +70,9 @@ export default async function Home() {
 
   return (
     <>
-      <div className="font-poppins min-h-screen">
+      <div className="min-h-screen font-poppins">
         <WebsiteHeader />
-        <div className="flex gap-2 px-4 py-3 bg-stone-200 overflow-auto">
+        <div className="flex gap-2 overflow-auto bg-stone-200 px-4 py-3">
           {category.length > 0 ? (
             category.map((category) => {
               return (
@@ -89,7 +89,7 @@ export default async function Home() {
             </>
           )}
         </div>
-        <div className="p-4 flex items-center gap-2 overflow-scroll selection:bg-sky-200">
+        <div className="flex items-center gap-2 overflow-scroll p-4 selection:bg-sky-200">
           {products.length > 0 ? (
             products.map((product: ProductType) => {
               return (

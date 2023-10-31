@@ -56,7 +56,7 @@ export async function POST(request: Request, response: any) {
       id: recentlyCreateduser._id,
       signupIsSuccessful: signupSuccessful,
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 

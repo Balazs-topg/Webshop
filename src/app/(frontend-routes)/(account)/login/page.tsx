@@ -56,7 +56,7 @@ function Page() {
           username: data.username,
           email: emailRef.current!.value,
           id: data.id,
-        })
+        }),
       );
 
     setIsLoading(false);
@@ -66,7 +66,7 @@ function Page() {
   return (
     <>
       <WebsiteHeader />
-      <form className=" max-w-lg mx-auto p-6 space-y-4" onSubmit={loginHandler}>
+      <form className=" mx-auto max-w-lg space-y-4 p-6" onSubmit={loginHandler}>
         <h1 className="text-3xl font-semibold text-sky-800">Logga in</h1>
         <Input
           isRequired
@@ -104,14 +104,14 @@ function Page() {
         <div className=" space-y-2">
           <div>
             Är du inte registerad?{" "}
-            <Link className="text-sky-800 font-semibold" href="./signup">
+            <Link className="font-semibold text-sky-800" href="./signup">
               registrera dig här
             </Link>
           </div>
           <div>
             Glömt lösenord?{" "}
             <Link
-              className="text-sky-800 font-semibold"
+              className="font-semibold text-sky-800"
               href="login/reset-password"
             >
               återställ lösenord

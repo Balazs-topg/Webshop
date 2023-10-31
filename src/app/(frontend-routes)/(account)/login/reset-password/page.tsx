@@ -22,7 +22,7 @@ function Page({ params }: { params: { slug: string } }) {
     <>
       <WebsiteHeader />
       <form
-        className=" max-w-lg mx-auto p-6 space-y-4"
+        className=" mx-auto max-w-lg space-y-4 p-6"
         onSubmit={resetPasswordHandler}
       >
         <h1 className="text-3xl font-semibold text-sky-800">

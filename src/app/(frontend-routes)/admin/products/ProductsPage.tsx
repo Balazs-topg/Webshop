@@ -108,16 +108,16 @@ export default function ProductsPage() {
       <WebsiteHeader />
       <div className="flex">
         <AdminNav />
-        <div className="w-full p-4 space-y-4 max-w-2xl mx-auto">
+        <div className="mx-auto w-full max-w-2xl space-y-4 p-4">
           <div className="w-full">
             <EditOrAddProduct isNew updateParent={getProducts} />
           </div>
-          <div className=" rounded-2xl bg-stone-100 p-4 space-y-2">
+          <div className=" space-y-2 rounded-2xl bg-stone-100 p-4">
             {displayProducts
               ? displayProducts.map((product: ProductType, index) => {
                   return (
                     <div
-                      className=" bg-white rounded-lg py-2 px-4 flex items-center justify-between"
+                      className=" flex items-center justify-between rounded-lg bg-white px-4 py-2"
                       key={product._id}
                     >
                       <div>{product.name}</div>
@@ -139,7 +139,7 @@ export default function ProductsPage() {
                           onClick={() => {
                             if (
                               confirm(
-                                `Are you sure you want to remove ${product.name}?`
+                                `Are you sure you want to remove ${product.name}?`,
                               )
                             ) {
                               removeProduct(product._id);

@@ -5,7 +5,7 @@ import "../../utils/connectToDB";
 
 export async function GET(
   request: Request,
-  { params }: { params: { "user-id": string } }
+  { params }: { params: { "user-id": string } },
 ) {
   console.log("request recived!");
 

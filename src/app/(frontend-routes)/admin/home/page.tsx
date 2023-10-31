@@ -10,8 +10,8 @@ export default function Home() {
       <WebsiteHeader></WebsiteHeader>
       <div className="flex">
         <AdminNav></AdminNav>
-        <div className="w-full mx-auto max-w-xl">
-          <h1 className=" text-3xl font-semibold p-8 text-center">
+        <div className="mx-auto w-full max-w-xl">
+          <h1 className=" p-8 text-center text-3xl font-semibold">
             Welcome back Admin!
           </h1>
         </div>

@@ -38,7 +38,7 @@ const accountSchema = new mongoose.Schema(
   {
     versionKey: false,
     strict: false,
-  }
+  },
 );
 
 const AccountModel =

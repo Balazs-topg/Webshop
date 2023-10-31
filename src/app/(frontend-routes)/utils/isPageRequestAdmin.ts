@@ -7,7 +7,7 @@ export default async function isPageRequestAdmin(allCookies: RequestCookie[]) {
   if (!allCookies) return false;
 
   const jwtToken = String(
-    allCookies.find((cookie) => cookie.name === "jwt")?.value
+    allCookies.find((cookie) => cookie.name === "jwt")?.value,
   );
 
   if (!jwtToken) return false;

@@ -9,8 +9,8 @@ function Page() {
   return (
     <>
       <WebsiteHeader />
-      <div className=" max-w-lg mx-auto p-6 space-y-4 flex justify-center flex-col">
-        <h1 className="text-3xl font-semibold text-sky-800 text-center">
+      <div className=" mx-auto flex max-w-lg flex-col justify-center space-y-4 p-6">
+        <h1 className="text-center text-3xl font-semibold text-sky-800">
           Välkommen till webshop!
           <br /> Nu är du registrerad!
         </h1>

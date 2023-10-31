@@ -77,7 +77,7 @@ function EditOrAddProduct({
   const [selectedBrand, setSelectedBrand] = useState(brand);
   const [productName, setProductName] = useState(name);
   const [productImgs, setProductImgs] = useState<string[]>(
-    imageUrl ? imageUrl : [""]
+    imageUrl ? imageUrl : [""],
   );
   const [selectedCategory, setSelectedCategory] = useState(category);
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
@@ -113,7 +113,7 @@ function EditOrAddProduct({
           jwt: getCookie("jwt")!,
         },
         body: JSON.stringify(jsonData),
-      }
+      },
     );
     const data = await response.json();
     updateParent && updateParent();
@@ -166,7 +166,7 @@ function EditOrAddProduct({
                   {isNew ? "Add new item" : "Edit"} {name && name}
                 </ModalHeader>
                 <ModalBody>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <SelectBrandInput
                       brand={brand!}
                       selectedBrand={selectedBrand!}
@@ -192,7 +192,7 @@ function EditOrAddProduct({
                     state={productImgs}
                     setState={setProductImgs}
                   ></ImageUrlInput>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <SelectCategoryInput
                       category={category!}
                       selectedCategory={selectedCategory!}
@@ -202,7 +202,7 @@ function EditOrAddProduct({
                       updateParent={contextState.getCategoryList}
                     />
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <SelectTagInput
                       tags={tags!}
                       selectedTags={selectedTags!}

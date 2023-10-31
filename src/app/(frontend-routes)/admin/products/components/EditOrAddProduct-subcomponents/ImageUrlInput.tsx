@@ -17,7 +17,7 @@ function UrlInput({
   // const [currentUrl, setCurrentUrl] = useState("");
   if (index == 0) {
     return (
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <Input
           isRequired
           value={value}
@@ -26,8 +26,8 @@ function UrlInput({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setState((prevState: []) =>
               prevState.map((item: any, idx: number) =>
-                idx === index ? e.target.value : item
-              )
+                idx === index ? e.target.value : item,
+              ),
             )
           }
         >
@@ -47,7 +47,7 @@ function UrlInput({
     );
   }
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       <Input
         value={value}
         type="text"
@@ -55,8 +55,8 @@ function UrlInput({
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setState((prevState: []) =>
             prevState.map((item: any, idx: number) =>
-              idx === index ? e.target.value : item
-            )
+              idx === index ? e.target.value : item,
+            ),
           )
         }
       >
@@ -68,7 +68,7 @@ function UrlInput({
         color="danger"
         onClick={() => {
           setState((prevState: []) =>
-            prevState.filter((_, idx) => idx !== index)
+            prevState.filter((_, idx) => idx !== index),
           );
         }}
       >
@@ -105,7 +105,7 @@ function ImageUrlInput({
               key={index}
             ></UrlInput>
             {listOfUrls[index] && (
-              <div className="rounded-xl overflow-hidden">
+              <div className="overflow-hidden rounded-xl">
                 <img src={listOfUrls[index]} alt="" />
               </div>
             )}{" "}

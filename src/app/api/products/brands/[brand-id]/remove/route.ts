@@ -7,7 +7,7 @@ import getUser from "@/app/api/utils/getUser";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { "brand-id": string; action: string } }
+  { params }: { params: { "brand-id": string; action: string } },
 ) {
   console.log("request recived!");
 

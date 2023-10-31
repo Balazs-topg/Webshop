@@ -6,7 +6,7 @@ import "../../../../utils/connectToDB";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { "tag-id": string; action: string } }
+  { params }: { params: { "tag-id": string; action: string } },
 ) {
   console.log("request recived for delete!");
 

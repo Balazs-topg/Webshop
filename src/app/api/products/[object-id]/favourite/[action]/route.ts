@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 export async function POST(
   request: Request,
-  { params }: { params: { "object-id": string; action: string } }
+  { params }: { params: { "object-id": string; action: string } },
 ) {
   console.log("request reciveddd!");
 

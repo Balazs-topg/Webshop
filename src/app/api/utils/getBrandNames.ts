@@ -9,7 +9,7 @@ const getBrandNames = async (products: ProductToPlainObject[]) => {
       const brand = await BrandModel.findById("" + product.brand);
       frozenProduct.brandName = brand && brand.name;
       return frozenProduct;
-    })
+    }),
   );
   return updatedProducts;
 };

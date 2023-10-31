@@ -11,7 +11,7 @@ const tagSchema = new mongoose.Schema(
   {
     versionKey: false,
     strict: false,
-  }
+  },
 );
 
 const TagModel = mongoose.models.tags || mongoose.model("tags", tagSchema);

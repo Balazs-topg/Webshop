@@ -31,7 +31,7 @@ export async function POST(request: Request, response: any) {
       userFound: Boolean(user),
       jwt: jwt,
     },
-    { status: !Boolean(user) || !passwordIsCorrect ? 400 : 200 }
+    { status: !Boolean(user) || !passwordIsCorrect ? 400 : 200 },
   );
 }
 

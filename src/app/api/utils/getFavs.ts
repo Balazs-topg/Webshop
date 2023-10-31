@@ -3,7 +3,7 @@ import { Account } from "../models/AccountModel";
 
 const getFavs = async (
   products: ProductToPlainObject[],
-  user: Account
+  user: Account,
 ): Promise<ProductToPlainObject[]> => {
   // get favs
   let productsWithFavs = products.map((product: ProductToPlainObject) => {

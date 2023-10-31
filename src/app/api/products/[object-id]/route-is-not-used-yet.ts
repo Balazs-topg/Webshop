@@ -5,7 +5,7 @@ import getUser from "@/app/api/utils/getUser";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { "object-id": string; action: string } }
+  { params }: { params: { "object-id": string; action: string } },
 ) {
   const reqBody: any = await request.json();
   const objectId = params["object-id"];
@@ -19,13 +19,13 @@ export async function PUT(
 
   return NextResponse.json(
     { message: "successfully updated item" },
-    { status: 200 }
+    { status: 200 },
   );
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { "object-id": string } }
+  { params }: { params: { "object-id": string } },
 ) {
   console.log("request recived!");
 

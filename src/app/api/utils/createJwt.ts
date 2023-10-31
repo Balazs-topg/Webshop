@@ -18,7 +18,7 @@ export const createJwt = (userObj: AccountModelType | null) => {
     process.env.JWT_SECRET_KEY as string,
     {
       expiresIn: "28d",
-    }
+    },
   );
   return response;
 };

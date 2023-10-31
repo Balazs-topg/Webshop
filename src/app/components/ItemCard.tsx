@@ -56,7 +56,7 @@ export default function ItemCard({
           "Content-Type": "application/json",
           jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
         },
-      }
+      },
     );
     const data = await response.json();
   };
@@ -66,22 +66,22 @@ export default function ItemCard({
       <div
         className={
           !isBeingClicked
-            ? "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all"
-            : "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all scale-95"
+            ? "flex h-[28rem] w-[16rem] shrink-0 flex-col rounded-3xl p-5 text-sky-900 transition-all hover:-translate-y-2 hover:shadow-md [&>.img-cont]:hover:shadow-inner [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56"
+            : "flex h-[28rem] w-[16rem] shrink-0 scale-95 flex-col rounded-3xl p-5 text-sky-900 transition-all hover:-translate-y-2 hover:shadow-md [&>.img-cont]:hover:shadow-inner [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56"
         }
       >
-        <div className="img-cont relative cursor-pointer bg-stone-200 animate-pulse p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden"></div>
+        <div className="img-cont relative flex h-full max-h-60 animate-pulse cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-stone-200 p-4 transition-all"></div>
         <div className="info space-y-2 py-2">
-          <div className="font-medium border-b border-stone-100 flex items-center pb-2">
-            <div className="bg-stone-200 rounded-md animate-pulse">
+          <div className="flex items-center border-b border-stone-100 pb-2 font-medium">
+            <div className="animate-pulse rounded-md bg-stone-200">
               <div className=" opacity-0">loading</div>
             </div>
-            <div className="relative overflow-hidden bg-stone-200 animate-pulse ml-auto rounded-full p-1">
+            <div className="relative ml-auto animate-pulse overflow-hidden rounded-full bg-stone-200 p-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="white"
-                className="w-4 h-4 opacity-0"
+                className="h-4 w-4 opacity-0"
               >
                 <path
                   fillRule="evenodd"
@@ -91,22 +91,22 @@ export default function ItemCard({
               </svg>
             </div>
           </div>
-          <div className="bg-stone-200 rounded-md animate-pulse w-fit">
+          <div className="w-fit animate-pulse rounded-md bg-stone-200">
             <div className=" opacity-0">loading loading</div>
           </div>
-          <div className="bg-stone-200 rounded-md animate-pulse w-fit">
-            <div className="font-medium text-xs uppercase flex items-center gap-2 opacity-0">
+          <div className="w-fit animate-pulse rounded-md bg-stone-200">
+            <div className="flex items-center gap-2 text-xs font-medium uppercase opacity-0">
               loading loading
             </div>
           </div>
         </div>
-        <div className="mt-auto flex justify-between items-end">
-          <div className="bg-stone-200 rounded-md animate-pulse">
-            <div className=" opacity-0 font-bold text-xl">loading</div>
+        <div className="mt-auto flex items-end justify-between">
+          <div className="animate-pulse rounded-md bg-stone-200">
+            <div className=" text-xl font-bold opacity-0">loading</div>
           </div>
           <div className="relative">
-            <div className=" flex items-center gap-2 bg-stone-200 rounded-full animate-pulse">
-              <div className="active:scale-95 opacity-0 relative overflow-hidden font-medium uppercase bg-sky-800 flex items-center transition-all rounded-full justify-center px-6 py-2 text-white">
+            <div className=" flex animate-pulse items-center gap-2 rounded-full bg-stone-200">
+              <div className="relative flex items-center justify-center overflow-hidden rounded-full bg-sky-800 px-6 py-2 font-medium uppercase text-white opacity-0 transition-all active:scale-95">
                 Köp
               </div>
             </div>
@@ -127,12 +127,12 @@ export default function ItemCard({
       <div
         className={
           !isBeingClicked
-            ? "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all"
-            : "shrink-0 flex flex-col text-sky-900 p-5 w-[16rem] h-[28rem] rounded-3xl hover:shadow-md [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56 [&>.img-cont]:hover:shadow-inner hover:-translate-y-2 transition-all scale-95"
+            ? "flex h-[28rem] w-[16rem] shrink-0 flex-col rounded-3xl p-5 text-sky-900 transition-all hover:-translate-y-2 hover:shadow-md [&>.img-cont]:hover:shadow-inner [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56"
+            : "flex h-[28rem] w-[16rem] shrink-0 scale-95 flex-col rounded-3xl p-5 text-sky-900 transition-all hover:-translate-y-2 hover:shadow-md [&>.img-cont]:hover:shadow-inner [&>div>img]:hover:scale-110 [&>div]:hover:max-h-56"
         }
       >
         <div
-          className="img-cont relative cursor-pointer bg-stone-100 p-4 max-h-60 h-full transition-all rounded-xl flex justify-center items-center overflow-hidden"
+          className="img-cont relative flex h-full max-h-60 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-stone-100 p-4 transition-all"
           onClick={() => {
             router.push(`product/${productName}`);
           }}
@@ -150,13 +150,13 @@ export default function ItemCard({
           />
         </div>
         <div className="info space-y-2 py-2">
-          <div className="font-medium border-b border-stone-100 flex items-center pb-2">
+          <div className="flex items-center border-b border-stone-100 pb-2 font-medium">
             {brandName}
             <button
               className={
                 isFavouriteState
-                  ? "relative overflow-hidden bg-amber-300 ml-auto rounded-full p-1"
-                  : "relative overflow-hidden bg-stone-200 ml-auto rounded-full p-1"
+                  ? "relative ml-auto overflow-hidden rounded-full bg-amber-300 p-1"
+                  : "relative ml-auto overflow-hidden rounded-full bg-stone-200 p-1"
               }
               onClick={handleFavourite}
             >
@@ -169,7 +169,7 @@ export default function ItemCard({
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="white"
-                className="w-4 h-4"
+                className="h-4 w-4"
               >
                 <path
                   fillRule="evenodd"
@@ -182,18 +182,18 @@ export default function ItemCard({
           <Link href={`/product/${productName}`} className="font-bold">
             {productName}
           </Link>
-          <div className="font-medium text-xs uppercase flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+          <div className="flex items-center gap-2 text-xs font-medium uppercase">
+            <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
             <div>finns i lager</div>
           </div>
         </div>
-        <div className="mt-auto flex justify-between items-end">
-          <div className="font-bold text-xl">{addSpacesForPrice(price)} kr</div>
+        <div className="mt-auto flex items-end justify-between">
+          <div className="text-xl font-bold">{addSpacesForPrice(price)} kr</div>
           <div className="relative">
             <div className=" flex items-center gap-2">
               <button
                 onClick={handleBuy}
-                className="active:scale-95 relative overflow-hidden font-medium uppercase bg-sky-800 flex items-center transition-all rounded-full justify-center px-6 py-2 text-white"
+                className="relative flex items-center justify-center overflow-hidden rounded-full bg-sky-800 px-6 py-2 font-medium uppercase text-white transition-all active:scale-95"
               >
                 Köp
                 <Ripples opacity={0.5} duration={700} optimize />

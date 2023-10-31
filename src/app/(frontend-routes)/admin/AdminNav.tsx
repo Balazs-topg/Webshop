@@ -42,7 +42,7 @@ function AdminNav({ children }: { children?: React.ReactNode }) {
     <div className="flex">
       <div className="relative">
         <div className="sticky top-0 flex flex-col gap-6 p-4">
-          <div className="absolute top-0 left-0 bg-stone-100 h-screen w-full"></div>
+          <div className="absolute left-0 top-0 h-screen w-full bg-stone-100"></div>
           <TabButton currentTab={currentTab} name="home"></TabButton>
           <TabButton currentTab={currentTab} name="products"></TabButton>
           <TabButton currentTab={currentTab} name="users"></TabButton>

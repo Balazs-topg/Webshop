@@ -53,7 +53,7 @@ function CartItem({
           "Content-Type": "application/json",
           jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
         },
-      }
+      },
     );
     const data = await response.json();
   };
@@ -103,13 +103,13 @@ function CartItem({
     setTimeOutId(newTimeoutID);
   };
   return (
-    <div className="pb-2 px-2 flex gap-2 border-b-2 border-stone-100 rounded-lg">
-      <div className="w-24 aspect-square bg-stone-100 rounded-sm overflow-hidden flex justify-center">
+    <div className="flex gap-2 rounded-lg border-b-2 border-stone-100 px-2 pb-2">
+      <div className="flex aspect-square w-24 justify-center overflow-hidden rounded-sm bg-stone-100">
         <img src={img} alt="" />
       </div>
       <div className="flex flex-col">
-        <strong className="text-sky-800 font-semibold text-sm">{brand}</strong>
-        <strong className="font-medium mb-auto">{name}</strong>
+        <strong className="text-sm font-semibold text-sky-800">{brand}</strong>
+        <strong className="mb-auto font-medium">{name}</strong>
         <strong className="font-bold text-sky-800">
           {addSpacesForPrice(price * count)} kr
         </strong>
@@ -120,19 +120,19 @@ function CartItem({
             onClick={() => {
               removeItemFromCart(id);
             }}
-            className="active:scale-95 transition-all relative overflow-hidden bg-stone-100 p-1 rounded-full flex justify-center items-center"
+            className="relative flex items-center justify-center overflow-hidden rounded-full bg-stone-100 p-1 transition-all active:scale-95"
           >
             {adminIcons.trash}
             <Ripples fillAndHold color="gray" opacity={0.5} optimize />
           </button>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleFavourite}
             className={
               isFavourite
-                ? "active:scale-95 transition-all w-8 h-8 relative overflow-hidden bg-amber-300 p-1 rounded-full flex justify-center items-center"
-                : "active:scale-95 transition-all w-8 h-8 relative overflow-hidden bg-stone-100  p-1 rounded-full flex justify-center items-center"
+                ? "relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-amber-300 p-1 transition-all active:scale-95"
+                : "relative flex h-8 w-8 items-center justify-center overflow-hidden  rounded-full bg-stone-100 p-1 transition-all active:scale-95"
             }
           >
             <svg
@@ -141,7 +141,7 @@ function CartItem({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="h-6 w-6"
             >
               <path
                 strokeLinecap="round"
@@ -151,17 +151,17 @@ function CartItem({
             </svg>
             <Ripples fillAndHold color="gray" opacity={0.5} optimize />
           </button>
-          <div className="ml-auto bg-stone-100 rounded-full p-1 flex gap-1 text-lg font-semibold">
+          <div className="ml-auto flex gap-1 rounded-full bg-stone-100 p-1 text-lg font-semibold">
             <button
               onClick={handleDecrement}
-              className="relative select-none overflow-hidden bg-white rounded-full w-8 h-8 flex items-center justify-center hover:shadow active:scale-95 transition-all"
+              className="relative flex h-8 w-8 select-none items-center justify-center overflow-hidden rounded-full bg-white transition-all hover:shadow active:scale-95"
             >
               -
               <Ripples fillAndHold color="gray" opacity={0.5} optimize />
             </button>
             <input
               type="number"
-              className="w-10 flex justify-center text-center bg-stone-100 outline-none"
+              className="flex w-10 justify-center bg-stone-100 text-center outline-none"
               step={1}
               onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
                 let intValue = Math.floor(+e.currentTarget.value);
@@ -177,7 +177,7 @@ function CartItem({
             />
             <button
               onClick={handleIncrement}
-              className="relative select-none overflow-hidden bg-white rounded-full w-8 h-8 flex items-center justify-center hover:shadow active:scale-95 transition-all"
+              className="relative flex h-8 w-8 select-none items-center justify-center overflow-hidden rounded-full bg-white transition-all hover:shadow active:scale-95"
             >
               +
               <Ripples fillAndHold color="gray" opacity={0.5} optimize />
@@ -199,8 +199,8 @@ function Page() {
   const updateCartItemQuantity = (itemId: string, newQuantity: number) => {
     setCartItems((prevItems: any) =>
       prevItems.map((item: any) =>
-        item._id === itemId ? { ...item, quantity: newQuantity } : item
-      )
+        item._id === itemId ? { ...item, quantity: newQuantity } : item,
+      ),
     );
   };
 
@@ -223,7 +223,7 @@ function Page() {
 
   const removeItemFromCart = async (id: string) => {
     setCartItems(
-      cartItems.filter((item: any) => (item._id !== id ? true : false))
+      cartItems.filter((item: any) => (item._id !== id ? true : false)),
     );
     const response = await fetch("/api/cart", {
       method: "delete",
@@ -257,14 +257,14 @@ function Page() {
   return (
     <>
       <WebsiteHeader />
-      <div className="max-w-lg min-h-screen mx-auto p-6 space-y-4">
-        <h1 className="text-3xl font-semibold text-sky-800 flex">
+      <div className="mx-auto min-h-screen max-w-lg space-y-4 p-6">
+        <h1 className="flex text-3xl font-semibold text-sky-800">
           Kundvagn{" "}
           <span className="ml-auto opacity-50">
             ({totalItemsCount(cartItems)})
           </span>
         </h1>
-        <div className="rounded-lg mt-4 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2 rounded-lg">
           {cartItems &&
             cartItems.map((cartItem: any) => {
               return (
@@ -282,12 +282,12 @@ function Page() {
                 />
               );
             })}
-          <div className="px-2 mt-2 gap-2 border-stone-100 font-semibold flex justify-between">
+          <div className="mt-2 flex justify-between gap-2 border-stone-100 px-2 font-semibold">
             Total summa:
             <span>{addSpacesForPrice(totalPrice)} kr</span>
           </div>
         </div>
-        <button className="bg-sky-800 outline-offset-4 rounded-sm w-full p-3 text-white active:scale-[0.97] transition-all relative overflow-hidden">
+        <button className="relative w-full overflow-hidden rounded-sm bg-sky-800 p-3 text-white outline-offset-4 transition-all active:scale-[0.97]">
           Till kassan
           <Ripples duration={1000} fillAndHold opacity={0.4} optimize />
         </button>

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import ProductModel from "../models/ProductModel";
+import ProductModel, { Product } from "../models/ProductModel";
 import BrandModel from "../models/BrandModel";
 import { ProductType } from "@/app/types/ProductType";
 import "../utils/connectToDB";
@@ -7,6 +7,8 @@ import getUser from "../utils/getUser";
 import mongoose from "mongoose";
 import getBrandNames from "../utils/getBrandNames";
 import getFavs from "../utils/getFavs";
+import { Account } from "../models/AccountModel";
+import { ProductToPlainObject } from "../models/ProductModel";
 
 interface reqBodyCart {
   productId: string;
@@ -50,25 +52,25 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(
     { message: "successfully added to cart" },
-    { status: 200 }
+    { status: 200 },
   );
 }
 
-const addProductInfoToCart = async (userCart: any[], user: any) => {
+const addProductInfoToCart = async (userCart: any[], user: Account) => {
   const productPromises = userCart.map(
     async (itemObject: cartItemInterface) => {
       return await ProductModel.findById(String(itemObject.item));
-    }
+    },
   );
   const productInfo = await Promise.all(productPromises);
 
-  const productInfoWithQqt = productInfo.map((product: any, i) => {
+  const productInfoWithQqt = productInfo.map((product: Product, i) => {
     let productWcartInfo: ProductTypeWithInfo = {
       ...product.toObject(),
       quantity: userCart[i].quantity,
     };
     return productWcartInfo;
-  }) as ProductType[];
+  }) as unknown as ProductToPlainObject[];
 
   return getFavs(await getBrandNames(productInfoWithQqt), user);
 };
@@ -99,7 +101,7 @@ export async function PUT(request: NextRequest) {
   const user = await getUser(request);
 
   const theItemWereUpdating = user.cart.find(
-    (item: any) => String(item.item) === reqBody.itemId
+    (item: any) => String(item.item) === reqBody.itemId,
   );
 
   if (theItemWereUpdating) {
@@ -130,7 +132,7 @@ export async function DELETE(request: NextRequest) {
   const user = await getUser(request);
 
   const theItemWereUpdating = user.cart.find(
-    (item: any) => String(item.item) === reqBody.itemId
+    (item: any) => String(item.item) === reqBody.itemId,
   );
 
   const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating!);
