@@ -155,8 +155,8 @@ export default function ItemCard({
             <button
               className={
                 isFavouriteState
-                  ? "relative ml-auto overflow-hidden rounded-full bg-amber-300 p-1"
-                  : "relative ml-auto overflow-hidden rounded-full bg-stone-200 p-1"
+                  ? "focus-visible:out relative ml-auto overflow-hidden rounded-full bg-amber-300 p-1 outline-2 outline-offset-2 outline-sky-800"
+                  : "focus-visible:out relative ml-auto overflow-hidden rounded-full bg-stone-200 p-1 outline-2 outline-offset-2 outline-sky-800"
               }
               onClick={handleFavourite}
             >

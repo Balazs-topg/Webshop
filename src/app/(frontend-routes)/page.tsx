@@ -24,10 +24,10 @@ function CategoryBtn({
     );
   }
   return (
-    <button className="relative select-none whitespace-nowrap rounded-md border-0 px-4 py-1 text-sm font-medium outline-2 outline-offset-2 outline-sky-800 transition-all focus-visible:outline [&>.background]:hover:scale-[1.1] [&>.background]:active:scale-[1]">
+    <button className="relative select-none whitespace-nowrap rounded-md border-0 px-4 py-1 text-sm font-medium outline-none transition-all [&>.background]:hover:scale-[1.08] [&>.background]:focus-visible:scale-[1.08] [&>.background]:focus-visible:outline [&>.background]:active:scale-[1]">
       <div className="relative z-[2]">{title}</div>
-      <div className="background absolute left-0 top-0 z-[1] h-full w-full rounded-full bg-white transition-all"></div>
-      <div className="background absolute left-0 top-0 z-[2] h-full w-full overflow-hidden rounded-full transition-all">
+      <div className="background absolute left-0 top-0 z-[1] h-full w-full rounded-full bg-white outline-2 outline-offset-2 outline-sky-800 transition-transform"></div>
+      <div className="background absolute left-0 top-0 z-[2] h-full w-full overflow-hidden rounded-full outline-none transition-transform">
         <Ripples fillAndHold color="black" opacity={0.2} optimize />
       </div>
     </button>

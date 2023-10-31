@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@nextui-org/react": "^2.1.13",
     "@radix-ui/react-slot": "^1.0.2",
     "@reduxjs/toolkit": "^1.9.6",

@@ -1,9 +1,98 @@
 "use client";
-import React, { ReactEventHandler, useEffect, useState } from "react";
+import React, { ReactEventHandler, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
 import { Ripples } from "react-ripples-continued";
 import { useRouter } from "next/navigation";
+
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+
+interface SearchBar {
+  isInFocus?: boolean;
+  onSearch: Function;
+  placeholder?: string;
+  initalValue?: string;
+}
+
+function SearchBar({
+  isInFocus = false,
+  initalValue = "",
+  onSearch = () => {
+    console.log("searching");
+  },
+  placeholder = "placeholder",
+}: SearchBar) {
+  const [isInFocusState, setIsInFocusState] = useState(isInFocus);
+  const [inputValue, setInputValue] = useState(initalValue);
+  const [keepLeft, setKeepLeft] = useState(!!initalValue);
+  const refInput = useRef<HTMLInputElement>(null);
+
+  return (
+    <div
+      tabIndex={0}
+      className={
+        isInFocusState
+          ? "group relative flex w-full cursor-text items-center overflow-hidden rounded-full border-2 border-primary px-4 py-2 text-sm font-medium"
+          : "group relative flex w-full cursor-text items-center overflow-hidden rounded-full border-2 px-4 py-2 text-sm font-medium"
+      }
+      // placeholder="Search This Website"
+      onFocus={() => {
+        setIsInFocusState(true);
+        setKeepLeft(true);
+        refInput.current?.focus();
+      }}
+      onBlur={() => {
+        setIsInFocusState(false);
+        if (inputValue.length === 0) setKeepLeft(false);
+      }}
+    >
+      <div
+        className={
+          keepLeft
+            ? "relative ml-[0%] -translate-x-[0%]  transition-all"
+            : "relative ml-[50%] -translate-x-[50%] transition-all"
+        }
+      >
+        {/* just a "ghost element"*/}
+        <span className="flex gap-2 whitespace-nowrap">
+          <div className="flex items-center justify-center">
+            <MagnifyingGlassIcon
+              stroke="rgb(148 163 184)"
+              className="heroicon-sw- h-5 w-5"
+            />
+          </div>
+          <div>{inputValue.length == 0 ? placeholder : inputValue}</div>
+        </span>
+        {/* the real element*/}
+        <div className="absolute left-0 top-0 flex w-full gap-2">
+          <div className="flex items-center justify-center">
+            <MagnifyingGlassIcon
+              stroke={inputValue.length == 0 ? "rgb(148 163 184)" : "black"}
+              className={
+                keepLeft
+                  ? "heroicon-sw-2 h-5 w-5 transition-all"
+                  : "heroicon-sw-2 h-5 w-5 transition-all"
+              }
+            />
+          </div>
+          <input
+            ref={refInput}
+            type="text"
+            className="placeholder:text-base-400 w-full bg-stone-100 outline-none transition-all"
+            placeholder={placeholder}
+            value={inputValue}
+            onInput={(e: any) => {
+              setInputValue(e.currentTarget.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onSearch(inputValue);
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function WebsiteHeader({ searchValue }: { searchValue?: string }) {
   const [username, setUsername] = useState("");
@@ -46,36 +135,11 @@ function WebsiteHeader({ searchValue }: { searchValue?: string }) {
           <Link href="/" className="mr-2 whitespace-nowrap">
             web <span className="text-sky-800">shop</span>
           </Link>
-          <Input
+          <SearchBar
+            onSearch={handleSearch}
+            initalValue={currentSearch}
             placeholder={`Sök bland ${productCount} produkter`}
-            className="overflow-hidden rounded-full"
-            startContent={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            }
-            radius="full"
-            color="primary"
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") {
-                handleSearch(e.currentTarget.value);
-              }
-            }}
-            variant="faded"
-            onInput={(e) => {
-              setCurrentSearch(e.currentTarget.value);
-            }}
-            value={currentSearch}
-          ></Input>
+          />
 
           {!username ? (
             <button
