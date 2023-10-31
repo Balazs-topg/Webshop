@@ -18,6 +18,9 @@ fördelen med att spara jwt i cookies är att jag då hade kunnat skydda admin d
 
 Både rditing och upladdning av items bör gå genom en komponent, då blir det mycket enklare.
 
+CP-prestanda planen:
+Kör isg på hem-sidan, hela skiten blir bara enkel html. problemet blir blir då att favs och cart info tappas, men det kan man faktiskt använda local storage till, sen då och då fetcha den ifrån databasen bara för att överenstämma med lokala grejer
+
 - [ ] Skapa admin panel
 
   - [ ] Fixa så att api routsen är mer logiska typ, det är _inte_ RESTFUL atm

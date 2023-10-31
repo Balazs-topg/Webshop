@@ -1,5 +1,6 @@
 "use client";
 import { motion, Variants, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useState } from "react";
 import { Ripples } from "react-ripples-continued";
 import Link from "next/link";
@@ -143,9 +144,11 @@ export default function ItemCard({
             setIsBeingClicked(false);
           }}
         >
-          <img
+          <Image
             className="mix-blend-multiply transition-all"
-            src={imageSrc}
+            src={imageSrc!}
+            width={200}
+            height={0}
             alt=""
           />
         </div>

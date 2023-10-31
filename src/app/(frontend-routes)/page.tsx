@@ -1,6 +1,5 @@
-"use client";
 import React from "react";
-import Home from "./Home";
+import Home from "./page-server-component";
 
 function Page() {
   return <Home />;
