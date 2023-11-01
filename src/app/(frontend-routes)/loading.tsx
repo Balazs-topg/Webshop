@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import WebsiteHeader from "../components/WebsiteHeader";
 
 function Loading() {
-  return (
-    <div>loading...</div>
-  )
+  return <WebsiteHeader />;
 }
 
-export default Loading
+export default Loading;

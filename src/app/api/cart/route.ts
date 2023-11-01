@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   user.save();
 
   return NextResponse.json(
-    { message: "successfully added to carttt___", "Cache-Control": "no-store" },
+    { message: "successfully added to cart" },
     { status: 200 },
   );
 }

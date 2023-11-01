@@ -1,9 +1,11 @@
+"use client";
 import { useState, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 interface SearchBar {
   isInFocus?: boolean;
-  onSearch: Function;
+  onSearch?: Function;
   placeholder?: string;
   initalValue?: string;
 }
@@ -11,15 +13,17 @@ interface SearchBar {
 export default function SearchBar({
   isInFocus = false,
   initalValue = "",
-  onSearch = () => {
-    console.log("searching");
-  },
-  placeholder = "placeholder",
+  placeholder = "Search This Website",
 }: SearchBar) {
+  const router = useRouter();
   const [isInFocusState, setIsInFocusState] = useState(isInFocus);
   const [inputValue, setInputValue] = useState(initalValue);
   const [keepLeft, setKeepLeft] = useState(!!initalValue);
   const refInput = useRef<HTMLInputElement>(null);
+
+  const onSearch = (value: string) => {
+    router.push(`/search?q=${value}`);
+  };
 
   return (
     <div
@@ -29,7 +33,6 @@ export default function SearchBar({
           ? "group relative flex w-full cursor-text items-center overflow-hidden rounded-full border-2 border-primary px-4 py-2 text-sm font-medium"
           : "group relative flex w-full cursor-text items-center overflow-hidden rounded-full border-2 px-4 py-2 text-sm font-medium"
       }
-      // placeholder="Search This Website"
       onFocus={() => {
         setIsInFocusState(true);
         setKeepLeft(true);

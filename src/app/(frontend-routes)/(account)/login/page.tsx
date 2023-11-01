@@ -66,7 +66,10 @@ function Page() {
   return (
     <>
       <WebsiteHeader />
-      <form className=" mx-auto max-w-lg space-y-4 p-6" onSubmit={loginHandler}>
+      <form
+        className=" mx-auto min-h-screen max-w-lg space-y-4 p-6"
+        onSubmit={loginHandler}
+      >
         <h1 className="text-3xl font-semibold text-sky-800">Logga in</h1>
         <Input
           isRequired

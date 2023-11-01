@@ -45,7 +45,6 @@ export default async function ItemCard({
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "no-store",
           jwt: jwtToken,
         },
         body: JSON.stringify({ productId: id }),

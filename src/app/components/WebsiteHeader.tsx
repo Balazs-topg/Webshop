@@ -1,7 +1,4 @@
-"use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { UserIcon } from "@heroicons/react/24/solid";
@@ -17,38 +14,27 @@ function WebsiteHeader({
   productCountProp?: number;
   productCountInCart?: number;
 }) {
-  const [username, setUsername] = useState("");
-  const [productCount, setProductCount] = useState(productCountProp);
-
-  const [currentSearch, setCurrentSearch] = useState(searchValue);
+  let username = "username";
+  let productCount = 10;
+  let currentSearch = searchValue;
 
   const fetchCount = async () => {
     const response = await fetch("/api/products/count", { method: "get" });
     const data = await response.json();
-    setProductCount(data.count);
+    productCount = data.count;
   };
 
-  useEffect(() => {
-    try {
-      const storedUserInfo = localStorage.getItem("userInfo");
-      if (storedUserInfo) {
-        const parsedUserInfo = JSON.parse(storedUserInfo);
-        if (parsedUserInfo && parsedUserInfo.username) {
-          setUsername(parsedUserInfo.username);
-        }
+  try {
+    const storedUserInfo = localStorage.getItem("userInfo");
+    if (storedUserInfo) {
+      const parsedUserInfo = JSON.parse(storedUserInfo);
+      if (parsedUserInfo && parsedUserInfo.username) {
+        username = parsedUserInfo.username;
       }
-    } catch (error) {
-      console.error("Error parsing userInfo from localStorage:", error);
     }
-    //fetchCount();
-  }, []);
-
-  const router = useRouter();
-
-  const handleSearch = (value: string) => {
-    console.log(value);
-    router.push(`/search?q=${value}`);
-  };
+  } catch (error) {
+    console.error("Error parsing userInfo from localStorage:", error);
+  }
 
   return (
     <nav className=" sticky z-10 flex w-full justify-center bg-stone-100 font-poppins">
@@ -58,41 +44,34 @@ function WebsiteHeader({
             web <span className="text-sky-800">shop</span>
           </Link>
           <SearchBar
-            onSearch={handleSearch}
             initalValue={currentSearch}
             placeholder={`Sök bland ${productCountProp} produkter`}
           />
 
           {!username ? (
-            <button
-              onClick={() => {
-                router.push("/login");
-              }}
+            <Link
+              href={"/login"}
               className=" relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
             >
               <UserIcon className="h-6 w-6 fill-white" />
-            </button>
+            </Link>
           ) : (
-            <button
-              onClick={() => {
-                router.push("/view-account");
-              }}
+            <Link
               className=" relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
+              href={"/view-account"}
             >
               <UserIcon className="h-6 w-6 fill-white" />
-            </button>
+            </Link>
           )}
-          <button
-            onClick={() => {
-              router.push("/cart");
-            }}
+          <Link
+            href={"/cart"}
             className="relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
           >
             <div className="absolute bottom-0 left-0 flex h-5 w-5 -translate-x-1 translate-y-1 items-center justify-center rounded-full bg-red-500 text-xs font-light text-white">
               {productCountInCart}
             </div>
             <ShoppingCartIcon className="h-6 w-6 fill-white" />
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
