@@ -21,7 +21,7 @@ interface cartItemInterface {
 type ProductTypeWithInfo = ProductType & { quantity: number };
 
 export async function POST(request: NextRequest) {
-  console.log("request recived!");
+  console.log("recived POST request!");
 
   const reqBody: reqBodyCart = await request.json();
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   user.save();
 
   return NextResponse.json(
-    { message: "successfully added to cart" },
+    { message: "successfully added to carttt___", "Cache-Control": "no-store" },
     { status: 200 },
   );
 }
@@ -62,15 +62,22 @@ const addProductInfoToCart = async (userCart: any[], user: Account) => {
       return await ProductModel.findById(String(itemObject.item));
     },
   );
-  const productInfo = await Promise.all(productPromises);
+  const productInfo: Product[] = await Promise.all(productPromises);
 
-  const productInfoWithQqt = productInfo.map((product: Product, i) => {
-    let productWcartInfo: ProductTypeWithInfo = {
-      ...product.toObject(),
-      quantity: userCart[i].quantity,
-    };
-    return productWcartInfo;
-  }) as unknown as ProductToPlainObject[];
+  //* remove null from array, (they could be there because the product has been removed from the db, but the cart still holds on to the objectId)
+  const productInfoFilteredNull = productInfo.filter(
+    (product: Product) => product,
+  );
+
+  const productInfoWithQqt = productInfoFilteredNull.map(
+    (product: Product, i) => {
+      let plainObject = product.toObject();
+      return {
+        ...plainObject,
+        quantity: userCart[i].quantity,
+      };
+    },
+  ) as unknown as ProductToPlainObject[];
 
   return getFavs(await getBrandNames(productInfoWithQqt), user);
 };
