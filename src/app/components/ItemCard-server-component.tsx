@@ -5,6 +5,7 @@ import addSpacesForPrice from "../(frontend-routes)/utils/addSpacesForPrice";
 import { cookies } from "next/headers";
 import FavButton from "./ItemCard-server-sub-components/FavButton";
 import { revalidatePath } from "next/cache";
+import getIsLoggedInFrontEndServerSide from "../(frontend-routes)/utils/getIsLoggedInFrontEndServerSide";
 
 type itemCardTypes = {
   brandName?: string;
@@ -29,7 +30,8 @@ export default async function ItemCard({
 }: itemCardTypes) {
   // const router = useRouter();
   const cookieStore = cookies();
-  const jwtToken = cookieStore.get("jwt")!.value; //! could be undef if user is not logged in TODO
+  const jwtToken = cookieStore.get("jwt");
+  const isLoggedIn = getIsLoggedInFrontEndServerSide(cookieStore);
 
   // const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   let isFavouriteState = isFavourite;
@@ -45,7 +47,7 @@ export default async function ItemCard({
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          jwt: jwtToken,
+          jwt: isLoggedIn ? jwtToken?.value! : "",
         },
         body: JSON.stringify({ productId: id }),
       });

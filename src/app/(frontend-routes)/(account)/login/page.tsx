@@ -56,7 +56,6 @@ function Page() {
 
   return (
     <>
-      <WebsiteHeader />
       <form
         className=" mx-auto min-h-screen max-w-lg space-y-4 p-6"
         onSubmit={loginHandler}

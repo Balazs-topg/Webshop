@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   if (await isPageRequestAdmin(cookies().getAll())) {
-    return <body className={inter.className}>{children}</body>;
+    return <div className={inter.className}>{children}</div>;
   } else {
     redirect("/");
   }
