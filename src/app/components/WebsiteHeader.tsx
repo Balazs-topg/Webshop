@@ -5,7 +5,7 @@ import { UserIcon } from "@heroicons/react/24/solid";
 
 import SearchBar from "./WebsiteHeader-subcomponents/searchBar";
 
-function WebsiteHeader({
+async function WebsiteHeader({
   searchValue,
   productCountProp = 0,
   productCountInCart = 0,
@@ -15,26 +15,26 @@ function WebsiteHeader({
   productCountInCart?: number;
 }) {
   let username = "username";
-  let productCount = 10;
   let currentSearch = searchValue;
 
-  const fetchCount = async () => {
-    const response = await fetch("/api/products/count", { method: "get" });
-    const data = await response.json();
-    productCount = data.count;
-  };
+  let productCount = 0;
+  // const response = await fetch("http://localhost:3000/api/products/count", {
+  //   method: "get",
+  // });
+  // const data = await response.json();
+  // productCount = data.count;
 
-  try {
-    const storedUserInfo = localStorage.getItem("userInfo");
-    if (storedUserInfo) {
-      const parsedUserInfo = JSON.parse(storedUserInfo);
-      if (parsedUserInfo && parsedUserInfo.username) {
-        username = parsedUserInfo.username;
-      }
-    }
-  } catch (error) {
-    console.error("Error parsing userInfo from localStorage:", error);
-  }
+  // try {
+  //   const storedUserInfo = localStorage.getItem("userInfo");
+  //   if (storedUserInfo) {
+  //     const parsedUserInfo = JSON.parse(storedUserInfo);
+  //     if (parsedUserInfo && parsedUserInfo.username) {
+  //       username = parsedUserInfo.username;
+  //     }
+  //   }
+  // } catch (error) {
+  //   console.error("Error parsing userInfo from localStorage:", error);
+  // }
 
   return (
     <nav className=" sticky z-10 flex w-full justify-center bg-stone-100 font-poppins">
@@ -45,7 +45,7 @@ function WebsiteHeader({
           </Link>
           <SearchBar
             initalValue={currentSearch}
-            placeholder={`Sök bland ${productCountProp} produkter`}
+            placeholder={`Sök bland ${productCount} produkter`}
           />
 
           {!username ? (

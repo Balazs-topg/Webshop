@@ -1,21 +1,22 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-
+import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { Input, Button } from "@nextui-org/react";
 
-import WebsiteHeader from "@/app/components/WebsiteHeader";
+// import WebsiteHeader from "@/app/components/WebsiteHeader";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { setCookie } from "../../utils/manageCookies";
+import { getCookie, setCookie } from "../../utils/manageCookies";
 import WebsiteFooter from "@/app/components/WebsiteFooter";
 
 function Page() {
   const router = useRouter();
   useEffect(() => {
     try {
-      const userInfo = localStorage.getItem("userInfo");
-      if (userInfo !== null && JSON.parse(userInfo)) {
+      const userJwt = getCookie("jwt");
+      if (userJwt !== null && JSON.parse(userJwt)) {
         router.push("./view-account");
       }
     } catch {}
@@ -48,16 +49,6 @@ function Page() {
     data.userFound ? setUserFound(true) : setUserFound(false);
     !data.loginIsSuccessful && setPasswordIsWrong(true);
     data.jwt && setCookie("jwt", data.jwt);
-    data.jwt && localStorage.setItem("jwt", data.jwt);
-    data.loginIsSuccessful &&
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          username: data.username,
-          email: emailRef.current!.value,
-          id: data.id,
-        }),
-      );
 
     setIsLoading(false);
     data.loginIsSuccessful && router.push("./");

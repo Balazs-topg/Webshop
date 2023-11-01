@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import { Button, Checkbox, Spinner, Input } from "@nextui-org/react";
 import WebsiteHeader from "@/app/components/WebsiteHeader";
 import { setCookie } from "../../utils/manageCookies";
+import { getCookie } from "../../utils/manageCookies";
 
 function Page() {
   const router = useRouter();
   useEffect(() => {
     try {
-      const userInfo = localStorage.getItem("userInfo");
-      if (userInfo !== null && JSON.parse(userInfo)) {
+      const userJwt = getCookie("jwt");
+      if (userJwt !== null && JSON.parse(userJwt)) {
         router.push("./view-account");
       }
     } catch {}
@@ -27,7 +28,6 @@ function Page() {
   const [passwordIsWeak, setPasswordIsWeak] = useState(false);
 
   const [repeatPassIsIncorrect, setRepeatWordIsIncorrect] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const signupHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,16 +59,6 @@ function Page() {
     data.emailIsTaken ? setEmailIsTaken(true) : setEmailIsTaken(false);
     data.passwordIsWeak ? setPasswordIsWeak(true) : setPasswordIsWeak(false);
     data.jwt && setCookie("jwt", data.jwt);
-    data.jwt && localStorage.setItem("jwt", data.jwt);
-    data.signupIsSuccessful &&
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          username: usernameRef.current!.value,
-          email: emailRef.current!.value,
-          id: data.id,
-        }),
-      );
     data.signupIsSuccessful && router.push("./signup-success");
     setIsLoading(false);
   };
