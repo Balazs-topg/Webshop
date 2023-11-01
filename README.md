@@ -23,6 +23,7 @@ Kör isg på hem-sidan, hela skiten blir bara enkel html. problemet blir blir d�
 
 - [ ] Skapa admin panel
 
+  - [ ] fixa cartcount i röda pricken, döp om variablerna också lol, det e kaos
   - [ ] Fixa så att api routsen är mer logiska typ, det är _inte_ RESTFUL atm
   - [ ] lägg till så att man kan kolla på alla användare
   - [ ] lägg till så att man kan kolla inkomande order
@@ -35,14 +36,16 @@ Kör isg på hem-sidan, hela skiten blir bara enkel html. problemet blir blir d�
 
 - [ ] Lägg till reset password (behöver först hitta en bra email-provider)
 - [ ] Lägg till hur många det finns i lagert
-- [ ] Lägg till kundvagn
 - [ ] Lägg till så att man kan filter mellan kategorier och märken och pris mm
 - [ ] Lägg till så att man kan betala och lägga order, och få order nummer
 - [ ] Lägg till recensioner
+- [x] Lägg till kundvagn
 - [x] Lägg till sök funktion
 - [x] Lägg till "favoriter"
 - [x] Lägg till förmåga att "inspektera" objekt
 - [x] SERCURITY : verify jwt bruhhhh
+
+- [ ] Fixa bug där favorite staten inte sparas, för att återskapa: tabort/lägg-till favorite gå till view-account, gå tillbaka till hemskärmen,
 
 - [x] Setup stack
 - [x] Setup DB

@@ -18,7 +18,21 @@ async function WebsiteHeader({
   const loggedIn = true;
   let currentSearch = searchValue;
 
-  let productCount = 0;
+  async function fetchProductCount() {
+    try {
+      const response = await fetch("http://localhost:3000/api/products/count");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.count;
+    } catch (error) {
+      console.error("Failed to fetch product count:", error);
+      return 0; // Return a default value or handle the error as appropriate
+    }
+  }
+
+  const productCount = await fetchProductCount();
 
   return (
     <nav className=" sticky z-10 flex w-full justify-center bg-stone-100 font-poppins">
