@@ -1,4 +1,4 @@
-import ItemCard from "../components/ItemCard";
+import ItemCard from "../components/ItemCard-server-component";
 import WebsiteHeader from "../components/WebsiteHeader";
 import WebsiteFooter from "../components/WebsiteFooter";
 
