@@ -6,6 +6,7 @@ import { Ripples } from "react-ripples-continued";
 import { cookies } from "next/headers";
 import { ProductType } from "../types/ProductType";
 import { TagOrCategoryOrBrand } from "./admin/products/components/EditOrAddProduct";
+import getIsLoggedInFrontEndServerSide from "./utils/getIsLoggedInFrontEndServerSide";
 
 async function CategoryBtn({
   title,
@@ -32,6 +33,7 @@ async function CategoryBtn({
 
 export default async function Home() {
   const cookieStore = cookies();
+  const isLoggedIn = getIsLoggedInFrontEndServerSide(cookieStore);
 
   let category: TagOrCategoryOrBrand[] = [];
   async function getBrandsList() {
@@ -49,15 +51,13 @@ export default async function Home() {
     category = data;
   }
 
-  console.log("jwt cookies", cookieStore.get("jwt"));
-
   let products: ProductType[] = [];
   async function getProducts() {
     const response = await fetch("http://localhost:3000/api/products/get", {
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        jwt: cookieStore.get("jwt")!.value, //! it acutally can be null tho, if the user isn't logged it, it will be null
+        jwt: isLoggedIn ? cookieStore.get("jwt")!.value : "", //! it acutally can be null tho, if the user isn't logged it, it will be null
       },
     });
     const data = await response.json();
@@ -70,7 +70,6 @@ export default async function Home() {
   return (
     <>
       <div className="min-h-screen font-poppins">
-        <WebsiteHeader />
         <div className="flex gap-2 overflow-auto bg-stone-200 px-4 py-3">
           {category.length > 0 ? (
             category.map((category: TagOrCategoryOrBrand) => {
@@ -113,7 +112,6 @@ export default async function Home() {
           )}
         </div>
       </div>
-      <WebsiteFooter />
     </>
   );
 }

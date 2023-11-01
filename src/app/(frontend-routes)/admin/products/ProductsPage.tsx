@@ -67,6 +67,8 @@ export default function ProductsPage() {
     getBrandsList();
     getCategoryList();
     getTagsList();
+
+    getProducts();
     //add these functions to the context state
     contextSetState((prevState: any) => ({
       ...prevState,
@@ -99,13 +101,9 @@ export default function ProductsPage() {
     getProducts();
   }
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
   return (
-    <div className=" font-poppins">
-      <WebsiteHeader />
+    <div className="font-poppins">
+      {/* <WebsiteHeader /> */}
       <div className="flex">
         <AdminNav />
         <div className="mx-auto w-full max-w-2xl space-y-4 p-4">

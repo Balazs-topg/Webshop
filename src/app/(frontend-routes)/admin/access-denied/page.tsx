@@ -4,7 +4,6 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 function page() {
   return (
     <>
-      <WebsiteHeader />
       <div className=" flex w-full items-center justify-center">
         <h1 className="p-10 text-3xl font-semibold text-sky-800">
           Du är inte en admin

@@ -34,7 +34,7 @@ function Page() {
 
   return (
     <>
-      <WebsiteHeader searchValue={search} />
+      {/* <WebsiteHeader searchValue={search} /> */}
       <div className=" min-h-screen">
         <div className="bg-stone-200">
           <h2 className=" p-2 text-center">Visar sökresultat för {search}</h2>
@@ -70,7 +70,6 @@ function Page() {
           })}
         </div>
       </div>
-      <WebsiteFooter />
     </>
   );
 }

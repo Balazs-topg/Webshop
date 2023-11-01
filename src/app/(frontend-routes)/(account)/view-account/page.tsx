@@ -20,19 +20,6 @@ async function Page() {
   } catch {
     redirect("./login");
   }
-  // try {
-  //   const userInfo = localStorage.getItem("userInfo");
-  //   if (!(userInfo !== null && JSON.parse(userInfo))) {
-  //     redirect("./view-account");
-  //   }
-  // } catch {}
-
-  // try {
-  //   const userInfoFromLocalStorage = localStorage.getItem("userInfo");
-  //   const userInfo = JSON.parse(userInfoFromLocalStorage!);
-  //   getUserInfo(userInfo.id);
-  // } catch {}
-
   const logOut = async () => {
     "use server";
     cookies().delete("jwt");
@@ -41,7 +28,6 @@ async function Page() {
 
   return (
     <>
-      <WebsiteHeader />
       <div className=" mx-auto max-w-lg space-y-4 p-6">
         <h1 className="text-3xl font-semibold text-sky-800">
           Du är inloggad som {user.username}

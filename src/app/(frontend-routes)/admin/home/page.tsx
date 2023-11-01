@@ -7,7 +7,6 @@ import WebsiteHeader from "../../../components/WebsiteHeader";
 export default function Home() {
   return (
     <div className=" font-poppins">
-      <WebsiteHeader></WebsiteHeader>
       <div className="flex">
         <AdminNav></AdminNav>
         <div className="mx-auto w-full max-w-xl">

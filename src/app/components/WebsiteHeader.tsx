@@ -14,27 +14,11 @@ async function WebsiteHeader({
   productCountProp?: number;
   productCountInCart?: number;
 }) {
-  let username = "username";
+  console.log("header is being rerendereddd");
+  const loggedIn = true;
   let currentSearch = searchValue;
 
   let productCount = 0;
-  // const response = await fetch("http://localhost:3000/api/products/count", {
-  //   method: "get",
-  // });
-  // const data = await response.json();
-  // productCount = data.count;
-
-  // try {
-  //   const storedUserInfo = localStorage.getItem("userInfo");
-  //   if (storedUserInfo) {
-  //     const parsedUserInfo = JSON.parse(storedUserInfo);
-  //     if (parsedUserInfo && parsedUserInfo.username) {
-  //       username = parsedUserInfo.username;
-  //     }
-  //   }
-  // } catch (error) {
-  //   console.error("Error parsing userInfo from localStorage:", error);
-  // }
 
   return (
     <nav className=" sticky z-10 flex w-full justify-center bg-stone-100 font-poppins">
@@ -48,7 +32,7 @@ async function WebsiteHeader({
             placeholder={`Sök bland ${productCount} produkter`}
           />
 
-          {!username ? (
+          {!loggedIn ? (
             <Link
               href={"/login"}
               className=" relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"

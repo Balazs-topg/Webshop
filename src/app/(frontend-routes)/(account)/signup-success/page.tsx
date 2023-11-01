@@ -8,7 +8,6 @@ import WebsiteHeader from "@/app/components/WebsiteHeader";
 function Page() {
   return (
     <>
-      <WebsiteHeader />
       <div className=" mx-auto flex max-w-lg flex-col justify-center space-y-4 p-6">
         <h1 className="text-center text-3xl font-semibold text-sky-800">
           Välkommen till webshop!

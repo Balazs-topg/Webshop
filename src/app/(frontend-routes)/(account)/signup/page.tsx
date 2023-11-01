@@ -65,7 +65,6 @@ function Page() {
 
   return (
     <>
-      <WebsiteHeader />
       <form
         onSubmit={signupHandler}
         className=" mx-auto max-w-lg space-y-4 p-6"

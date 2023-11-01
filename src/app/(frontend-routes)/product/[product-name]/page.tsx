@@ -24,7 +24,6 @@ export default async function Page({
 
   return (
     <>
-      <WebsiteHeader />
       <div className="mx-auto mt-4 max-w-4xl p-4">
         <div className="flex w-full flex-col items-stretch gap-10 sm:flex-row">
           <div className="flex-1">

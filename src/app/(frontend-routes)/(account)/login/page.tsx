@@ -113,7 +113,6 @@ function Page() {
           </div>
         </div>
       </form>
-      <WebsiteFooter />
     </>
   );
 }

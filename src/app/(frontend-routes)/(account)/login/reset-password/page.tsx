@@ -20,7 +20,6 @@ function Page({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      <WebsiteHeader />
       <form
         className=" mx-auto max-w-lg space-y-4 p-6"
         onSubmit={resetPasswordHandler}
