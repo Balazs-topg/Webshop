@@ -24,7 +24,7 @@ async function CategoryBtn({
     );
   }
   return (
-    <button className="relative select-none overflow-hidden whitespace-nowrap rounded-md bg-white px-4 py-1 text-sm font-medium transition-all hover:shadow active:scale-95">
+    <button className="relative select-none overflow-hidden whitespace-nowrap rounded-md bg-white px-4 py-1 text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow">
       {title}
       <Ripples fillAndHold color="gray" opacity={0.5} optimize />
     </button>
