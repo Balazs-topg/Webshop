@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { Ripples } from "react-ripples-continued";
 import Link from "next/link";
 import addSpacesForPrice from "../(frontend-routes)/utils/addSpacesForPrice";
 import { cookies } from "next/headers";
 import FavButton from "./ItemCard-server-sub-components/FavButton";
+import BuyButton from "./ItemCard-server-sub-components/BuyButton";
 import { revalidatePath } from "next/cache";
 import getIsLoggedInFrontEndServerSide from "../(frontend-routes)/utils/getIsLoggedInFrontEndServerSide";
 
@@ -155,15 +155,11 @@ export default async function ItemCard({
             {addSpacesForPrice(price!)} kr
           </div>
           <div className="relative">
-            <form className=" flex items-center gap-2" action={handleBuy}>
-              <button
-                // onClick={handleBuy}
-                className="relative flex items-center justify-center overflow-hidden rounded-full bg-sky-800 px-6 py-2 font-medium uppercase text-white transition-all active:scale-95"
-              >
-                Köp
-                <Ripples opacity={0.5} duration={700} optimize />
-              </button>
-            </form>
+            <BuyButton
+              isLoggedIn={isLoggedIn}
+              jwtToken={jwtToken!.value} //! could be undefined g
+              productId={id!}
+            />
           </div>
         </div>
       </div>

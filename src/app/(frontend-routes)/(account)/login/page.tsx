@@ -16,7 +16,7 @@ function Page() {
   useEffect(() => {
     try {
       const userJwt = getCookie("jwt");
-      if (userJwt !== null && JSON.parse(userJwt)) {
+      if (userJwt && JSON.parse(userJwt)) {
         router.push("./view-account");
       }
     } catch {}

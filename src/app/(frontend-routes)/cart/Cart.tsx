@@ -15,6 +15,9 @@ import { getCookie } from "../utils/manageCookies";
 import { Ripples } from "react-ripples-continued";
 import { ProductType } from "@/app/types/ProductType";
 
+import { webshopContext } from "@/app/Providers";
+import { useContext } from "react";
+
 interface CartItemInterface {
   name: string;
   price: number;
@@ -190,8 +193,24 @@ function CartItem({
 }
 
 function Cart() {
+  const [webshopContextState, setWebshopContextState] =
+    useContext(webshopContext);
+  const cartCount = webshopContextState.cartCount;
+
   const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(cartCount);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  //sync context state with component-level state
+  useEffect(() => {
+    console.log("syncing...", getTotalItemsCount(cartItems));
+    if (!isLoading) {
+      setWebshopContextState((prevState: any) => ({
+        ...prevState,
+        cartCount: getTotalItemsCount(cartItems),
+      }));
+    }
+  }, [cartItems]);
 
   const updateCartItemQuantity = (itemId: string, newQuantity: number) => {
     setCartItems((prevItems: any) =>
@@ -206,11 +225,10 @@ function Cart() {
     cartItems.forEach((product: ProductType) => {
       totalPrice = totalPrice + +product.price * product.quantity!;
     });
-    console.log(totalPrice);
     setTotalPrice(totalPrice);
   }, [cartItems]);
 
-  const totalItemsCount = (cartItems: ProductType[]) => {
+  const getTotalItemsCount = (cartItems: ProductType[]) => {
     let cartItemsCount = 0;
     cartItems.forEach((cartItem: any) => {
       cartItemsCount = cartItemsCount + cartItem.quantity;
@@ -219,9 +237,11 @@ function Cart() {
   };
 
   const removeItemFromCart = async (id: string) => {
-    setCartItems(
-      cartItems.filter((item: any) => (item._id !== id ? true : false)),
+    const newCartItemValue = cartItems.filter((item: any) =>
+      item._id !== id ? true : false,
     );
+    setCartItems(newCartItemValue);
+
     const response = await fetch("/api/cart", {
       method: "delete",
       headers: {
@@ -236,6 +256,7 @@ function Cart() {
   };
 
   const getCartItems = async () => {
+    setIsLoading(true);
     const response = await fetch("/api/cart", {
       method: "get",
       headers: {
@@ -245,6 +266,7 @@ function Cart() {
     });
     const data = await response.json();
     setCartItems(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -255,10 +277,7 @@ function Cart() {
     <>
       <div className="mx-auto min-h-screen max-w-lg space-y-4 p-6">
         <h1 className="flex text-3xl font-semibold text-sky-800">
-          Kundvagn{" "}
-          <span className="ml-auto opacity-50">
-            ({totalItemsCount(cartItems)})
-          </span>
+          Kundvagn <span className="ml-auto opacity-50">{cartCount}</span>
         </h1>
         <div className="mt-4 flex flex-col gap-2 rounded-lg">
           {cartItems &&

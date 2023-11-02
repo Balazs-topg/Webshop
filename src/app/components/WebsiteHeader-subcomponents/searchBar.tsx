@@ -53,10 +53,7 @@ export default function SearchBar({
         {/* just a "ghost element"*/}
         <div className="flex w-full gap-2 whitespace-nowrap">
           <div className="flex items-center justify-center">
-            <MagnifyingGlassIcon
-              stroke="rgb(148 163 184)"
-              className="heroicon-sw-2 h-5 w-5"
-            />
+            <div className="heroicon-sw-2 h-5 w-5" />
           </div>
           <span style={{ whiteSpace: "pre" }}>
             {inputValue.length == 0 ? placeholder : inputValue}
