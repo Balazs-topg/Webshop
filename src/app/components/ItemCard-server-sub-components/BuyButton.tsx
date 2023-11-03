@@ -10,7 +10,7 @@ function BuyButton({
   productId,
 }: {
   isLoggedIn: boolean;
-  jwtToken: string;
+  jwtToken?: string | boolean;
   productId: string;
 }) {
   const [webshopContextState, setWebshopContextState] =

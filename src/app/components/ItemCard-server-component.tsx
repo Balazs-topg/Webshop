@@ -157,7 +157,7 @@ export default async function ItemCard({
           <div className="relative">
             <BuyButton
               isLoggedIn={isLoggedIn}
-              jwtToken={jwtToken!.value} //! could be undefined g
+              jwtToken={isLoggedIn && jwtToken!.value} //! could be undefined g
               productId={id!}
             />
           </div>
