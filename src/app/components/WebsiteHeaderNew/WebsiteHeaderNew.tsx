@@ -30,10 +30,11 @@ function WebsiteHeader({
   const [webshopContextState, setWebshopContextState] =
     useContext(webshopContext);
 
-  const [jwt, setJwt] = useState(getCookie("jwt"));
+  const jwt = getCookie("jwt");
   const [productCount, setProductCount] = useState(0);
   const cartCount = webshopContextState.cartCount;
-  const [isLoggedIn, setIsLoggedIn] = useState(true); //! placeholder value TODO
+  let isLoggedIn: boolean = false;
+  if (getCookie("jwt")) isLoggedIn = true;
 
   async function fetchProductCount() {
     try {

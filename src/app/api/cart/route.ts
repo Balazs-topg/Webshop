@@ -27,11 +27,11 @@ export async function POST(request: NextRequest) {
 
   const reqBody: reqBodyCart = await request.json();
 
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
   //if the request is not comming from a guest
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
 
     // addToCart
@@ -115,10 +115,10 @@ const addProductInfoToCart = async (userCart: any[], user: Account) => {
 export async function GET(request: NextRequest) {
   console.log("request recived!");
   let userCartWInfo;
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
     const userCart = user.cart;
     userCartWInfo = await addProductInfoToCart(userCart, user);
@@ -141,10 +141,10 @@ export async function PUT(request: NextRequest) {
 
   const reqBody: setNewQqt = await request.json();
 
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     // Authenticate JWT
     const user = await getUser(request);
     const theItemWereUpdating = user.cart.find(
@@ -189,10 +189,10 @@ export async function DELETE(request: NextRequest) {
   console.log("request recived!");
 
   const reqBody: deleteItemFromCart = await request.json();
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
     const theItemWereUpdating = user.cart.find(
       (item: any) => String(item.item) === reqBody.itemId,

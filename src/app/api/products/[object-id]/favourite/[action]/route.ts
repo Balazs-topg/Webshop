@@ -13,10 +13,10 @@ export async function POST(
   const objectId = new mongoose.Types.ObjectId(params["object-id"]);
   const action = params.action;
 
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
 
     //favourite logic

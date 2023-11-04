@@ -67,11 +67,11 @@ export async function GET(
   const query: string = params["query"];
   console.log(`search request recived! ${query}`);
 
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
   let result;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
     //query
     const queryArr = query.split(" ");

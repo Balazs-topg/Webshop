@@ -18,10 +18,10 @@ export async function GET(request: NextRequest, response: any) {
     return item.toObject();
   });
 
-  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  if (!isGuest) {
+  if (isGuest === "false") {
     const user = await getUser(request);
     const productsWithFavs = await getFavs(productsToPlainObjects, user);
     const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);
