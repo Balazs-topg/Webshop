@@ -28,6 +28,7 @@ interface CartItemInterface {
   updateQuantity: Function;
   removeItemFromCart: Function;
   isFavouriteProp: boolean;
+  isLoggedIn: boolean;
 }
 
 function CartItem({
@@ -40,6 +41,7 @@ function CartItem({
   updateQuantity,
   removeItemFromCart,
   isFavouriteProp,
+  isLoggedIn,
 }: CartItemInterface) {
   const [productCount, setProductCount] = useState(count);
   const [isFavourite, setIsFavourite] = useState(isFavouriteProp);
@@ -54,7 +56,9 @@ function CartItem({
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
+          jwt: isLoggedIn ? getCookie("jwt")! : "",
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart"),
         },
       },
     );
@@ -84,6 +88,8 @@ function CartItem({
         headers: {
           "Content-Type": "application/json",
           jwt: getCookie("jwt")!,
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart"),
         },
         body: JSON.stringify({
           itemId: id,
@@ -192,7 +198,7 @@ function CartItem({
   );
 }
 
-function Cart() {
+function Cart({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [webshopContextState, setWebshopContextState] =
     useContext(webshopContext);
   const cartCount = webshopContextState.cartCount;
@@ -247,6 +253,8 @@ function Cart() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: isLoggedIn ? false : true,
+        guestCartId: getCookie("guestCart"),
       },
       body: JSON.stringify({
         itemId: id,
@@ -262,6 +270,8 @@ function Cart() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: isLoggedIn ? false : true,
+        guestCartId: getCookie("guestCart"),
       },
     });
     const data = await response.json();

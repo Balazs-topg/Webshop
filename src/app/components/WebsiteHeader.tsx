@@ -52,6 +52,8 @@ async function WebsiteHeader({
           headers: {
             "Content-Type": "application/json",
             jwt: isLoggedIn ? jwt!.value : "",
+            isGuest: isLoggedIn ? false : true,
+            guestCartId: cookieStore.get("guestCart"),
           },
         },
       );

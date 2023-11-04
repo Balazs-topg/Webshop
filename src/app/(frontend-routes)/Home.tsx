@@ -58,7 +58,9 @@ export default async function Home() {
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        jwt: isLoggedIn ? cookieStore.get("jwt")!.value : "", //! it acutally can be null tho, if the user isn't logged it, it will be null
+        jwt: isLoggedIn ? cookieStore.get("jwt")!.value : "",
+        isGuest: isLoggedIn ? false : true,
+        guestCartId: cookieStore.get("guestCart")!.value,
       },
     });
     const data = await response.json();
@@ -93,6 +95,7 @@ export default async function Home() {
             products!.map((product: ProductType) => {
               return (
                 <ItemCard
+                  isLoggedIn={isLoggedIn}
                   key={product._id}
                   id={product._id}
                   brandName={product.brandName}

@@ -59,6 +59,8 @@ function WebsiteHeader({
           headers: {
             "Content-Type": "application/json",
             jwt: isLoggedIn ? jwt! : "",
+            isGuest: isLoggedIn ? false : true,
+            guestCartId: getCookie("guestCart"),
           },
         },
       );

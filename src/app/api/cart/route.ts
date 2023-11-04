@@ -9,6 +9,7 @@ import getBrandNames from "../utils/getBrandNames";
 import getFavs from "../utils/getFavs";
 import { Account } from "../models/AccountModel";
 import { ProductToPlainObject } from "../models/ProductModel";
+import GuestCartModel, { GuestCart } from "../models/GuestCartModel";
 
 interface reqBodyCart {
   productId: string;
@@ -20,35 +21,64 @@ interface cartItemInterface {
 }
 type ProductTypeWithInfo = ProductType & { quantity: number };
 
+//add to cart
 export async function POST(request: NextRequest) {
   console.log("recived POST request!");
 
   const reqBody: reqBodyCart = await request.json();
 
-  const user = await getUser(request);
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  // addToCart
-  if (!user.cart) user.cart = [];
+  //if the request is not comming from a guest
+  if (!isGuest) {
+    const user = await getUser(request);
 
-  if (
-    // if item is alredy in cart
-    user.cart.some((itemObject) => {
-      return String(itemObject.item) === reqBody.productId;
-    })
-  ) {
-    user.cart.forEach((itemObject) => {
-      if (String(itemObject.item) === reqBody.productId) {
-        itemObject.quantity!++;
-      }
-    });
+    // addToCart
+    if (!user.cart) user.cart = [];
+
+    if (
+      // if item is alredy in cart
+      user.cart.some((itemObject) => {
+        return String(itemObject.item) === reqBody.productId;
+      })
+    ) {
+      user.cart.forEach((itemObject) => {
+        if (String(itemObject.item) === reqBody.productId) {
+          itemObject.quantity!++;
+        }
+      });
+    } else {
+      // if item isn't in cart
+      user.cart.push({
+        item: new mongoose.Types.ObjectId(reqBody.productId),
+        quantity: 1,
+      });
+    }
+    user.save();
   } else {
-    // if item isn't in cart
-    user.cart.push({
-      item: new mongoose.Types.ObjectId(reqBody.productId),
-      quantity: 1,
-    });
+    const guestCard = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    if (!guestCard.cart) guestCard.cart = [];
+    if (
+      // if item is alredy in cart
+      guestCard.cart.some((itemObject) => {
+        return String(itemObject.item) === reqBody.productId;
+      })
+    ) {
+      guestCard.cart.forEach((itemObject) => {
+        if (String(itemObject.item) === reqBody.productId) {
+          itemObject.quantity!++;
+        }
+      });
+    } else {
+      // if item isn't in cart
+      guestCard.cart.push({
+        item: new mongoose.Types.ObjectId(reqBody.productId),
+        quantity: 1,
+      });
+    }
+    guestCard.save();
   }
-  user.save();
 
   return NextResponse.json(
     { message: "successfully added to cart" },
@@ -84,12 +114,19 @@ const addProductInfoToCart = async (userCart: any[], user: Account) => {
 
 export async function GET(request: NextRequest) {
   console.log("request recived!");
+  let userCartWInfo;
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  const user = await getUser(request);
-
-  const userCart = user.cart;
-  const userCartWInfo = await addProductInfoToCart(userCart, user);
-
+  if (!isGuest) {
+    const user = await getUser(request);
+    const userCart = user.cart;
+    userCartWInfo = await addProductInfoToCart(userCart, user);
+  } else {
+    const guest = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    const userCart = guest.cart;
+    userCartWInfo = await addProductInfoToCart(userCart, guest as any);
+  }
   return NextResponse.json(userCartWInfo, { status: 200 });
 }
 
@@ -104,26 +141,43 @@ export async function PUT(request: NextRequest) {
 
   const reqBody: setNewQqt = await request.json();
 
-  // Authenticate JWT
-  const user = await getUser(request);
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  const theItemWereUpdating = user.cart.find(
-    (item: any) => String(item.item) === reqBody.itemId,
-  );
-
-  if (theItemWereUpdating) {
-    theItemWereUpdating.quantity = reqBody.newQuantity;
-  }
-
-  user.cart = user.cart.map((item: any) => {
-    if (String(theItemWereUpdating!.item) === String(item.item)) {
-      return theItemWereUpdating;
-    } else {
-      return item;
+  if (!isGuest) {
+    // Authenticate JWT
+    const user = await getUser(request);
+    const theItemWereUpdating = user.cart.find(
+      (item: any) => String(item.item) === reqBody.itemId,
+    );
+    if (theItemWereUpdating) {
+      theItemWereUpdating.quantity = reqBody.newQuantity;
     }
-  });
-
-  await user.save();
+    user.cart = user.cart.map((item: any) => {
+      if (String(theItemWereUpdating!.item) === String(item.item)) {
+        return theItemWereUpdating;
+      } else {
+        return item;
+      }
+    });
+    await user.save();
+  } else {
+    const guest = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    const theItemWereUpdating = guest.cart.find(
+      (item: any) => String(item.item) === reqBody.itemId,
+    );
+    if (theItemWereUpdating) {
+      theItemWereUpdating.quantity = reqBody.newQuantity;
+    }
+    guest.cart = guest.cart.map((item: any) => {
+      if (String(theItemWereUpdating!.item) === String(item.item)) {
+        return theItemWereUpdating;
+      } else {
+        return item;
+      }
+    });
+    await guest.save();
+  }
 
   return NextResponse.json({ status: 200 }, { status: 200 });
 }
@@ -135,25 +189,28 @@ export async function DELETE(request: NextRequest) {
   console.log("request recived!");
 
   const reqBody: deleteItemFromCart = await request.json();
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  const user = await getUser(request);
-
-  const theItemWereUpdating = user.cart.find(
-    (item: any) => String(item.item) === reqBody.itemId,
-  );
-
-  const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating!);
-  user.cart.splice(indexOfItemThatWeWillRemove, 1);
-  await user.save();
+  if (!isGuest) {
+    const user = await getUser(request);
+    const theItemWereUpdating = user.cart.find(
+      (item: any) => String(item.item) === reqBody.itemId,
+    );
+    const indexOfItemThatWeWillRemove = user.cart.indexOf(theItemWereUpdating!);
+    user.cart.splice(indexOfItemThatWeWillRemove, 1);
+    await user.save();
+  } else {
+    const guest = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    const theItemWereUpdating = guest.cart.find(
+      (item: any) => String(item.item) === reqBody.itemId,
+    );
+    const indexOfItemThatWeWillRemove = guest.cart.indexOf(
+      theItemWereUpdating!,
+    );
+    guest.cart.splice(indexOfItemThatWeWillRemove, 1);
+    await guest.save();
+  }
 
   return NextResponse.json({ status: 200 }, { status: 200 });
 }
-
-//boiler plate
-// export async function GET(request: Request) {}
-export async function HEAD(request: Request) {}
-// export async function POST(request: Request) {}
-// export async function PUT(request: Request) {}
-// export async function DELETE(request: Request) {}
-export async function PATCH(request: Request) {}
-export async function OPTIONS(request: Request) {}

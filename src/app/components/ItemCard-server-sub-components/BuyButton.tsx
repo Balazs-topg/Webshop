@@ -3,6 +3,7 @@ import React from "react";
 import { Ripples } from "react-ripples-continued";
 import { webshopContext } from "@/app/Providers";
 import { useContext } from "react";
+import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 
 function BuyButton({
   isLoggedIn,
@@ -31,6 +32,8 @@ function BuyButton({
         headers: {
           "Content-Type": "application/json",
           jwt: isLoggedIn ? jwtToken : "",
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart")
         },
         body: JSON.stringify({ productId: productId }),
       });

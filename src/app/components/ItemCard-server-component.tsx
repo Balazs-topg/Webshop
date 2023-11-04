@@ -16,6 +16,7 @@ type itemCardTypes = {
   isFavourite?: boolean;
   id?: string;
   isSkeleton?: boolean;
+  isLoggedIn: boolean;
 };
 
 export default async function ItemCard({
@@ -27,36 +28,38 @@ export default async function ItemCard({
   isFavourite = false,
   id,
   isSkeleton = false,
+  isLoggedIn,
 }: itemCardTypes) {
   // const router = useRouter();
   const cookieStore = cookies();
   const jwtToken = cookieStore.get("jwt");
-  const isLoggedIn = getIsLoggedInFrontEndServerSide(cookieStore);
 
   // const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   let isFavouriteState = isFavourite;
   // const [isBeingClicked, setIsBeingClicked] = useState(false);
   let isBeingClicked = false;
 
-  const handleBuy = async () => {
-    "use server";
-    console.log("handleBuy called");
-    revalidatePath("/");
-    try {
-      const response = await fetch("http://localhost:3000/api/cart/", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          jwt: isLoggedIn ? jwtToken?.value! : "",
-        },
-        body: JSON.stringify({ productId: id }),
-      });
-      const data = await response.json();
-      console.log("handleBuy finished", data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const handleBuy = async () => {
+  //   "use server";
+  //   console.log("handleBuy called");
+  //   revalidatePath("/");
+  //   try {
+  //     const response = await fetch("http://localhost:3000/api/cart/", {
+  //       method: "post",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         jwt: isLoggedIn ? jwtToken?.value! : "",
+  //         isGuest: isLoggedIn ? false : true,
+  //         guestCartId: jwtGuestToken?.value,
+  //       },
+  //       body: JSON.stringify({ productId: id }),
+  //     });
+  //     const data = await response.json();
+  //     console.log("handleBuy finished", data);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   if (isSkeleton) {
     return (
@@ -140,7 +143,11 @@ export default async function ItemCard({
         <div className="info space-y-2 py-2">
           <div className="flex items-center border-b border-stone-100 pb-2 font-medium">
             {brandName}
-            <FavButton isFavourite={isFavouriteState} id={id!} />
+            <FavButton
+              isLoggedIn={isLoggedIn}
+              isFavourite={isFavouriteState}
+              id={id!}
+            />
           </div>
           <Link href={`/product/${productName}`} className="font-bold">
             {productName}

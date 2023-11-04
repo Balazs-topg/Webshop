@@ -5,6 +5,8 @@ import getUser from "../../utils/getUser";
 import getIsLoggedIn from "../../utils/getIsLoggedIn";
 import getBrandNames from "../../utils/getBrandNames";
 import getFavs from "../../utils/getFavs";
+import GuestCartModel, { GuestCart } from "../../models/GuestCartModel";
+import { Account } from "../../models/AccountModel";
 
 export async function GET(request: NextRequest, response: any) {
   console.log("request recived!");
@@ -16,14 +18,24 @@ export async function GET(request: NextRequest, response: any) {
     return item.toObject();
   });
 
-  const loggedIn = getIsLoggedIn(request);
-  if (loggedIn) {
-    const user = await getUser(request);
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
+  if (!isGuest) {
+    const user = await getUser(request);
     const productsWithFavs = await getFavs(productsToPlainObjects, user);
     const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);
     return NextResponse.json(productsWFavsAndWBrandNames, { status: 200 });
+  } else {
+    const guestCart = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    const productsWithFavs = await getFavs(
+      productsToPlainObjects,
+      guestCart as Account,
+    );
+    const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);
+    return NextResponse.json(productsWFavsAndWBrandNames, { status: 200 });
   }
+
   return NextResponse.json(products, { status: 200 });
 }
 

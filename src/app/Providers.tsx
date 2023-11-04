@@ -23,7 +23,7 @@ function Providers({ children }: childrenType) {
   });
 
   const setGuestCart = async () => {
-    if (!getCookie("jwt") && !getCookie("guestCartID")) {
+    if (!getCookie("guestCart")) {
       const response = await fetch("http://localhost:3000/api/guest-cart", {
         method: "post",
       });

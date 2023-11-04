@@ -7,9 +7,11 @@ import { getCookie } from "@/app/(frontend-routes)/utils/manageCookies";
 function FavButton({
   id,
   isFavourite = false,
+  isLoggedIn,
 }: {
   id: string;
   isFavourite: boolean;
+  isLoggedIn: boolean;
 }) {
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
 
@@ -26,6 +28,8 @@ function FavButton({
         headers: {
           "Content-Type": "application/json",
           jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart"),
         },
       },
     );

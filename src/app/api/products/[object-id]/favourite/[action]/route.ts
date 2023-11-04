@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import "../../../../utils/connectToDB";
 import getUser from "@/app/api/utils/getUser";
 import mongoose from "mongoose";
+import GuestCartModel, { GuestCart } from "@/app/api/models/GuestCartModel";
 
 export async function POST(
   request: Request,
@@ -12,30 +13,42 @@ export async function POST(
   const objectId = new mongoose.Types.ObjectId(params["object-id"]);
   const action = params.action;
 
-  const user = await getUser(request);
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
 
-  //favourite logic
-  if (!user.favourites) user.favourites = [];
+  if (!isGuest) {
+    const user = await getUser(request);
 
-  if (action == "un-favourite") {
-    user.favourites.splice(user.favourites.indexOf(objectId), 1);
-  } else if (action == "favourite") {
-    //if its not in favourites
-    if (!user.favourites.includes(objectId)) {
-      user.favourites.push(objectId);
-      user.markModified("favourites");
+    //favourite logic
+    if (!user.favourites) user.favourites = [];
+
+    if (action == "un-favourite") {
+      user.favourites.splice(user.favourites.indexOf(objectId), 1);
+    } else if (action == "favourite") {
+      //if its not in favourites
+      if (!user.favourites.includes(objectId)) {
+        user.favourites.push(objectId);
+        user.markModified("favourites");
+      }
     }
+    await user.save();
+  } else {
+    const guest = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+
+    //favourite logic
+    if (!guest.favourites) guest.favourites = [];
+
+    if (action == "un-favourite") {
+      guest.favourites.splice(guest.favourites.indexOf(objectId), 1);
+    } else if (action == "favourite") {
+      //if its not in favourites
+      if (!guest.favourites.includes(objectId)) {
+        guest.favourites.push(objectId);
+        guest.markModified("favourites");
+      }
+    }
+    await guest.save();
   }
-  await user.save();
 
   return NextResponse.json({ status: 200 });
 }
-
-//boiler plate
-export async function GET(request: Request) {}
-export async function HEAD(request: Request) {}
-// export async function POST(request: Request) {}
-export async function PUT(request: Request) {}
-export async function DELETE(request: Request) {}
-export async function PATCH(request: Request) {}
-export async function OPTIONS(request: Request) {}
