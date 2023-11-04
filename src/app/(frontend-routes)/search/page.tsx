@@ -8,6 +8,7 @@ import ItemCard from "@/app/components/ItemCard";
 import { ProductType } from "@/app/types/ProductType";
 import { getCookie } from "../utils/manageCookies";
 
+
 function Page() {
   const searchParams = useSearchParams();
   const search = searchParams.get("q") || "none";

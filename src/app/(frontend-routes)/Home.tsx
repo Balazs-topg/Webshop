@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { ProductType } from "../types/ProductType";
 import { TagOrCategoryOrBrand } from "./admin/products/components/EditOrAddProduct";
 import getIsLoggedInFrontEndServerSide from "./utils/getIsLoggedInFrontEndServerSide";
+import { revalidatePath } from "next/cache";
 
 async function CategoryBtn({
   title,
