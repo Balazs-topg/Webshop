@@ -7,6 +7,8 @@ import Link from "next/link";
 import { getCookie } from "../(frontend-routes)/utils/manageCookies";
 import { useRouter } from "next/navigation";
 import addSpacesForPrice from "../(frontend-routes)/utils/addSpacesForPrice";
+import { useContext } from "react";
+import { webshopContext } from "../Providers";
 
 type itemCardTypes = {
   brandName?: string;
@@ -33,16 +35,36 @@ export default function ItemCard({
   // const [isLoading, setIsLoading] = useState(false);
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   const [isBeingClicked, setIsBeingClicked] = useState(false); // for styles, not for functionallity
+  let isLoggedIn: boolean;
+  if (!!getCookie("jwt")) isLoggedIn = true;
+
+  const [webshopContextState, setWebshopContextState] =
+    useContext(webshopContext);
 
   const handleBuy = async () => {
-    const response = await fetch("/api/cart", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        jwt: getCookie("jwt")!,
-      },
-      body: JSON.stringify({ productId: id }),
-    });
+    console.log("handleBuy called");
+
+    setWebshopContextState((prevState: any) => ({
+      ...prevState,
+      cartCount: prevState.cartCount + 1,
+    }));
+
+    try {
+      const response = await fetch("http://localhost:3000/api/cart/", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          jwt: isLoggedIn ? jwtToken : "",
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart"),
+        },
+        body: JSON.stringify({ productId: productId }),
+      });
+      const data = await response.json();
+      console.log("handleBuy finished", data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handleFavourite = async () => {
@@ -55,7 +77,9 @@ export default function ItemCard({
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          jwt: getCookie("jwt")!, //! TODO it acutally can be null tho, if the user isn't logged it, it will be null
+          jwt: isLoggedIn ? getCookie("jwt") : "",
+          isGuest: isLoggedIn ? false : true,
+          guestCartId: getCookie("guestCart"),
         },
       },
     );

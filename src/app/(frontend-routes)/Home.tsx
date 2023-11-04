@@ -35,6 +35,7 @@ async function CategoryBtn({
 export default async function Home() {
   const cookieStore = cookies();
   const isLoggedIn = getIsLoggedInFrontEndServerSide(cookieStore);
+  console.log("isLoggedIn", isLoggedIn);
 
   let category: TagOrCategoryOrBrand[] = [];
   async function getBrandsList() {

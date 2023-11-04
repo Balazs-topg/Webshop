@@ -23,6 +23,7 @@ Kör isg på hem-sidan, hela skiten blir bara enkel html. problemet blir blir d�
 
 - [ ] Skapa admin panel
 
+  - [ ] FIX CRITICAL BUG att logginen inte gör ett skit typ, vette fan. ändå om man inloggad så tas inte cart infot ifrån inloggen, utan fortsätter att tas ifråg guestCarten, ingen aning vad det kan vara
   - [ ] fixa cartcount i röda pricken, döp om variablerna också lol, det e kaos
   - [ ] Fixa så att api routsen är mer logiska typ, det är _inte_ RESTFUL atm
   - [ ] lägg till så att man kan kolla på alla användare

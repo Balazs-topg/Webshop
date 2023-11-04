@@ -7,6 +7,8 @@ import CategoryModel from "@/app/api/models/CategoryModel";
 import getBrandNames from "@/app/api/utils/getBrandNames";
 import getUser from "@/app/api/utils/getUser";
 import getFavs from "@/app/api/utils/getFavs";
+import GuestCartModel, { GuestCart } from "@/app/api/models/GuestCartModel";
+import { Account } from "@/app/api/models/AccountModel";
 
 //takes a keyword an returns a promise that queries the database
 const keywordToResults = async (keyword: RegExp): Promise<Product[]> => {
@@ -64,26 +66,44 @@ export async function GET(
   //init
   const query: string = params["query"];
   console.log(`search request recived! ${query}`);
-  const user = await getUser(request);
 
-  //query
-  const queryArr = query.split(" ");
-  const resultOfqueries = queryArr.map(
-    async (query) => await keywordToResults(new RegExp(query, "i")),
-  );
-  const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
+  const isGuest = request.headers.get("isGuest") as unknown as boolean;
+  const guestCardId = request.headers.get("guestCartId") as unknown as string;
+  let result;
 
-  const removedDiff = removeTheDiff(resultOfQueriesArr);
-  const removedDiffPlainObj = removedDiff.map((item) => {
-    return item.toObject();
-  });
-  const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
-  const removedDiffWBrandNamesWFavs = await getFavs(
-    removedDiffWBrandNames,
-    user,
-  );
+  if (!isGuest) {
+    const user = await getUser(request);
+    //query
+    const queryArr = query.split(" ");
+    const resultOfqueries = queryArr.map(
+      async (query) => await keywordToResults(new RegExp(query, "i")),
+    );
+    const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
 
-  return NextResponse.json(removedDiffWBrandNamesWFavs, { status: 200 });
+    const removedDiff = removeTheDiff(resultOfQueriesArr);
+    const removedDiffPlainObj = removedDiff.map((item) => {
+      return item.toObject();
+    });
+    const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
+    result = await getFavs(removedDiffWBrandNames, user);
+  } else {
+    const guestCard = (await GuestCartModel.findById(guestCardId)) as GuestCart;
+    //query
+    const queryArr = query.split(" ");
+    const resultOfqueries = queryArr.map(
+      async (query) => await keywordToResults(new RegExp(query, "i")),
+    );
+    const resultOfQueriesArr = await Promise.all(resultOfqueries); //an array consisting of arrays
+
+    const removedDiff = removeTheDiff(resultOfQueriesArr);
+    const removedDiffPlainObj = removedDiff.map((item) => {
+      return item.toObject();
+    });
+    const removedDiffWBrandNames = await getBrandNames(removedDiffPlainObj);
+    result = await getFavs(removedDiffWBrandNames, guestCard as Account);
+  }
+
+  return NextResponse.json(result, { status: 200 });
 }
 
 //boiler plate
