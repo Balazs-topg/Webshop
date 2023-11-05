@@ -16,7 +16,7 @@ type itemCardTypes = {
   isFavourite?: boolean;
   id?: string;
   isSkeleton?: boolean;
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 };
 
 export default async function ItemCard({
@@ -33,6 +33,8 @@ export default async function ItemCard({
   // const router = useRouter();
   const cookieStore = cookies();
   const jwtToken = cookieStore.get("jwt");
+
+  console.log("card item rerenderd");
 
   // const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   let isFavouriteState = isFavourite;

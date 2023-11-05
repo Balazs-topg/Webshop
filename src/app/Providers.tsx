@@ -41,7 +41,9 @@ function Providers({ children }: childrenType) {
     <webshopContext.Provider
       value={[webshopContextState, setwebshopContextState]}
     >
-      {children}
+      <div className="selection:bg-sky-700 selection:bg-opacity-50">
+        {children}
+      </div>
     </webshopContext.Provider>
   );
 }

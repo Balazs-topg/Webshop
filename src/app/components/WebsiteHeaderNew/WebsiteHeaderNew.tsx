@@ -15,7 +15,6 @@ import { getCookie } from "../../(frontend-routes)/utils/manageCookies";
 import { webshopContext } from "@/app/Providers";
 import { useContext } from "react";
 
-
 function WebsiteHeader({
   searchValue,
   productCountProp = 0,
@@ -92,15 +91,15 @@ function WebsiteHeader({
   return (
     <nav className="sticky top-0 z-10 flex w-full justify-center bg-stone-100 font-poppins">
       <div className="w-full max-w-5xl p-4">
-        <div className="flex gap-2 text-3xl font-semibold">
-          <Link href="/" className="mr-2 whitespace-nowrap">
-            web <span className="text-sky-800">shop</span>
+        <div className="flex items-center gap-2 font-semibold">
+          <Link href="/" className="mr-2 whitespace-nowrap text-2xl">
+            <span>Hormone </span>
+            <span className="whitespace-normal text-sky-800">Haven</span>
           </Link>
           <SearchBar
             initalValue={searchValue}
             placeholder={`Sök bland ${productCount} produkter`}
           />
-
           {!isLoggedIn ? (
             <Link
               href={"/login"}

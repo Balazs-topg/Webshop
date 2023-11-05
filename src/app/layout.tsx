@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Imprima, Inter } from "next/font/google";
 import Providers from "./Providers";
 import WebsiteFooter from "./components/WebsiteFooter";
 import WebsiteHeader from "./components/WebsiteHeaderNew/WebsiteHeaderNew";
@@ -25,7 +25,7 @@ export default async function RootLayout({
         <Providers>
           <WebsiteHeader />
           {children}
-          {/* <WebsiteFooter /> */}
+          <WebsiteFooter />
         </Providers>
       </body>
     </html>
