@@ -26,6 +26,7 @@ export default function ProductsPage() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: false,
       },
     });
     const data = await response.json();
@@ -41,6 +42,7 @@ export default function ProductsPage() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: false,
       },
     });
     const data = await response.json();
@@ -55,6 +57,7 @@ export default function ProductsPage() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: false,
       },
     });
     const data = await response.json();
@@ -84,6 +87,7 @@ export default function ProductsPage() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: false,
       },
     });
     const data = await response.json();
@@ -96,6 +100,7 @@ export default function ProductsPage() {
       headers: {
         "Content-Type": "application/json",
         jwt: getCookie("jwt")!,
+        isGuest: false,
       },
     });
     getProducts();

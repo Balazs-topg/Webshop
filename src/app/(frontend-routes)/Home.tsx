@@ -58,7 +58,7 @@ export default async function Home() {
     const response = await fetch("http://localhost:3000/api/products/get", {
       method: "get",
       headers: {
-        "Content-Type": "application/json",
+        "Contentk-Type": "application/json",
         jwt: isLoggedIn ? cookieStore.get("jwt")!.value : "",
         isGuest: isLoggedIn ? false : true,
         guestCartId: cookieStore.get("guestCart")!.value,

@@ -5,11 +5,8 @@ const getFavs = async (
   products: ProductToPlainObject[],
   user: Account,
 ): Promise<ProductToPlainObject[]> => {
-  // get favs
   let productsWithFavs = products.map((product: ProductToPlainObject) => {
-    const frozenProduct = product
-      ? product
-      : { ...(product as ProductToPlainObject) };
+    const frozenProduct = product;
     if (user.favourites.map(String).includes(product._id.toString())) {
       frozenProduct.isFavourite = true;
     } else {
