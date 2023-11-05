@@ -15,9 +15,6 @@ export async function PUT(
   const isAdmin = user ? user.isAdmin : false;
   if (!isAdmin) return NextResponse.json({ status: 401 });
 
-  console.log("reqBody.brand", reqBody.brand);
-  console.log("reqBody.category", reqBody.category);
-
   await ProductModel.findByIdAndUpdate(objectId, reqBody);
 
   return NextResponse.json(

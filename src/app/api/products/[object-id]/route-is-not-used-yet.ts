@@ -30,7 +30,6 @@ export async function DELETE(
   console.log("request recived!");
 
   const objectId = params["object-id"];
-  console.log(objectId);
 
   const user = await getUser(request);
   //*Checks if admin

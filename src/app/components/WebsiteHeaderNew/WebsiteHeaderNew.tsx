@@ -15,6 +15,7 @@ import { getCookie } from "../../(frontend-routes)/utils/manageCookies";
 import { webshopContext } from "@/app/Providers";
 import { useContext } from "react";
 
+
 function WebsiteHeader({
   searchValue,
   productCountProp = 0,
@@ -70,7 +71,6 @@ function WebsiteHeader({
       }
       const data = await response.json();
 
-      console.log("setting new cart state to ", data.itemCount);
       setWebshopContextState((prevState: any) => ({
         ...prevState,
         cartCount: data.itemCount,
@@ -89,10 +89,8 @@ function WebsiteHeader({
     fetchProductCount();
   }, []);
 
-  console.log("productCount", cartCount);
-
   return (
-    <nav className=" sticky z-10 flex w-full justify-center bg-stone-100 font-poppins">
+    <nav className="sticky top-0 z-10 flex w-full justify-center bg-stone-100 font-poppins">
       <div className="w-full max-w-5xl p-4">
         <div className="flex gap-2 text-3xl font-semibold">
           <Link href="/" className="mr-2 whitespace-nowrap">
@@ -106,13 +104,13 @@ function WebsiteHeader({
           {!isLoggedIn ? (
             <Link
               href={"/login"}
-              className=" relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
+              className="relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95 "
             >
               <UserIcon className="h-6 w-6 fill-white" />
             </Link>
           ) : (
             <Link
-              className=" relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
+              className="relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95 "
               href={"/view-account"}
             >
               <UserIcon className="h-6 w-6 fill-white" />
@@ -120,7 +118,7 @@ function WebsiteHeader({
           )}
           <Link
             href={"/cart"}
-            className="relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95"
+            className="relative flex items-center justify-center rounded-full bg-sky-800 p-2 transition-all active:scale-95 "
           >
             <div className="absolute bottom-0 left-0 ">
               <div

@@ -209,7 +209,6 @@ function Cart({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   //sync context state with component-level state
   useEffect(() => {
-    console.log("syncing...", getTotalItemsCount(cartItems));
     if (!isLoading) {
       setWebshopContextState((prevState: any) => ({
         ...prevState,

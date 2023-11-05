@@ -8,7 +8,7 @@ export async function POST(
   request: Request,
   { params }: { params: { "object-id": string; action: string } },
 ) {
-  console.log("request reciveddd!");
+  console.log("request recived!");
 
   const objectId = new mongoose.Types.ObjectId(params["object-id"]);
   const action = params.action;

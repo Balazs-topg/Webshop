@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Providers from "./Providers";
 import WebsiteFooter from "./components/WebsiteFooter";
 import WebsiteHeader from "./components/WebsiteHeaderNew/WebsiteHeaderNew";
+// import WebsiteHeader from "./components/WebsiteHeader";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 

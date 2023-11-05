@@ -23,7 +23,6 @@ export async function GET(request: NextRequest, response: any) {
 
   if (isGuest === "false") {
     const user = await getUser(request);
-    console.log("userwedowkejidw", user);
 
     const productsWithFavs = await getFavs(productsToPlainObjects, user);
     const productsWFavsAndWBrandNames = await getBrandNames(productsWithFavs);

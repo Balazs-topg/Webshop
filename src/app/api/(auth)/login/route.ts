@@ -13,8 +13,7 @@ export async function POST(request: Request, response: any) {
   const reqBody: LoginRequest = await request.json();
 
   const user = await AccountModel.findOne({ email: reqBody.email });
-  console.log("user: ", user);
-
+  
   const passwordIsCorrect = user
     ? await bcrypt.compare(reqBody.password, user.password)
     : false;

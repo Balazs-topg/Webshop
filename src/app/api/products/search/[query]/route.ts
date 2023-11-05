@@ -65,7 +65,6 @@ export async function GET(
 ) {
   //init
   const query: string = params["query"];
-  console.log(`search request recived! ${query}`);
 
   const isGuest = request.headers.get("isGuest");
   const guestCardId = request.headers.get("guestCartId") as unknown as string;

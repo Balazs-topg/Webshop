@@ -15,8 +15,6 @@ function FavButton({
 }) {
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
 
-  console.log("fav rerendered");
-
   const handleFavourite = async () => {
     setIsFavouriteState(!isFavouriteState);
     const response = await fetch(

@@ -4,6 +4,7 @@ import AccountModel from "@/app/api/models/AccountModel";
 import ProductModel from "@/app/api/models/ProductModel";
 import "../../../utils/connectToDB";
 import getUser from "@/app/api/utils/getUser";
+import { Irish_Grover } from "next/font/google";
 
 export async function DELETE(
   request: Request,
@@ -12,8 +13,6 @@ export async function DELETE(
   console.log("request recived!");
 
   const objectId = params["object-id"]; // 'a', 'b', or 'c'
-  console.log(objectId);
-
   const user = await getUser(request);
   //*Checks if admin
   const isAdmin = user ? user.isAdmin : false;
@@ -24,12 +23,3 @@ export async function DELETE(
 
   return NextResponse.json({ status: 200 });
 }
-
-//boiler plate
-export async function GET(request: Request) {}
-export async function HEAD(request: Request) {}
-export async function POST(request: Request) {}
-export async function PUT(request: Request) {}
-// export async function DELETE(request: Request) {}
-export async function PATCH(request: Request) {}
-export async function OPTIONS(request: Request) {}

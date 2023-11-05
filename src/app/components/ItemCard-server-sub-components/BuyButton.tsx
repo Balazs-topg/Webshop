@@ -19,8 +19,6 @@ function BuyButton({
   const cartCount = webshopContextState.cartCount;
 
   const handleBuy = async () => {
-    console.log("handleBuy called");
-
     setWebshopContextState((prevState: any) => ({
       ...prevState,
       cartCount: prevState.cartCount + 1,
@@ -38,7 +36,6 @@ function BuyButton({
         body: JSON.stringify({ productId: productId }),
       });
       const data = await response.json();
-      console.log("handleBuy finished", data);
     } catch (e) {
       console.error(e);
     }
